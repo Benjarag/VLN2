@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django specific
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+db.sqlite3
+
+# Environment variables
+.env
+*.env
+
+# Virtual environment
+venv/
+env/
+ENV/
+*.venv
+
+# Static files
+staticfiles/
+static/
+
+# Media files
+media/
+
+# Node modules (if using npm/yarn for frontend)
+node_modules/
+
+# CSS preprocessor files
+*.sass-cache/
+*.scss-cache/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# macOS specific files
+.DS_Store
+
+# Azure specific
+*.azure/
+*.azure-pipelines/
+
+# PostgreSQL specific
+*.pgsql
+pgdata/
+
+# Backup files
+*.bak
+*.swp
+*.swo
+*.tmp
