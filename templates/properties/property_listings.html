@@ -9,15 +9,43 @@
 <body>
     <div class="property-container">
         {% for property in properties %}
-        <div class="property-item">
-            <h3>{{ property.title }}</h3>
-            <div class="property-image" style="background-image: url('{% static property.image_url %}')"></div>
-            <div class="property-category">{{ property.size }}</div>
-            <div class="property-price">{{ property.price }}</div>
-            <div class="property-address">{{ property.rooms }} rooms</div>
-            <div class="property-badge">{{ property.status }}</div>
+        <div class="property-card">
+            <div class="property-image-wrapper">
+                <img src="{% static property.image_url %}" class="property-image" alt="Property image">
+                <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                <!-- Heart icon button -->
+                <div class="favorite-icon">
+                    <i class="fa-regular fa-heart"></i> <!-- Heart icon from FontAwesome -->
+                </div>
+            </div>
+            <div class="property-info">
+                <div class="property-address">
+                    <span class="location-icon">&#x1F4CD;</span> <!-- 📍 -->
+                    {{ property.title }}
+                </div>
+                <div class="property-details">
+                    <span class="detail-box">🏠 {{ property.size }}</span>
+                    <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+                </div>
+                <div class="property-price">{{ property.price }}</div>
+            </div>
         </div>
         {% endfor %}
     </div>
+
+    <!-- Script to toggle heart icon -->
+    <script>
+        document.querySelectorAll('.favorite-icon').forEach(icon => {
+            icon.addEventListener('click', () => {
+                icon.classList.toggle('active');
+                const heartIcon = icon.querySelector('i');
+                if (icon.classList.contains('active')) {
+                    heartIcon.classList.replace('fa-regular', 'fa-solid');
+                } else {
+                    heartIcon.classList.replace('fa-solid', 'fa-regular');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
