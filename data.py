@@ -18,7 +18,7 @@ PROPERTIES = [
         "size" : "126 sqm",
         "price": "65.000.000 kr.",
         "rooms": "5",
-        "status": "Available",
+        "status": "Sold",
         "type": "Sumarhús",
         "zipcode": "806",
         "image_url": "properties/images/Djaknavegur3.png"

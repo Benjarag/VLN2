@@ -9,17 +9,18 @@
 <body>
     <div class="property-container">
         {% for property in properties %}
-        <div class="property-card">
+        <div class="property-card" data-id="{{ property.id }}">
+            <!-- Image and Status -->
             <div class="property-image-wrapper">
                 <img src="{% static property.image_url %}" class="property-image" alt="Property image">
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                <!-- Heart icon button -->
-                <div class="favorite-icon">&#9825;</div>
+                <div class="favorite-icon">&#9825;</div> <!-- ♥ icon -->
             </div>
+
+            <!-- Info Section -->
             <div class="property-info">
                 <div class="property-address">
-                    <span class="location-icon">&#x1F4CD;</span> <!-- 📍 -->
-                    {{ property.title }}
+                    <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
                 </div>
                 <div class="property-details">
                     <span class="detail-box">🏠 {{ property.size }}</span>
@@ -31,7 +32,6 @@
         {% endfor %}
     </div>
 
-    <!-- Link to JavaScript file -->
     <script src="{% static 'properties/js/app.js' %}"></script>
 </body>
 </html>
