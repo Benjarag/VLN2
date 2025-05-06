@@ -3,6 +3,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Properties</title>
+    <title>{{ property.title }}</title>
     <link rel="stylesheet" href="{% static 'properties/styles/property_details.css' %}">
 </head>
+<body>
+
+<!-- Top Header Row -->
+<div class="header-row">
+    <a href="{% url 'property_listings' %}" class="back-button">&larr;</a>
+    <h1 class="property-title">{{ property.title }}</h1>
+    <div class="favorite-icon">&#9825;</div>
+</div>
+
+<!-- Main Image with Carousel -->
+<div class="image-carousel">
+    <button class="carousel-nav left">&lt;</button>
+    <img src="{% static property.image_url %}" class="main-image" alt="Main property image">
+    <button class="carousel-nav right">&gt;</button>
+</div>
+
+<!-- Property Information + Seller + Purchase -->
+<div class="info-section">
+    <div class="property-specs">
+        <div class="spec-box">🏠 Type: {{ property.type }}</div>
+        <div class="spec-box">💰 Price: {{ property.price }}</div>
+        <div class="spec-box">📅 Date: {{ property.listing_date }}</div>
+        <div class="spec-box">📄 Status: {{ property.status }}</div>
+    </div>
+    <div class="seller-box">
+        <p>Seller:</p>
+        <div class="seller-info">
+            <img src="{% static seller.profile_picture %}" class="seller-photo" alt="Seller">
+            <div>
+                <div>{{ seller.name }}</div>
+                <div>{{ seller.phone }}</div>
+            </div>
+        </div>
+    </div>
+    <button class="purchase-button">Submit Purchase</button>
+</div>
+
+<!-- Additional Info and Description -->
+<div class="additional-section">
+    <h2>Additional Information</h2>
+    <div class="description-label">Description:</div>
+    <div class="additional-boxes">
+        <div class="spec-box">🛏️ Bedrooms: {{ property.bedrooms }}</div>
+        <div class="spec-box">🛁 Bathrooms: {{ property.bathrooms }}</div>
+        <div class="spec-box">📐 Size: {{ property.size }}</div>
+    </div>
+    <p class="property-description">{{ property.description }}</p>
+</div>
+
+<script src="{% static 'properties/js/property_details.js' %}"></script>
+</body>
+</html>

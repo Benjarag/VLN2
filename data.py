@@ -8,7 +8,15 @@ PROPERTIES = [
         "status": "Available",
         "type": "Einbýlishús",
         "zipcode": "103",
-        "image_url": "properties/images/Lautarvegur30.png"
+        "image_url": "properties/images/Lautarvegur30.png",
+        "data_listed": "2023-01-01",
+        "bathrooms": "1",
+        "description": "Built in 2020, feautures a large garden, modern interior and a large pool.",
+        "seller": {
+            "name": "John Doe",
+            "phone": "+354 555 1234",
+            "profile_image": "seller_images/john_doe.jpg"
+        }
 
     },
 
@@ -21,7 +29,15 @@ PROPERTIES = [
         "status": "Sold",
         "type": "Sumarhús",
         "zipcode": "806",
-        "image_url": "properties/images/Djaknavegur3.png"
+        "image_url":"properties/images/Djaknavegur3.png",
+        "data_listed": "2023-01-01",
+        "bathrooms": "1",
+        "description": "Built in 2020, feautures a large garden, modern interior and a large pool.",
+        "seller": {
+            "name": "Jane Smith",
+            "phone": "+354 555 5678",
+            "profile_image": "seller_images/jane_smith.jpg"
+        }
 
     },
 
@@ -34,7 +50,15 @@ PROPERTIES = [
         "status": "Available",
         "type": "Fjölbýlishús",
         "zipcode": "203",
-        "image_url": "properties/images/Alfkonuhvarf33.png"
+        "image_url": "properties/images/Alfkonuhvarf33.png",
+        "data_listed": "2023-01-01",
+        "bathrooms": "1",
+        "description": "Built in 2020, feautures a large garden, modern interior and a large pool.",
+        "seller": {
+            "name": "Mike Johnson",
+            "phone": "+354 555 9012",
+            "profile_image": "seller_images/mike_johnson.jpg"
+        }
 
     }
 ]
