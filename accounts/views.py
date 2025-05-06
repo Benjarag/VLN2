@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from accounts.forms import UserUpdateForm, ProfileUpdateForm
-
+from django.contrib import  messages
+from django.contrib.auth import logout
 
 @login_required
 def profile(request):
@@ -36,7 +37,10 @@ def profile_update(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, f'Your profile has been updated successfully!')
             return redirect('profile')
+        else:
+            messages.error(request, 'There was an error updating your profile. Please check the form and try again.')
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
@@ -54,3 +58,8 @@ def login_view(request):
 
 def favorites_view(request):
     return HttpResponse("This is the favorites page")
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been logged out successfully!')
+    return redirect('home:homepage')

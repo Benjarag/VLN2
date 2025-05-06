@@ -1,0 +1,87 @@
+.profile-image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #616B7F;
+    margin-top: 3rem;
+}
+
+/* NAVIGATION BAR */
+
+.nav-logo {
+    height: 40px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 50px; /* Minimum 20px, preferred 5vw, maximum 80px */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Small screens*/
+@media (max-width: 700px) {
+    .nav-links {
+        gap: 25px;
+    }
+}
+
+/* Medium screens */
+@media (min-width: 900px) {
+    .nav-links {
+        gap: 115px;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1100px) {
+    .nav-links {
+        gap: 150px; /* 5% of viewport width */
+    }
+}
+
+
+
+/* Profile container positioning */
+.profile-container {
+    margin-left: auto; /* Push to far right */
+}
+
+/* Nav Content */
+.nav-content {
+    gap: 3rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+
+/* Sticky navigation bar with scroll behavior */
+.nav-bar {
+    background-color: rgba(151, 170, 190, 0.64);
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: transform 0.5s ease;
+}
+
+/* Class to hide the navbar when scrolling down */
+.nav-bar--hidden {
+    transform: translateY(-100%);
+}
+
+body {
+    padding-top: 80px; /* Adjust this value based on your navbar height */
+}

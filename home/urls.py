@@ -2,6 +2,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'home'
+
 urlpatterns = [
-    path('', views.homepage, name='homepage'),  # Homepage URL pattern
+    path('', views.home_view, name='homepage'),  # Homepage URL pattern
 ]

@@ -1,0 +1,96 @@
+.hero-section {
+    margin-top: 170px;
+    position: -ms-device-fixed;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Changed from center to flex-start */
+    overflow: hidden;
+    text-align: center;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/home/images/homepage_photo.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.search-container {
+    padding-top: 20px;
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    padding: 10px 50px 10px 15px; /* Extra padding on the right to make room for the button */
+    border-radius: 25px;
+    width: 100%;
+    border: 1px solid;
+    outline: none;
+}
+
+.search-button {
+    position: absolute;
+    right: 5px; /* Position from the right edge of the input */
+    top: calc(50% + 10px); /* Adjust this to align with the container - adding half of padding-top */
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: grey;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 0; /* Reset all padding */
+}
+
+.search-button:hover {
+    background-color: darkgrey;
+    padding: 0; /* Reset all padding */
+}
+.search-button i, .search-button svg {
+    color: white;
+    font-size: 16px;
+}
+
+
+/* Features Section */
+.features-section h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card h3 {
+    margin-bottom: 15px;
+}

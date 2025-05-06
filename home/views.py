@@ -4,5 +4,5 @@ from django.shortcuts import render
 # home/views.py
 from django.http import HttpResponse
 
-def homepage(request):
-    return HttpResponse("Welcome to the homepage!")  # Simple response for testing
+def home_view(request):
+    return render(request, 'home/homepage.html')

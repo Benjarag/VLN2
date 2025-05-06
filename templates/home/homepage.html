@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-background"></div>
+    <div class="h-container">
+        <h1>Find Your Ideal Property</h1>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search for street name">
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+</section>
+
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="h-container">
+        <h2>Why You Should Work With Us</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Wide Range of Properties</h3>
+                <p>We have a wide collection of properties that you can browse through seamlessly</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Buy Homes</h3>
+                <p>You can submit an offer directly through us</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Trusted Communications</h3>
+                <p>No more funny business done in the shadows - you can see the seller's profile</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
