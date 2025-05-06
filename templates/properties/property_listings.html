@@ -14,9 +14,7 @@
                 <img src="{% static property.image_url %}" class="property-image" alt="Property image">
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
                 <!-- Heart icon button -->
-                <div class="favorite-icon">
-                    <i class="fa-regular fa-heart"></i> <!-- Heart icon from FontAwesome -->
-                </div>
+                <div class="favorite-icon">&#9825;</div>
             </div>
             <div class="property-info">
                 <div class="property-address">
@@ -33,19 +31,7 @@
         {% endfor %}
     </div>
 
-    <!-- Script to toggle heart icon -->
-    <script>
-        document.querySelectorAll('.favorite-icon').forEach(icon => {
-            icon.addEventListener('click', () => {
-                icon.classList.toggle('active');
-                const heartIcon = icon.querySelector('i');
-                if (icon.classList.contains('active')) {
-                    heartIcon.classList.replace('fa-regular', 'fa-solid');
-                } else {
-                    heartIcon.classList.replace('fa-solid', 'fa-regular');
-                }
-            });
-        });
-    </script>
+    <!-- Link to JavaScript file -->
+    <script src="{% static 'properties/js/app.js' %}"></script>
 </body>
 </html>

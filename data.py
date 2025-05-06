@@ -3,7 +3,7 @@ PROPERTIES = [
         "id": 1,
         "title": "Lautarvegur 30, Reykjavik, 103",
         "size" : "310 sqm",
-        "price": "$1.2m",
+        "price": "155.808.000 kr.",
         "rooms": "7",
         "status": "Available",
         "type": "Einbýlishús",
