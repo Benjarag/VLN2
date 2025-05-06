@@ -6,6 +6,8 @@ PROPERTIES = [
         "price": "$1.2m",
         "rooms": "7",
         "status": "Available",
+        "type": "Einbýlishús",
+        "zipcode": "103",
         "image_url": "properties/images/Lautarvegur30.png"
 
     }

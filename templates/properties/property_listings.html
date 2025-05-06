@@ -4,55 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Properties</title>
-    <style>
-        .property-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .property-item {
-            padding: 10px;
-            background-color: rgba(155, 155, 155, 0.2);
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .property-item h3 {
-            margin: 10px 0;
-        }
-
-        .property-image {
-            height: 150px;
-            width: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 5px;
-        }
-
-        .property-badge {
-            border-radius: 20px;
-            padding: 8px;
-            font-size: 0.8em;
-            background-color: lightblue;
-            max-width: 100px;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .property-price {
-            font-weight: bold;
-            color: #2a2;
-            margin-top: 5px;
-        }
-
-        .property-category,
-        .property-address {
-            margin-top: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'properties/styles/properties.css' %}">
 </head>
 <body>
     <div class="property-container">
