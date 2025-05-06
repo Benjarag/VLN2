@@ -1,8 +1,8 @@
 from django.shortcuts import render
-
-# Create your views here.
-# properties/views.py
-from django.http import HttpResponse
+from data import PROPERTIES  # Assuming you're importing the data
 
 def property_listings(request):
-    return HttpResponse("This is the property listings page")
+    return render(request, "properties/property_listings.html", {
+        "properties": PROPERTIES
+    })
+
