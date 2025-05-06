@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>Profile Page</h1>
+
+    <div class="profile-content">
+        <!-- Left Column - Profile Image -->
+        <div class="profile-image">
+            <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'accounts/images/default_profile.jpg' %}{% endif %}"
+                 alt="Profile Picture">
+        </div>
+
+        <!-- Right Column - Profile Info -->
+        <div class="profile-info">
+            <h2>Name: {{ user.username }}</h2>
+
+            <div class="profile-details">
+                <h3>Additional Information</h3>
+                <p><b>Email:</b> {{ user.email }}</p>
+                {% if user.profile.phone %}
+                <p><b>Phone:</b> {{ user.profile.phone }}</p>
+                {% endif %}
+            </div>
+            <div class="profile-actions">
+                <button onclick="window.location.href='{% url 'update_profile' %}'" class="button">Update Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

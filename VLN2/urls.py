@@ -17,12 +17,20 @@ Including another URLconf
 # project_name/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),  # Homepage URL
+    path('', include('home.urls'), name='home'),  # Homepage URL
     path('accounts/', include('accounts.urls')),  # Authentication URLs
     path('properties/', include('properties.urls')),  # Property Listings URLs
-    path('offers/', include('offers.urls')),
-    path('sellers/', include('sellers.urls')),
+    path('offers/', include('offers.urls')), # Offer Management URLs
+    path('sellers/', include('sellers.urls')), # Seller Profile URLs
+    path('mail/', include('mail.urls')), # Mail App URLs
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,8 +3,8 @@
 from django.urls import path
 from . import views
 
-app_name = 'mailapp'
+app_name = 'mail'
 
 urlpatterns = [
-    path('send-confirmation-email/<int:transaction_id>/', views.send_purchase_confirmation_email, name='send_confirmation_email'),
+    path('', views.mail_view, name='mail'),
 ]
