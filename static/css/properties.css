@@ -39,6 +39,7 @@
     color: white;
     font-size: 0.9em;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .property-status.available {
@@ -79,6 +80,7 @@
 .property-address {
     font-size: 1em;
     margin-bottom: 8px;
+    cursor: pointer;
 }
 
 .location-icon {
@@ -89,6 +91,7 @@
     display: flex;
     gap: 15px;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .detail-box {
@@ -105,6 +108,7 @@
     font-size: 1.2em;
     font-weight: bold;
     color: #ffce69;
+    cursor: pointer;
 }
 
 .favorite-icon.active {
