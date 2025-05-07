@@ -6,28 +6,27 @@
 {% block content %}
 <div class="property-container">
     {% for property in properties %}
-    <a href="{% url 'property_details' property.id %}" class="property-link">
-        <div class="property-card" data-id="{{ property.id }}">
-            <!-- Image and Status -->
-            <div class="property-image-wrapper">
-                <img src="{% static property.image_url %}" class="property-image" alt="Property image">
-                <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                <div class="favorite-icon"><i class="fa-regular fa-heart"></i></div>
-            </div>
-
-            <!-- Info Section -->
-            <div class="property-info">
-                <div class="property-address">
-                    <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
-                </div>
-                <div class="property-details">
-                    <span class="detail-box">🏠 {{ property.size }}</span>
-                    <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
-                </div>
-                <div class="property-price">{{ property.price }}</div>
-            </div>
+    <div class="property-card" data-id="{{ property.id }}">
+        <!-- Remove any <a> tags that might be wrapping this content -->
+        <!-- Image and Status -->
+        <div class="property-image-wrapper">
+            <img src="{% static property.image_url %}" class="property-image" alt="Property image">
+            <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+            <div class="favorite-icon">&#9825;</div>
         </div>
-    </a>
+
+        <!-- Info Section -->
+        <div class="property-info">
+            <div class="property-address">
+                <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
+            </div>
+            <div class="property-details">
+                <span class="detail-box">🏠 {{ property.size }}</span>
+                <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+            </div>
+            <div class="property-price">{{ property.price }}</div>
+        </div>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}
