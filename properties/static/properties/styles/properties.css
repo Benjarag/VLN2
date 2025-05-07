@@ -5,13 +5,7 @@ body {
     padding: 20px;
 }
 
-.property-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    max-width: 1000px;
-    margin: auto;
-}
+
 
 .property-card {
     display: flex;
