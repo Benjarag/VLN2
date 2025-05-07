@@ -8,7 +8,6 @@
 <div class="header-row">
     <a href="{% url 'property_listings' %}" class="back-button">&larr;</a>
     <h1 class="property-title">{{ property.title }}</h1>
-    <div class="favorite-icon">&#9825;</div>
 </div>
 
 <!-- Main Image with Carousel -->
@@ -16,6 +15,7 @@
     <button class="carousel-nav left">&lt;</button>
     <img src="{% static property.image_url %}" class="main-image" alt="Main property image">
     <button class="carousel-nav right">&gt;</button>
+    <div class="favorite-icon">&#9825;</div>
 </div>
 
 <!-- Property Information + Seller + Purchase -->
@@ -23,20 +23,23 @@
     <div class="property-specs">
         <div class="spec-box">🏠 Type: {{ property.type }}</div>
         <div class="spec-box">💰 Price: {{ property.price }}</div>
-        <div class="spec-box">📅 Date: {{ property.listing_date }}</div>
+        <div class="spec-box">📅 Date: {{ property.date }}</div>
         <div class="spec-box">📄 Status: {{ property.status }}</div>
     </div>
+
+    <!-- Seller Section Styled -->
     <div class="seller-box">
-        <p>Seller:</p>
-        <div class="seller-info">
-            <img src="{% static seller.profile_picture %}" class="seller-photo" alt="Seller">
-            <div>
-                <div>{{ seller.name }}</div>
-                <div>{{ seller.phone }}</div>
+        <p class="seller-label">Seller:</p>
+        <div class="seller-info-card">
+            <img src="{% static property.seller.profile_image %}" class="seller-photo" alt="Seller">
+            <div class="seller-details">
+                <div class="seller-name">{{ property.seller.name }}</div>
+                <div class="seller-phone">{{ property.seller.phone }}</div>
             </div>
         </div>
     </div>
-    <button class="purchase-button">Submit Purchase</button>
+
+    <button class="submit-button">Submit Purchase</button>
 </div>
 
 <!-- Additional Info and Description -->
