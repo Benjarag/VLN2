@@ -108,7 +108,10 @@
 }
 
 .additional-section {
-    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
 }
 
 .description-label {
@@ -120,8 +123,21 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
+
+
 }
 
 .property-description {
     line-height: 1.8;
+
+}
+
+.additional-information {
+    font-weight: bold;
+    margin: 1rem 0 0.5rem;
+}
+
+.description-section {
+    border-left: 1px solid #eaeaea;
+    padding-left: 1.5rem;
 }
