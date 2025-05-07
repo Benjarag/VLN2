@@ -1,10 +1,3 @@
-body {
-    font-family: sans-serif;
-    background-color: white;
-    margin: 0;
-    padding: 20px;
-}
-
 .property-container {
     display: flex;
     flex-direction: column;
@@ -60,18 +53,20 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 24px;
-    height: 24px;
-    font-size: 18px;
-    color: white;
-    background-color: #ccc;
-    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    width: 30px;
+    height: 30px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+    color: grey; /* Gray color for outline heart */
+    font-size: 20px;
+    transition: color 0.3s ease;
 }
+
 
 .property-info {
     padding: 10px 20px;
@@ -103,8 +98,6 @@ body {
     border-radius: 20px;
     font-size: 0.7em;
     margin-top: 80px;
-
-
 }
 
 .property-price {
@@ -112,11 +105,9 @@ body {
     font-size: 1.2em;
     font-weight: bold;
     color: #ffce69;
-
 }
 
 .favorite-icon.active {
-    background-color: red;
-    color: white;
+    color: red;
     transform: scale(1.1);
 }

@@ -14,9 +14,9 @@ class Property(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     # Add seller information
-    seller_name = models.CharField(max_length=255)
-    seller_phone = models.CharField(max_length=20)
-    seller_profile_image = models.ImageField(upload_to='seller_images/')
+    seller_name = models.CharField(max_length=255, null=True, blank=True)
+    seller_phone = models.CharField(max_length=20, null=True, blank=True)
+    seller_profile_image = models.ImageField(upload_to='seller_images/', null=True, blank=True)
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)

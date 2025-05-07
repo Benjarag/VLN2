@@ -1,13 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ property.title }}</title>
-    <link rel="stylesheet" href="{% static 'properties/styles/property_details.css' %}">
-</head>
-<body>
 
+{% block title %}{{ property.title }}{% endblock %}
+
+{% block content %}
 <!-- Top Header Row -->
 <div class="header-row">
     <a href="{% url 'property_listings' %}" class="back-button">&larr;</a>
@@ -54,7 +50,4 @@
     </div>
     <p class="property-description">{{ property.description }}</p>
 </div>
-
-<script src="{% static 'properties/js/property_details.js' %}"></script>
-</body>
-</html>
+{% endblock %}

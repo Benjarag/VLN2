@@ -1,20 +1,18 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Properties</title>
-    <link rel="stylesheet" href="{% static 'properties/styles/properties.css' %}">
-</head>
-<body>
-    <div class="property-container">
-        {% for property in properties %}
+
+{% block title %}Property Listings{% endblock %}
+
+{% block content %}
+<div class="property-container">
+    {% for property in properties %}
+    <a href="{% url 'property_details' property.id %}" class="property-link">
         <div class="property-card" data-id="{{ property.id }}">
             <!-- Image and Status -->
             <div class="property-image-wrapper">
                 <img src="{% static property.image_url %}" class="property-image" alt="Property image">
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                <div class="favorite-icon">&#9825;</div> <!-- ♥ icon -->
+                <div class="favorite-icon"><i class="fa-regular fa-heart"></i></div>
             </div>
 
             <!-- Info Section -->
@@ -29,9 +27,7 @@
                 <div class="property-price">{{ property.price }}</div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-
-    <script src="{% static 'properties/js/properties.js' %}"></script>
-</body>
-</html>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

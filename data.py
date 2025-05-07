@@ -1,6 +1,6 @@
 PROPERTIES = [
     {
-        "id": 1,
+        "id": 0,
         "title": "Lautarvegur 30, Reykjavik, 103",
         "size" : "310 sqm",
         "price": "155.808.000 kr.",
@@ -21,7 +21,7 @@ PROPERTIES = [
     },
 
     {
-        "id": 2,
+        "id": 1,
         "title": "Djáknavegur 3, Selfoss, 806",
         "size" : "126 sqm",
         "price": "65.000.000 kr.",
@@ -42,7 +42,7 @@ PROPERTIES = [
     },
 
     {
-        "id": 3,
+        "id": 2,
         "title": "Álfkonuhvarf 33, Kópavogur, 203",
         "size" : "131 sqm",
         "price": "83.650.000 kr.",

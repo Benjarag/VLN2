@@ -1,26 +1,26 @@
-document.querySelectorAll('.favorite-icon').forEach(icon => {
-    icon.addEventListener('click', () => {
-        icon.classList.toggle('active');
-        const heartIcon = icon.querySelector('i');
-        if (icon.classList.contains('active')) {
-            heartIcon.classList.replace('fa-regular', 'fa-solid');
-        } else {
-            heartIcon.classList.replace('fa-solid', 'fa-regular');
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle favorite icon clicks
+    document.querySelectorAll('.favorite-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            // Toggle the active class
+            this.classList.toggle('active');
+
+            // Toggle between solid and regular heart
+            const heartIcon = this.querySelector('i');
+            if (this.classList.contains('active')) {
+                heartIcon.classList.replace('fa-regular', 'fa-solid');
+            } else {
+                heartIcon.classList.replace('fa-solid', 'fa-regular');
+            }
+
+            // Prevent the click from bubbling up to the parent
+            e.stopPropagation();
+            e.preventDefault();
+
+            // Here you would normally add AJAX to save the favorite status
+            console.log('Favorite toggled');
+        });
     });
+
+    // Rest of the code for property cards...
 });
-
-// Redirect when clicking a property card (except on the heart)
-document.querySelectorAll('.property-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-        // Prevent redirect if heart icon is clicked
-        if (e.target.closest('.favorite-icon')) return;
-
-        const propertyId = card.dataset.id;
-        if (propertyId) {
-            window.location.href = `/properties/${propertyId}/`;
-        }
-    });
-});
-
-
