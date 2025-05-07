@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Properties</title>
+    <link rel="stylesheet" href="{% static 'properties/styles/properties.css' %}">
+</head>
+<body>
+    <div class="property-container">
+        {% for property in properties %}
+        <div class="property-card" data-id="{{ property.id }}">
+            <!-- Image and Status -->
+            <div class="property-image-wrapper">
+                <img src="{% static property.image_url %}" class="property-image" alt="Property image">
+                <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                <div class="favorite-icon">&#9825;</div> <!-- ♥ icon -->
+            </div>
+
+            <!-- Info Section -->
+            <div class="property-info">
+                <div class="property-address">
+                    <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
+                </div>
+                <div class="property-details">
+                    <span class="detail-box">🏠 {{ property.size }}</span>
+                    <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+                </div>
+                <div class="property-price">{{ property.price }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="{% static 'properties/js/properties.js' %}"></script>
+</body>
+</html>

@@ -1,8 +1,15 @@
-from django.shortcuts import render
-
-# Create your views here.
-# properties/views.py
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from data import PROPERTIES
+from .models import Property
 
 def property_listings(request):
-    return HttpResponse("This is the property listings page")
+    return render(request, "properties/property_listings.html", {
+        "properties": PROPERTIES
+    })
+
+
+
+def property_details(request, property_id):
+    return render(request, "properties/property_details.html", {
+        "property": PROPERTIES[property_id]
+    })
