@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}VLN2 Project{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/property_details.js' %}"></script>
     <script src="{% static 'js/properties.js' %}"></script>
     <script src="{% static 'js/messages.js' %}"></script>
@@ -20,30 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="nav-bar">
-        <div class="nav-content">
-            <a href="/" class="nav-logo">
-                <img src="{% static 'images/logo.png' %}?v=1" alt="Castle Apartments Logo" class="nav-logo">
-            </a>
-            <ul class="nav-links">
-                <li><a href="{% url 'home:homepage' %}" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="{% url 'property_listings' %}" class="nav-link"><i class="fas fa-building"></i> Listings</a></li>
-                <li><a href="{% url 'offers:my_offers' %}" class="nav-link"><i class="fas fa-handshake"></i> Offers</a></li>
-                <li><a href="{% url 'favorites' %}" class="nav-link"><i class="fas fa-heart"></i> Favorites</a></li>
-            </ul>
-            <div class="profile-container">
-                <a href="{% url 'profile' %}" class="nav-link profile-link">
-                    {% if user.profile.image %}
-                        <div style="width: 32px; height: 32px; border-radius: 50%; background-image: url('{{ user.profile.image.url }}'); background-size: cover; background-position: center; margin-right: 8px; display: inline-block; vertical-align: middle;"></div>
-                    {% else %}
-                        <i class="fas fa-user-circle" style="font-size: 32px; width: 32px; height: 32px; margin-right: 8px; display: inline-block; vertical-align: middle;"></i>
-                    {% endif %}
-                    <span>Profile</span>
-                </a>
-            </div>
-        </div>
-    </nav>
+    {% include '_navigation.html' %}
 
     {% if messages %}
     <div class="messages">
