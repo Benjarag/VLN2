@@ -74,6 +74,7 @@
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+
 }
 
 .property-address {
@@ -105,6 +106,7 @@
     font-size: 1.2em;
     font-weight: bold;
     color: #ffce69;
+    text-decoration: none;
 }
 
 .favorite-icon.active {
