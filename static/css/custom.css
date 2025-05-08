@@ -21,30 +21,27 @@
 
 .nav-links {
     display: flex;
-    gap: 50px; /* Minimum 20px, preferred 5vw, maximum 80px */
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-/* Small screens*/
-@media (max-width: 700px) {
-    .nav-links {
-        gap: 25px;
-    }
+/* Define base navigation styling with default gap for small screens */
+.nav-links {
+    --nav-gap: 20px; /* Default gap for small screens */
+    gap: var(--nav-gap);
 }
 
-/* Medium screens */
+/* Screen size breakpoints */
 @media (min-width: 900px) {
     .nav-links {
-        gap: 115px;
+        --nav-gap: 100px; /* Medium screens */
     }
 }
 
-/* Large screens */
 @media (min-width: 1100px) {
     .nav-links {
-        gap: 150px; /* 5% of viewport width */
+        --nav-gap: 130px; /* Large screens */
     }
 }
 
