@@ -82,3 +82,20 @@
 body {
     padding-top: 80px; /* Adjust this value based on your navbar height */
 }
+
+/* Buttons */
+.button {
+    padding: 10px 20px;
+    background: #ffce69;
+    color: black;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: fit-content;
+    align-self: center;
+}
+
+.button:hover {
+    background: #e6ae3e;
+}

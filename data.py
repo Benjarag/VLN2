@@ -60,5 +60,31 @@ PROPERTIES = [
             "profile_image": "seller_images/mike_johnson.jpg"
         }
 
+    },
+
+    {
+        "id": 3,
+        "title": "Haukanes 24, Garðabær, 210",
+        "size": "620 sqm",
+        "price": "625.000.000 kr.",
+        "rooms": "20",
+        "bedrooms": "7",
+        "status": "Available",
+        "type": "Einbýlishús",
+        "zipcode": "210",
+        "image_url": "properties/images/Haukanes24.png",
+        "date": "2025-01-01",
+        "bathrooms": "4",
+        "description": "Húsið er á tveim hæðum. Gegið er inn á efri hæðina frá götu",
+        "seller": {
+            "name": "Styrmir Bjartur Karlson",
+            "phone": "899-9090",
+            "profile_image": "properties/images/Styrmir.png"
+        }
+
+
     }
+
+
+
 ]
