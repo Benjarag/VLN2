@@ -85,17 +85,33 @@ WSGI_APPLICATION = 'VLN2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'verklegt_namskeid_db',
+#         'USER': 'verklegt_db_user',
+#         'PASSWORD': 'PcNkIf0Ku9al0jD0ubK7Bz6V',
+#         'HOST': 'db-verklegt-namskeid-ii-eu-bmpg13.postgres.database.azure.com',
+#         'PORT': '5432'
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'verklegt_namskeid_db',
         'USER': 'verklegt_db_user',
-        'PASSWORD': 'PcNkIf0Ku9al0jD0ubK7Bz6V',
-        'HOST': 'db-verklegt-namskeid-ii-eu-bmpg13.postgres.database.azure.com',
+        'PASSWORD': 'nkn0Aef7iFUvSi0cF0YS2sg8',
+        'HOST': 'db-verklegt-namskeid-ii-eu-1pgdky.postgres.database.azure.com',
         'PORT': '5432'
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -142,6 +158,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'  # For user-uploaded files
 
+LOGIN_REDIRECT_URL = '/'  # Redirect to homepage after login
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

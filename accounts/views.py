@@ -3,9 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from accounts.forms import UserUpdateForm, ProfileUpdateForm
+from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm
 from django.contrib import  messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
+
+from accounts.models import Profile
+
 
 @login_required
 def profile(request):
@@ -50,12 +53,6 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
-def signup_view(request):
-    return HttpResponse("This is the signup page")
-
-def login_view(request):
-    return HttpResponse("This is the login page")
-
 def favorites_view(request):
     return HttpResponse("This is the favorites page")
 
@@ -63,3 +60,21 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully!')
     return redirect('home:homepage')
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # Create user
+            user = form.save()
+            # Create profile if it doesn't exist (we don't need to store the profile object)
+            # Just using get_or_create to ensure it exists
+            Profile.objects.get_or_create(user=user)
+            # Log the user in
+            login(request, user)
+            # Redirect to home page
+            return redirect('/')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'accounts/signup.html', {'form': form})
