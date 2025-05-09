@@ -31,7 +31,7 @@ def property_listings(request):
         properties = properties.filter(price__lte=price_max)
 
     if type_filter:
-        properties = properties.filter(property_type__iexact=type_filter)
+        properties = properties.filter(type__iexact=type_filter)
 
     if order_by == "price":
         properties = properties.order_by('price')

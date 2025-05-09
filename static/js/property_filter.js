@@ -23,7 +23,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.toString()) {
         applyFiltersFromParams(urlParams);
+    } else if (window.location.pathname === '/properties/') {
+        // If we're at the root properties URL with no params,
+        // check if we arrived by back button or direct navigation
+        const shouldShowAll = sessionStorage.getItem('show_all_properties');
+        if (shouldShowAll === 'true') {
+            // Reset filters
+            clearFilters();
+            // Reset the flag
+            sessionStorage.removeItem('show_all_properties');
+        }
     }
+
+    // Add event listener for browser back/forward navigation
+    window.addEventListener('popstate', function(event) {
+        console.log('Navigation state changed:', window.location.href);
+        
+        // Get the new URL params after back/forward navigation
+        const newUrlParams = new URLSearchParams(window.location.search);
+        
+        // If we navigated to the root properties URL with no params
+        if (window.location.pathname === '/properties/' && !newUrlParams.toString()) {
+            console.log('At root with no params, clearing filters');
+            // Set flag to show all properties
+            sessionStorage.setItem('show_all_properties', 'true');
+            // Clear and reset filters
+            clearFilters();
+            // Fetch all properties
+            fetchProperties('');
+        } else {
+            // Apply the URL parameters as filters
+            applyFiltersFromParams(newUrlParams);
+        }
+    });
 
     document.getElementById("search-value").addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
@@ -33,6 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset filter button event listener
     resetButton.addEventListener('click', () => {
+        clearFilters();
+        
+        // Reset URL
+        history.pushState({}, '', '/properties/');
+        
+        // Fetch all properties
+        fetchProperties('');
+    });
+    
+    // Function to clear all filters
+    function clearFilters() {
         // Clear all inputs
         document.getElementById('search-value').value = '';
         document.getElementById('zip').value = '';
@@ -45,15 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
             orderByElement.value = '';
         }
         
-        // Clear localStorage
+        // Clear localStorage and sessionStorage
         localStorage.removeItem('property_filters');
-        
-        // Reset URL
-        history.pushState({}, '', '/properties/');
-        
-        // Fetch all properties
-        fetchProperties('');
-    });
+        sessionStorage.removeItem('show_all_properties');
+    }
 
     searchBtn.addEventListener('click', async () => {
         const search = document.getElementById('search-value').value;
@@ -78,6 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
             query = query.slice(0, -1);
         }
         
+        // If no filters, just show "?" in the URL
+        if (query === '?') {
+            query = '';
+        }
+        
         // Save filter settings to localStorage
         saveFilters({
             search_filter: search,
@@ -89,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Update URL with filters (for back button functionality)
-        history.pushState({}, '', `/properties/${query}`);
+        history.pushState({filters: true}, '', `/properties/${query}`);
         
         // Fetch filtered properties
         fetchProperties(query);
@@ -133,16 +176,21 @@ document.addEventListener('DOMContentLoaded', () => {
             orderByElement.value = params.get('order_by');
         }
         
-        // Save these filters to localStorage as well
-        const filterObj = {};
-        for (const [key, value] of params.entries()) {
-            filterObj[key] = value;
+        // If no params, clear filters
+        if (params.toString() === '') {
+            clearFilters();
+        } else {
+            // Save these filters to localStorage as well
+            const filterObj = {};
+            for (const [key, value] of params.entries()) {
+                filterObj[key] = value;
+            }
+            saveFilters(filterObj);
         }
-        saveFilters(filterObj);
         
         // Only fetch if we're on the main listing page (not coming from a property detail)
         if (document.getElementById('properties-placeholder')) {
-            fetchProperties('?' + params.toString());
+            fetchProperties(params.toString() ? '?' + params.toString() : '');
         }
     }
     
