@@ -85,27 +85,27 @@ WSGI_APPLICATION = 'VLN2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'verklegt_namskeid_db',
-        'USER': 'verklegt_db_user',
-        'PASSWORD': 'PcNkIf0Ku9al0jD0ubK7Bz6V',
-        'HOST': 'db-verklegt-namskeid-ii-eu-bmpg13.postgres.database.azure.com',
-        'PORT': '5432'
-    }
-}
-#
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'verklegt_namskeid_db',
 #         'USER': 'verklegt_db_user',
-#         'PASSWORD': 'nkn0Aef7iFUvSi0cF0YS2sg8',
-#         'HOST': 'db-verklegt-namskeid-ii-eu-1pgdky.postgres.database.azure.com',
+#         'PASSWORD': 'PcNkIf0Ku9al0jD0ubK7Bz6V',
+#         'HOST': 'db-verklegt-namskeid-ii-eu-bmpg13.postgres.database.azure.com',
 #         'PORT': '5432'
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'verklegt_namskeid_db',
+        'USER': 'verklegt_db_user',
+        'PASSWORD': 'nkn0Aef7iFUvSi0cF0YS2sg8',
+        'HOST': 'db-verklegt-namskeid-ii-eu-1pgdky.postgres.database.azure.com',
+        'PORT': '5432'
+    }
+}
 
 # DATABASES = {
 #     'default': {
