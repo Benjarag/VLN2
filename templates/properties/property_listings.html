@@ -6,56 +6,54 @@
 {% block content %}
 <div class="filter-container">
     <div class="filter-title">Filter</div>
-  <div class="filter-group">
-    <label for="zip">Zip</label>
-    <select id="zip" name="zip">
-      <option value="">All</option>
-      <option value="101">101</option>
-      <option value="108">108</option>
-      <option value="200">200</option>
-    </select>
-  </div>
 
-  <div class="filter-group">
-    <label for="price-range">Price range</label>
-    <div class="price-inputs">
-      <input type="number" placeholder="Min" />
-      <input type="number" placeholder="Max" />
+    <div class="filter-group">
+        <label for="zip">Zip</label>
+        <select id="zip" name="zip">
+            <option value="">All</option>
+            <option value="101">101</option>
+            <option value="108">108</option>
+            <option value="200">200</option>
+        </select>
     </div>
-  </div>
 
-  <div class="filter-group">
-    <label for="type">Type</label>
-    <select id="type" name="type">
-      <option value="">Choose</option>
-      <option value="apartment">Apartment</option>
-      <option value="house">House</option>
-      <option value="villa">Villa</option>
-    </select>
-  </div>
+    <div class="filter-group">
+        <label for="price-range">Price range</label>
+        <div class="price-inputs">
+            <input type="number" id="price-min" placeholder="Min" />
+            <input type="number" id="price-max" placeholder="Max" />
+        </div>
+    </div>
 
-  <div class="filter-group">
-    <label for="search">Search</label>
-    <input type="text" id="search" placeholder="Street name..." />
-  </div>
+    <div class="filter-group">
+        <label for="type">Type</label>
+        <select id="type" name="type">
+            <option value="">Choose</option>
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+            <option value="villa">Villa</option>
+        </select>
+    </div>
 
-  <div class="filter-group">
-    <button type="submit">Search</button>
-  </div>
+    <div class="filter-group">
+        <label for="search-value">Search</label>
+        <input type="text" id="search-value" class="form-control" placeholder="Street name..." />
+    </div>
+
+    <div class="filter-group">
+        <button id="search-icon" type="button">Search</button>
+    </div>
 </div>
 
-<div class="property-container">
+<div id="properties-placeholder" class="property-container">
     {% for property in properties %}
     <div class="property-card" data-id="{{ property.id }}">
-        <!-- Remove any <a> tags that might be wrapping this content -->
-        <!-- Image and Status -->
         <div class="property-image-wrapper">
             <img src="{% static property.image_url %}" class="property-image" alt="Property image">
             <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
             <div class="favorite-icon">&#9825;</div>
         </div>
 
-        <!-- Info Section -->
         <div class="property-info">
             <div class="property-address">
                 <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
@@ -64,7 +62,7 @@
                 <span class="detail-box">🏠 {{ property.size }} sqm</span>
                 <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
             </div>
-            <div class="property-price">{{ property.get_formatted_price }}kr.</div>
+            <div class="property-price">{{ property.get_formatted_price }} kr.</div>
         </div>
     </div>
     {% endfor %}
