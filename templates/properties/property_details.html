@@ -22,8 +22,8 @@
 <div class="info-section">
     <div class="property-specs">
         <div class="spec-box">🏠 Type: {{ property.type }}</div>
-        <div class="spec-box">💰 Price: {{ property.price }}</div>
-        <div class="spec-box">📅 Date: {{ property.date }}</div>
+        <div class="spec-box">💰 Price: {{ property.get_formatted_price }}kr.</div>
+        <div class="spec-box">📅 Date: {{ property.get_formatted_date }}</div>
         <div class="spec-box">📄 Status: {{ property.status }}</div>
     </div>
 
@@ -48,7 +48,7 @@
     <div class="additional-boxes">
         <div class="spec-box">🛏️ Bedrooms: {{ property.bedrooms }}</div>
         <div class="spec-box">🛁 Bathrooms: {{ property.bathrooms }}</div>
-        <div class="spec-box">📐 Size: {{ property.size }}</div>
+        <div class="spec-box">📐 Size: {{ property.size }} sqm</div>
     </div>
     <div class="description-section">
         <div class="description-label">Description:</div>

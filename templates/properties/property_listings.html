@@ -61,10 +61,10 @@
                 <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
             </div>
             <div class="property-details">
-                <span class="detail-box">🏠 {{ property.size }}</span>
+                <span class="detail-box">🏠 {{ property.size }} sqm</span>
                 <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
             </div>
-            <div class="property-price">{{ property.price }}</div>
+            <div class="property-price">{{ property.get_formatted_price }}kr.</div>
         </div>
     </div>
     {% endfor %}
