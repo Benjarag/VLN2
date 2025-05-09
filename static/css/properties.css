@@ -59,19 +59,10 @@
     background-color: #e6ae3e;
 }
 
-/* Filter title styling */
-.filter-title {
-  background-color: white;
-  font-weight: bold;
-  padding: 0 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
-}
+
+
+
+
 
 
 .property-card {

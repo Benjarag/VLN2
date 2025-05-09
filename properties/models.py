@@ -19,6 +19,9 @@ class Property(models.Model):
     seller_phone = models.CharField(max_length=20, null=True, blank=True)
     seller_profile_image = models.ImageField(upload_to='properties/images', null=True, blank=True)
     
+    # Add to your Property model
+    zip = models.CharField(max_length=10, null=True, blank=True)
+
     def __str__(self):
         return self.title
     
