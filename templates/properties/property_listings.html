@@ -5,67 +5,72 @@
 
 {% block content %}
 <div class="filter-container">
-    <div class="filter-title">Filter</div>
-  <div class="filter-group">
-    <label for="zip">Zip</label>
-    <select id="zip" name="zip">
-      <option value="">All</option>
-      <option value="101">101</option>
-      <option value="108">108</option>
-      <option value="200">200</option>
-    </select>
-  </div>
+    <form method="get" action="{% url 'properties:property_listings' %}">
+        <div class="filter-title">Filter</div>
+        <div class="filter-group">
+            <label for="postal_code">Zip</label>
+            {{ filter_form.postal_code }}
+        </div>
 
-  <div class="filter-group">
-    <label for="price-range">Price range</label>
-    <div class="price-inputs">
-      <input type="number" placeholder="Min" />
-      <input type="number" placeholder="Max" />
-    </div>
-  </div>
+        <div class="filter-group">
+            <label for="price-range">Price range</label>
+            <div class="price-inputs">
+                {{ filter_form.min_price }}
+                {{ filter_form.max_price }}
+            </div>
+        </div>
 
-  <div class="filter-group">
-    <label for="type">Type</label>
-    <select id="type" name="type">
-      <option value="">Choose</option>
-      <option value="apartment">Apartment</option>
-      <option value="house">House</option>
-      <option value="villa">Villa</option>
-    </select>
-  </div>
+        <div class="filter-group">
+            <label for="property_type">Type</label>
+            {{ filter_form.property_type }}
+        </div>
 
-  <div class="filter-group">
-    <label for="search">Search</label>
-    <input type="text" id="search" placeholder="Street name..." />
-  </div>
+        <div class="filter-group">
+            <label for="search">Search</label>
+            {{ filter_form.search }}
+        </div>
 
-  <div class="filter-group">
-    <button type="submit">Search</button>
-  </div>
+        <div class="filter-group">
+            {{ filter_form.ordering }}
+        </div>
+
+        <div class="filter-group">
+            <button type="submit">Search</button>
+        </div>
+    </form>
 </div>
 
 <div class="property-container">
     {% for property in properties %}
     <div class="property-card" data-id="{{ property.id }}">
-        <!-- Remove any <a> tags that might be wrapping this content -->
-        <!-- Image and Status -->
-        <div class="property-image-wrapper">
-            <img src="{% static property.image_url %}" class="property-image" alt="Property image">
-            <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-            <div class="favorite-icon">&#9825;</div>
-        </div>
+        <a href="{% url 'properties:property_details' property_id=property.id %}">
+            <!-- Image and Status -->
+            <div class="property-image-wrapper">
+                {% if property.images.first %}
+                    <img src="{{ property.images.first.image.url }}" class="property-image" alt="Property image">
+                {% else %}
+                    <img src="{% static 'properties/images/placeholder.png' %}" class="property-image" alt="No image available">
+                {% endif %}
+                <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                <div class="favorite-icon">&#9825;</div>
+            </div>
 
-        <!-- Info Section -->
-        <div class="property-info">
-            <div class="property-address">
-                <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
+            <!-- Info Section -->
+            <div class="property-info">
+                <div class="property-address">
+                    <span class="location-icon">&#x1F4CD;</span> {{ property.title }}
+                </div>
+                <div class="property-details">
+                    <span class="detail-box">🏠 {{ property.size }} sqm</span>
+                    <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+                </div>
+                <div class="property-price">{{ property.get_formatted_price }}kr.</div>
             </div>
-            <div class="property-details">
-                <span class="detail-box">🏠 {{ property.size }} sqm</span>
-                <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
-            </div>
-            <div class="property-price">{{ property.get_formatted_price }}kr.</div>
-        </div>
+        </a>
+    </div>
+    {% empty %}
+    <div class="no-properties">
+        <p>No properties found matching your criteria.</p>
     </div>
     {% endfor %}
 </div>

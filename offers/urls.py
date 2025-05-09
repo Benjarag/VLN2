@@ -4,5 +4,7 @@ from . import views
 app_name = 'offers'
 
 urlpatterns = [
-    path('', views.offers, name='my_offers'),
+    path('<int:property_id>/offer/', views.submit_purchase_offer, name='submit_purchase_offer'),
+    path('', views.purchase_offers_list, name='offers'),
+    path('finalization/<int:finalization_id>/review/', views.review_purchase, name='finalize_purchase'),
 ]

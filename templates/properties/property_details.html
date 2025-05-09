@@ -6,19 +6,23 @@
 {% block content %}
 <!-- Top Header Row -->
 <div class="header-row">
-    <a href="{% url 'property_listings' %}" class="back-button">&larr;</a>
+    <a href="{% url 'properties:property_listings' %}" class="back-button">&larr;</a>
     <h1 class="property-title">{{ property.title }}</h1>
 </div>
 
 <!-- Main Image with Carousel -->
 <div class="image-carousel">
     <button class="carousel-nav left">&lt;</button>
-    <img src="{% static property.image_url %}" class="main-image" alt="Main property image">
+    {% if property.images.first %}
+        <img src="{{ property.images.first.image.url }}" class="main-image" alt="Main property image">
+    {% else %}
+        <img src="{% static 'properties/images/placeholder.png' %}" class="main-image" alt="No image available">
+    {% endif %}
     <button class="carousel-nav right">&gt;</button>
     <div class="favorite-icon">&#9825;</div>
 </div>
 
-<!-- Property Information + Seller + Purchase -->
+<!-- Property Information + Purchase -->
 <div class="info-section">
     <div class="property-specs">
         <div class="spec-box">🏠 Type: {{ property.type }}</div>
@@ -27,17 +31,7 @@
         <div class="spec-box">📄 Status: {{ property.status }}</div>
     </div>
 
-    <!-- Seller Section Styled -->
-    <div class="seller-box">
-        <p class="seller-label">Seller:</p>
-        <div class="seller-info-card">
-            <img src="{% static property.seller.profile_image %}" class="seller-photo" alt="Seller">
-            <div class="seller-details">
-                <div class="seller-name">{{ property.seller.name }}</div>
-                <div class="seller-phone">{{ property.seller.phone }}</div>
-            </div>
-        </div>
-    </div>
+    <!-- Removed Seller Section -->
 
     <button class="submit-button">Submit Purchase</button>
 </div>

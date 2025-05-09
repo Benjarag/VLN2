@@ -1,0 +1,145 @@
+Core requirements
+Core requirements are needed to have a functional system. In order to gain a score of 7.0 you
+will need to implement all the requirements listed below.
+
+● (3%) Layout of the site
+● Navigation bar
+● Footer
+
+● (6%) Profile page - shows profile information about the logged in user
+● Display the following fields
+● Name
+● Profile image
+● Ability to edit the fields
+● Name
+● Profile image
+● The profile image should be uploaded from your computer
+● A button to update the profile information
+● If successfully submitted a confirmation should appear to the user
+● If the operation fails the user should see a clear indication that
+something failed
+
+● (12%) Property catalogue - lists available properties
+● Display a list of all available properties
+● Property address
+● Property thumbnail
+● Listing price
+● Number of rooms
+● Number of square meters
+● Information whether it has been sold or not. Property which has an
+accepted purchase offer is considered sold
+● A link to the property details page
+● Filters
+● Filter by postal code, e.g. 101, 220, 170
+● Filter by price range
+● Filter by type, e.g. villa, house, townhouse and apartments
+● Search (based on case-insensitive street name)
+● Order by price and name
+● All filters should be inclusive
+
+● (6%) Property details - shows detailed information about a specific property
+● Property address
+● Street name and house number
+● City
+● Postal code
+● Property information
+● Description
+● Type of the property
+● Listing price
+● Listing date
+● Information whether the property has been sold. Property which has an
+accepted purchase offer is considered sold
+● Seller information
+● Name
+● Thumbnail
+● A link to the Seller’s profile page
+● Images
+● Multiple images of the property, e.g. gallery or slideshow
+● Additional information
+● Total number of rooms
+● Number of bedrooms
+● Number of bathrooms
+● Number of square meters
+● A button to submit a purchase offer
+● Purchase offers are not available if the property has been sold
+● If a purchase offer has already been submitted the button should say
+“Resubmit a purchase offer” and the current status of the purchase order
+should be displayed next to the button
+● If no purchase offer has been submitted the button should say “Submit a
+purchase offer”
+
+● (6%) Seller profile - shows detailed information about a seller of a property
+● Name of the seller
+● Type of the seller (Individual, Real Estate Agency)
+● Address of the seller
+● The address should only be displayed if the seller is of type “Real Estate
+Agency” otherwise it should be hidden
+● Street name
+● City
+● Postal code
+● Logo of the seller
+● Cover image of the seller
+● Bio of the seller
+● A list of all properties on sale by that particular seller
+● Each property should:
+● Display a thumbnail image
+● Display the property’s address
+● When clicked on should redirect to the property detail page for
+that particular property
+
+● (6%) Submitting a purchase offer
+● A purchase offer can be submitted for each property which has not been sold.
+Property which has an accepted purchase offer is considered sold
+● When submitting a purchase offer the following information should be gathered
+● Purchase offer price
+● Expiration date
+● After submitting a purchase offer, a confirmation message should be displayed
+● (6%) Purchase offers
+● A list of all purchase offers
+● Each purchase offer should have the following:
+● Name of the property
+● A link to the property which will lead to the “Property details” page
+● Date of purchase offer
+● Expiration date of purchase offer
+● Status of purchase offer (Pending, Accepted, Rejected and Contingent)
+● Seller of property
+● Purchase offer price
+● A link to finalize the purchase offer if the purchase offer is either accepted
+or contingent
+
+● (25%) Finalizing a purchase offer - this happens after the purchase offer has been
+accepted by the seller
+● Contact information
+● Address
+● Street name
+● City
+● Postal Code
+● Country - should be displayed as a <select> HTML element and
+the ability to choose from multiple countries
+● National id (ísl. kennitala)
+● Payment step
+● Payment options (Credit card, bank transfer or mortgage)
+● If credit card is selected
+● Cardholder name
+● Credit card number
+● Expiry date
+● CVC
+● If bank transfer is selected
+● Bank account (you are free to use either IBAN, Swift or the
+Icelandic format)
+● If mortgage is selected
+● Mortgage provider, e.g. Arion banki, Landsbankinn, Íslandsbanki,
+etc.
+● Review step (read-only)
+● Display all information typed in the previous sections without being able
+to change/edit anything
+● A button to confirm the purchase offer
+● Confirmation step
+● States that the purchase offer was successfully submitted
+● A link to the homepage
+● Easy navigation between steps
+● All information gathered in each step should be available throughout the
+finalizing phase, meaning that if transitioning between different steps the
+information should persist between transitions
+● Ability to navigate back and forth between all steps excluding the
+confirmation step

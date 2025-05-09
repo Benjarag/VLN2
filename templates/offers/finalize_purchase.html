@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    
+    <!-- Basic information fields -->
+    <div class="form-section">
+        <h3>Contact Information</h3>
+        {{ form.street_address.label_tag }} {{ form.street_address }}
+        {{ form.city.label_tag }} {{ form.city }}
+        {{ form.postal_code.label_tag }} {{ form.postal_code }}
+        {{ form.country.label_tag }} {{ form.country }}
+        {{ form.national_id.label_tag }} {{ form.national_id }}
+    </div>
+    
+    <!-- Payment section -->
+    <div class="form-section">
+        <h3>Payment Method</h3>
+        <div class="payment-options">
+            {{ form.payment_option }}
+        </div>
+        
+        <!-- Credit Card Fields (hidden by default) -->
+        <div id="credit-card-fields" class="payment-details" style="display: none;">
+            <h4>Credit Card Details</h4>
+            {{ form.cardholder_name.label_tag }} {{ form.cardholder_name }}
+            {{ form.credit_card_number.label_tag }} {{ form.credit_card_number }}
+            {{ form.expiry_date.label_tag }} {{ form.expiry_date }}
+            {{ form.cvc.label_tag }} {{ form.cvc }}
+        </div>
+        
+        <!-- Bank Transfer Fields (hidden by default) -->
+        <div id="bank-transfer-fields" class="payment-details" style="display: none;">
+            <h4>Bank Transfer Details</h4>
+            {{ form.bank_account.label_tag }} {{ form.bank_account }}
+        </div>
+        
+        <!-- Mortgage Fields (hidden by default) -->
+        <div id="mortgage-fields" class="payment-details" style="display: none;">
+            <h4>Mortgage Details</h4>
+            {{ form.mortgage_provider.label_tag }} {{ form.mortgage_provider }}
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Continue</button>
+</form>
+{% endblock %}
