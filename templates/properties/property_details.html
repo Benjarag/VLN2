@@ -7,7 +7,7 @@
 <!-- Top Header Row -->
 <div class="header-row">
     <a href="{% url 'properties:property_listings' %}" class="back-button">&larr;</a>
-    <h1 class="property-title">{{ property.title }}</h1>
+    <h1 class="property-title">Property address: {{ property.street_address }}</h1>
 </div>
 
 <!-- Main Image with Carousel -->
@@ -16,7 +16,7 @@
     {% if property.images.first %}
         <img src="{{ property.images.first.image.url }}" class="main-image" alt="Main property image">
     {% else %}
-        <img src="{% static 'properties/images/placeholder.png' %}" class="main-image" alt="No image available">
+        <img src="{% static '../../media/properties/images/placeholder.png' %}" class="main-image" alt="No image available">
     {% endif %}
     <button class="carousel-nav right">&gt;</button>
     <div class="favorite-icon">&#9825;</div>

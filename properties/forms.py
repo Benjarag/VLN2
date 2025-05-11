@@ -4,8 +4,8 @@ from .models import Property
 
 class PropertyFilterForm(forms.Form):
     # Search field for street address
-    search = forms.CharField(required=False, label='Search by address',
-                            widget=forms.TextInput(attrs={'placeholder': 'Search by address...'}))
+    search = forms.CharField(required=False, label='Search by street address',
+                            widget=forms.TextInput(attrs={'placeholder': 'Search by street address...'}))
     
     # Postal code field
     postal_code = forms.CharField(required=False, label='Postal Code')

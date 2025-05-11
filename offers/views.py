@@ -11,7 +11,7 @@ from django.utils import timezone
 @login_required
 def purchase_offers_list(request):
     # Get all offers from the current user
-    offers = PurchaseOffer.objects.filter(user=request.user).order_by('-created_at')
+    offers = PurchaseOffer.objects.filter(user=request.user).order_by('-date_created')
 
     return render(request, 'offers/purchase_offers_list.html', {
         'offers': offers
