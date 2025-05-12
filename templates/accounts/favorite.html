@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Uppáhalds eignir</h2>
+
+<div class="property-container">
+    {% for property in properties %}
+        <div class="property-card" data-id="{{ property.id }}">
+            <a href="{% url 'properties:property_details' property_id=property.id %}">
+                <div class="property-image-wrapper">
+                    {% if property.images.first %}
+                        <img src="{{ property.images.first.image.url }}" class="property-image" alt="Property image">
+                    {% else %}
+                        <img src="{% static '../../media/properties/images/placeholder.png' %}" class="property-image" alt="No image available">
+                    {% endif %}
+                    <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                    <div class="favorite-icon">&#9825;</div>
+                </div>
+
+                <div class="property-info">
+                    <div class="property-address">
+                        <span class="location-icon">&#x1F4CD;</span> {{ property.title }}, {{ property.street_address }},
+                        {% if property.city %}
+                            {{ property.city }},
+                        {% endif %}
+                        {% if property.postal_code %}
+                            {{ property.postal_code }}.
+                        {% endif %}
+                    </div>
+                    <div class="property-details">
+                        <span class="detail-box">🏠 {{ property.size }} sqm</span>
+                        <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+                    </div>
+                    <div class="property-price">{{ property.get_formatted_price }}kr.</div>
+                </div>
+            </a>
+        </div>
+    {% empty %}
+    <div class="no-properties">
+        <p>Engar uppáhalds eignir fundust.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
