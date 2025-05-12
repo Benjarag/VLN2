@@ -1,13 +1,14 @@
 # accounts/views.py
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 
 from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm
 from django.contrib import  messages
 from django.contrib.auth import logout, login
 
 from accounts.models import Profile
+from properties.models import Property
 
 
 @login_required
@@ -53,8 +54,26 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
+def toggle_favorite(request):
+    if request.method == 'POST':
+        property_id = request.POST.get('property_id')
+        property_obj = get_object_or_404(Property, id=property_id)
+
+        user = request.user
+
+        if property_obj in user.favorite_properties.all():
+            # ef hann ýtir á favorite takkann þegar búið er að favorite-a listing-ið
+            user.favorite_properties.remove(property_obj)
+            return JsonResponse({'status': 'removed'})
+        else:
+            user.favorite_properties.add(property_obj)
+            return JsonResponse({'status': 'added'})
+    return JsonResponse({'error': 'Bad request'}, status=400)
+
+@login_required
 def favorites_view(request):
-    return HttpResponse("This is the favorites page")
+    properties = request.user.favorite_properties.all()
+    return render(request, 'accounts/favorite.html', {'properties': properties})
 
 def logout_view(request):
     logout(request)

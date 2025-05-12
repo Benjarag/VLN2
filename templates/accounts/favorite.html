@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}My Favorites{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>My Favorite Properties</h1>
+    
+    {% if properties %}
+        <div class="row">
+            {% for property in properties %}
+                <div class="col-md-4 mb-4">
+                    <div class="card property-card" data-id="{{ property.id }}">
+                        {% if property.propertyimage_set.first %}
+                            <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="{{ property.title }}">
+                        {% else %}
+                            <img src="/media/properties/images/placeholder.png" class="card-img-top" alt="No image available">
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ property.title }}</h5>
+                            <p class="card-text">{{ property.street_address }}, {{ property.city }}</p>
+                            <p class="card-text"><strong>{{ property.get_formatted_price }} kr</strong></p>
+                            <p class="card-text">
+                                <small>{{ property.size }} m² • {{ property.rooms }} rooms • {{ property.bedrooms }} bedrooms</small>
+                            </p>
+                            
+                            <!-- Favorite icon - already favorite by definition -->
+                            <a href="#" class="favorite-icon active">
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <p>You haven't added any properties to your favorites yet.</p>
+            <a href="{% url 'properties:property_list' %}" class="btn btn-primary">Browse Properties</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
