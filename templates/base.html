@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{% static 'css/property_details.css' %}">
     <link rel="stylesheet" href="{% static 'css/properties.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/favicon-32x32.png' %}" sizes="32x32">
+    {% block login_css %}{% endblock %}
+    {% block signup_css %}{% endblock %}}
 </head>
 <body>
     {% include '_navigation.html' %}
