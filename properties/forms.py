@@ -3,9 +3,15 @@ from django import forms
 from .models import Property
 
 class PropertyFilterForm(forms.Form):
-    # Search field for street address
-    search = forms.CharField(required=False, label='Search by street address',
-                            widget=forms.TextInput(attrs={'placeholder': 'Search by street address...'}))
+    # For the search field, similarly add style
+    search = forms.CharField(
+        required=False, 
+        label='Search by street address',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Search by street address...',
+            'style': 'font-size: 0.60rem;'  # Adjust size as needed
+        })
+    )
     
     # Postal code field
     postal_code = forms.CharField(required=False, label='Postal Code')
@@ -16,12 +22,14 @@ class PropertyFilterForm(forms.Form):
     max_price = forms.IntegerField(required=False, label='Max Price',
                                   widget=forms.NumberInput(attrs={'placeholder': 'Max'}))
     
-    # Property type dropdown (choices come from Property model)
+    # For the property_type field, add a style attribute to make the font smaller
     property_type = forms.ChoiceField(
         choices=[('', '-- Select Property Type --')] + list(Property.PROPERTY_TYPES),
         required=False,
-        label='Property Type'
+        label='Property Type',
+        widget=forms.Select(attrs={'style': 'font-size: 0.60rem;'})  # Adding style for smaller font
     )
+    
     
     # Ordering options
     ORDERING_CHOICES = [
