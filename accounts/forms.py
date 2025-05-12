@@ -1,11 +1,26 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'id': 'signup_email', 'placeholder': 'Email'})
+    )
+    username = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'signup_username', 'placeholder': 'Username'})
+    )
+    password1 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'signup_password1', 'placeholder': 'Password'})
+    )
+    password2 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'id': 'signup_password2', 'placeholder': 'Confirm Password'})
+    )
 
     class Meta:
         model = User
@@ -18,6 +33,24 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'login_username',
+            'placeholder': 'Username'
+        }))
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'id': 'login_password',
+            'placeholder': 'Password'
+        }))
+
+
 class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(help_text='')  # Empty help text
 
@@ -25,9 +58,8 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username']
 
+
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image', 'phone']
-
-

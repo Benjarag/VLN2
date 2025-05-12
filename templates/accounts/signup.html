@@ -1,13 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block signup_css %}
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h1>Sign up to Castle Apartments</h1>
+<div class="signup-container">
+    <h2 class="signup-title">Create an Account</h2>
 
-    <form method="POST" action="{%  url 'signup' %}">
+    <form method="post" class="signup-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button class="button">Sign up</button>
+
+        <!-- Option 1: Custom form layout with individual fields -->
+        <div class="form-group">
+            <label for="signup_username">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="signup_email">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="signup_password1">Password</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="signup_password2">Confirm Password</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="signup-button">Sign Up</button>
     </form>
 
-    <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    <div class="login-link">
+        Already have an account? <a href="{% url 'login' %}">Log In</a>
+    </div>
+</div>
 {% endblock %}
