@@ -2,32 +2,27 @@
 from django import forms
 from django.utils import timezone
 from .models import PurchaseFinalization, PurchaseOffer
+from .models import PurchaseOffer
 
 
 class PurchaseOfferForm(forms.ModelForm):
-    # Override the offer_price field to add validation and styling
+    # Add these fields to the form
     offer_price = forms.IntegerField(
-        label="Offer Price (ISK)",
         min_value=1,
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter your offer amount in ISK'
-        })
+        widget=forms.NumberInput(attrs={'placeholder': 'Enter your offer amount in ISK'})
     )
-
-    # Add a date picker for expiration date
     expiration_date = forms.DateField(
-        label="Offer Expiration Date",
-        widget=forms.DateInput(attrs={
-            'class': 'form-control',
-            'type': 'date',
-            'min': timezone.now().date().isoformat()  # Set minimum date to today
-        })
+        widget=forms.DateInput(attrs={'type': 'date'})
     )
 
     class Meta:
         model = PurchaseOffer
-        fields = ['offer_price', 'expiration_date']
+        fields = ['offer_price']
+
+    def __init__(self, *args, **kwargs):
+        super(PurchaseOfferForm, self).__init__(*args, **kwargs)
+        # Set minimum date for expiration date
+        self.fields['expiration_date'].initial = timezone.now().date() + timezone.timedelta(days=7)
 
 
 class PurchaseFinalizationForm(forms.ModelForm):
@@ -68,4 +63,3 @@ class PurchaseFinalizationForm(forms.ModelForm):
                 self.add_error('mortgage_provider', 'Required for mortgage payment')
         
         return cleaned_data
-

@@ -1,0 +1,88 @@
+/* Match property listing styles but ensure offer-specific customizations */
+.property-card {
+  position: relative;
+  display: flex;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  overflow: visible;
+  /* Using min-height instead of fixed height for responsiveness */
+  min-height: 180px;
+  height: auto;
+}
+
+.property-card a {
+  display: flex;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Fixed size container for image */
+.property-image-wrapper {
+  position: relative;
+  /*width: 150px;*/
+  /*height: 150px;*/
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+    aspect-ratio: 1/1; /* For modern browsers */
+  flex-shrink: 0;
+  margin-right: 15px;
+  align-self: center;
+}
+
+/* Image fills the wrapper container completely */
+.property-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.property-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This maintains aspect ratio while filling container */
+  border-radius: 10px;
+}
+
+/* Offer details styling */
+.offer-details {
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-grow: 1;
+}
+
+.offer-detail {
+  margin: 2px 0;
+}
+
+.offer-status {
+  font-weight: bold;
+}
+
+.offer-status.pending { color: grey; }
+.offer-status.accepted { color: green; }
+.offer-status.rejected, .offer-status.expired { color: red; }
+
+/* Dates section */
+.offer-dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.date-divider {
+  margin: 0 10px;
+}
+
+/* Price styling */
+.offers-property-price {
+  font-size: 1.2em;
+}

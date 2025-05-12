@@ -72,7 +72,7 @@ class Property(models.Model):
     @property
     def is_sold(self):
         """Check if property is sold based on status or accepted offer"""
-        return self.status == 'Sold' or self.has_accepted_offer()
+        return self.status == 'Sold' or self.has_accepted_offer
 
 
 class PropertyImage(models.Model):

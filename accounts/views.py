@@ -53,6 +53,7 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
+@login_required
 def favorites_view(request):
     return HttpResponse("This is the favorites page")
 

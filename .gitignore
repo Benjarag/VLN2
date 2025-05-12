@@ -18,8 +18,8 @@ env/
 ENV/
 *.venv
 
-# User uploaded content
-media/
+## User uploaded content
+#media/
 
 # Dependency directories
 node_modules/
