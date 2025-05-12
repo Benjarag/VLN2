@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 
 from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm
-from django.contrib import  messages
+from django.contrib import messages
 from django.contrib.auth import logout, login
 
 from accounts.models import Profile
@@ -54,12 +54,16 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
+
 def toggle_favorite(request):
     if request.method == 'POST':
         property_id = request.POST.get('property_id')
         property_obj = get_object_or_404(Property, id=property_id)
 
         user = request.user
+
+        if not user.is_authenticated:
+            return JsonResponse({'error': 'guest-user'})
 
         if property_obj in user.favorite_properties.all():
             # ef hann ýtir á favorite takkann þegar búið er að favorite-a listing-ið
@@ -70,10 +74,12 @@ def toggle_favorite(request):
             return JsonResponse({'status': 'added'})
     return JsonResponse({'error': 'Bad request'}, status=400)
 
+
 @login_required
 def favorites_view(request):
     properties = request.user.favorite_properties.all()
     return render(request, 'accounts/favorite.html', {'properties': properties})
+
 
 def logout_view(request):
     logout(request)

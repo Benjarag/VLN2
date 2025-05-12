@@ -54,6 +54,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
+                // The guest user should still be able to see the UI effect, but we don't save it
+                if (data.status === 'guest-user' && !this.classList.contains('active')) {
+                    this.classList.add('active');
+                    return;
+                } else if (data.status === 'guest-user' && this.classList.contains('active')) {
+                    this.classList.remove('active');
+                    return;
+                }
                 console.log(`Favorite ${data.status} for property ID: ${propertyId}`);
                 // Update UI based on server response if needed
                 if (data.status === 'added' && !this.classList.contains('active')) {
