@@ -103,3 +103,11 @@ def submit_purchase_offer(request, property_id):
 
     # This view only handles POST requests
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+@login_required
+#Login required to favorite a listing
+def favorite_listings(request, property_id):
+    favorite_property = get_object_or_404(Property, id=property_id)
+    request.user.favorite_properties.add(favorite_property)
+    request.user.save()
+    return redirect('properties:property_details', property_id=property_id)
