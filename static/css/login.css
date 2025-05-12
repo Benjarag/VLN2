@@ -56,7 +56,7 @@
 
 /* Login button - smaller padding */
 .login-button {
-    background-color: #007bff;
+    background-color: #ffce69;
     color: white;
     border: none;
     padding: 10px;
@@ -68,7 +68,7 @@
 }
 
 .login-button:hover {
-    background-color: #0069d9;
+    background-color: #e6ae3e;
 }
 
 .signup-link {
