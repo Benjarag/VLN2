@@ -95,7 +95,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 576px) {
+@media (max-width: 570px) {
     .signup-container {
         margin: 15px;
         padding: 15px;
