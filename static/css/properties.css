@@ -6,19 +6,18 @@
   padding: 0 1rem;
   height: 100px;
   overflow-x: auto;
-  justify-content: center; /* Center content horizontally */
+  justify-content: center;
 }
 
 .filter-form {
   width: 100%;
-  max-width: 1200px; /* Add a max-width to ensure it doesn't stretch too much */
+  max-width: 1200px;
 }
 
 .filter-row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between; /* Evenly distribute items */
   height: 100%;
   width: 100%;
 }
@@ -28,12 +27,47 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; /* Center content within each group */
-  min-width: 120px;
+  align-items: center;
   padding: 0 1rem;
   border-left: 1px solid #eaeaea;
   height: 60px;
-  flex: 1; /* Make all groups take equal space */
+}
+
+/* Specific width controls for different filter groups */
+.filter-group:nth-child(1) {
+  /* Filter title */
+  flex: 0.6;
+  border-left: none;
+}
+
+.filter-group:nth-child(2) {
+  /* Zip - make it smaller */
+  flex: 0.5;
+}
+
+.filter-group:nth-child(3) {
+  /* Price range */
+  flex: 1.2;
+}
+
+.filter-group:nth-child(4) {
+  /* Type - make it bigger */
+  flex: 1.4;
+}
+
+.filter-group:nth-child(5) {
+  /* Search - make it bigger */
+  flex: 1.7;
+}
+
+.filter-group:nth-child(6) {
+  /* Ordering */
+  flex: 1.2;
+}
+
+.filter-group:nth-child(7) {
+  /* Button */
+  flex: 0.8;
 }
 
 /* Title styling */
@@ -43,9 +77,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-left: none;
-  padding-right: 1rem;
-  min-width: 80px; /* Give a more consistent width */
 }
 
 /* Form controls styling */
@@ -54,7 +85,7 @@
   margin-bottom: 5px;
   font-weight: 500;
   font-size: 0.9rem;
-  text-align: center; /* Center the labels */
+  text-align: center;
 }
 
 .filter-group select,
@@ -64,18 +95,31 @@
   font-size: 0.85rem;
   border-radius: 5px;
   border: 1px solid #ccc;
-  text-align: center; /* Center the text in inputs */
+  text-align: center;
+  width: 100%;
+}
+
+/* Style the select dropdowns to have the proper color */
+.filter-group select {
+  color: #6c757d;
+}
+
+.filter-group select option[value=""] {
+  color: #6c757d;
+}
+
+.filter-group select option:not([value=""]) {
+  color: #212529;
 }
 
 .postal-code-inputs {
   display: flex;
-  gap: 0.5rem;
-  width: 100px;
-  justify-content: center; /* Center the content */
+  justify-content: center;
+  width: 100%;
 }
 
 .postal-code-inputs input {
-  width: 100px;
+  width: 70px; /* Making the zip input a bit smaller */
   text-align: center;
 }
 
@@ -83,8 +127,8 @@
 .price-inputs {
   display: flex;
   gap: 0.5rem;
-  width: 200px;
-  justify-content: center; /* Center the content */
+  justify-content: center;
+  width: 100%;
 }
 
 .price-inputs input {
@@ -101,7 +145,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100px; /* Consistent width for button */
+  width: 100px;
   text-align: center;
 }
 
@@ -117,140 +161,4 @@
 .filter-container::-webkit-scrollbar-thumb {
   background-color: #c1c1c1;
   border-radius: 4px;
-}
-
-/* Property cards styling */
-.property-card {
-  display: flex;
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 15px;
-  height: 180px;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.property-card a {
-  display: flex;
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-}
-
-.property-image-wrapper {
-  position: relative;
-  width: 180px;
-  height: 100%;
-  flex-shrink: 0;
-}
-
-.property-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.property-status {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 5px 10px;
-  border-radius: 20px;
-  color: white;
-  font-size: 0.9em;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.property-status.available {
-  background-color: green;
-}
-
-.property-status.sold {
-  background-color: red;
-}
-
-.favorite-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 10;
-  color: grey;
-  font-size: 20px;
-  transition: color 0.3s ease;
-}
-
-.property-info {
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-grow: 1;
-}
-
-.property-address {
-  font-size: 1em;
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.location-icon {
-  margin-right: 5px;
-}
-
-.property-details {
-  display: flex;
-  align-self: flex-start;
-  margin-top: -30px;
-  gap: 15px;
-  cursor: pointer;
-}
-
-.detail-box {
-  background-color: white;
-  border: 1px solid black;
-  padding: 3px 6px;
-  border-radius: 20px;
-  font-size: 0.7em;
-  margin-top: 60px;
-}
-
-.property-price {
-  margin-top: 30px;
-  align-self: flex-end;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #ffce69;
-  cursor: pointer;
-}
-
-.favorite-icon.active {
-  color: red;
-  transform: scale(1.1);
-}
-
-/* Container for property listings */
-.property-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.no-properties {
-  text-align: center;
-  padding: 40px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  margin-top: 20px;
 }
