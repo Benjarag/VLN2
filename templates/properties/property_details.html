@@ -31,9 +31,44 @@
         <div class="spec-box">📄 Status: {{ property.status }}</div>
     </div>
 
-    <!-- Removed Seller Section -->
+    <!-- Removed Seller Section -->    <!-- Seller Section -->
+    <div class="seller-section">
+        <h3>Seller Information</h3>
+        {% if property.seller %}
+            <div class="seller-profile">
+                {% if property.seller.logo %}
+                    <img src="{{ property.seller.logo.url }}" class="seller-image" alt="Seller logo">
+                {% else %}
+                    <img src="{% static 'sellers/images/default_profile.png' %}" class="seller-image" alt="Default seller image">
+                {% endif %}
+                <div class="seller-details">
+                    <div class="seller-name">{{ property.seller.name }}</div>
+                    <div class="seller-contact">{{ property.seller.phone }}</div>
+                    <a href="{% url 'sellers:seller_profile' seller_id=property.seller.id %}" class="seller-link">View Profile</a>
+                </div>
+            </div>
+        {% else %}
+            <p class="no-seller">Seller information not available</p>
+        {% endif %}
+    </div>
 
-    <button class="submit-button">Submit Purchase</button>
+    <!-- Submit Purchase Button -->
+    {% if not is_sold %}
+        {% if user_offer %}
+            <a href="{% url 'offers:submit_purchase_offer' property_id=property.id %}" class="submit-button">Resubmit Purchase Offer</a>
+        {% else %}
+            <a href="{% url 'offers:submit_purchase_offer' property_id=property.id %}" class="submit-button">Submit Purchase Offer</a>
+        {% endif %}
+    {% elif property.is_sold %}
+        <div class="property-sold-notice">
+            <p>This property has been sold and is no longer accepting offers.</p>
+        </div>
+{#    {% elif not user.is_authenticated %}#}
+{#        <div class="login-prompt">#}
+{#            <p>Please <a href="/login/?next={{ request.path }}">log in</a> to make an offer.</p>#}
+{#        </div>#}
+    {% endif %}
+
 </div>
 
 <!-- Additional Info and Description -->

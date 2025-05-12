@@ -1,6 +1,7 @@
 # accounts/views.py
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from django.http import JsonResponse
 
 from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm
@@ -73,6 +74,7 @@ def toggle_favorite(request):
             user.favorite_properties.add(property_obj)
             return JsonResponse({'status': 'added'})
     return JsonResponse({'error': 'Bad request'}, status=400)
+
 
 
 @login_required

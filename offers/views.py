@@ -24,7 +24,9 @@ def submit_purchase_offer(request, property_id):
     # Check if property is sold
     if property.is_sold:
         messages.error(request, "Cannot submit offer for a sold property")
-        return JsonResponse({'success': False, 'message': 'This property is sold and not accepting offers'})
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'This property is sold and not accepting offers'})
+        return redirect('properties:property_details', property_id=property.id)
 
     if request.method == 'POST':
         # Process form submission
@@ -32,14 +34,20 @@ def submit_purchase_offer(request, property_id):
         if form.is_valid():
             # Check if date is valid (not in the past)
             if form.cleaned_data['expiration_date'] < timezone.now().date():
-                return JsonResponse({'success': False, 'message': 'Expiration date cannot be in the past'})
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'success': False, 'message': 'Expiration date cannot be in the past'})
+                messages.error(request, "Expiration date cannot be in the past")
+                return render(request, 'offers/submit_purchase_offer.html', {'form': form, 'property': property})
 
             # Create the purchase offer
             offer = form.save(commit=False)
-            # Set the foreign key relationships
+            
+            # Set the required fields
             offer.related_property = property
             offer.user = request.user
-
+            offer.property_name = property.title
+            offer.seller_name = "Property Seller" # Set a default value since seller is not implemented yet
+            
             # Convert the date to datetime with timezone for date_expired
             offer.date_expired = timezone.datetime.combine(
                 form.cleaned_data['expiration_date'],
@@ -48,13 +56,37 @@ def submit_purchase_offer(request, property_id):
 
             offer.save()
 
-            return JsonResponse({'success': True, 'message': 'Your purchase offer has been submitted'})
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
+            
+            messages.success(request, "Your purchase offer has been submitted successfully!")
+            return redirect('properties:property_details', property_id=property.id)
         else:
-            return JsonResponse({'success': False, 'message': form.errors.as_text()})
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'message': form.errors.as_text()})
+            
+            return render(request, 'offers/submit_purchase_offer.html', {'form': form, 'property': property})
 
-    # This view only handles POST requests
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    # GET request - display the form
+    form = PurchaseOfferForm()
+    return render(request, 'offers/submit_purchase_offer.html', {'form': form, 'property': property})
 
+@login_required
+def cancel_offer(request, offer_id):
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+
+    # Only pending offers can be cancelled
+    if offer.status != 'Pending':
+        messages.error(request, "Only pending offers can be cancelled.")
+        return redirect('offers:purchase_offers_list')
+
+    if request.method == 'POST':
+        # Update the offer status to Cancelled
+        offer.status = 'Cancelled'
+        offer.save()
+        messages.success(request, "Your purchase offer has been cancelled successfully.")
+        
+    return redirect('offers:purchase_offers_list')
 
 
 # Create your views here.

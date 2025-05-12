@@ -7,6 +7,8 @@ from offers.forms import PurchaseOfferForm
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
 
 
 def property_listings(request):
@@ -35,8 +37,13 @@ def property_listings(request):
 
         # Search by street name (case-insensitive)
         if data.get('search'):
-            # TEMPORARILY use title instead of street_address
-            properties = properties.filter(title__icontains=data['search'])
+            search_query = data['search']
+            properties = properties.filter(
+                Q(street_address__icontains=search_query) |
+                Q(city__icontains=search_query) |
+                Q(postal_code__icontains=search_query) |
+                Q(title__icontains=search_query)
+            )
 
         # Ordering
         if data.get('ordering'):
@@ -59,9 +66,13 @@ def property_details(request, property_id):
             user=request.user
         ).order_by('-date_created').first()
 
+    # Pre-calculate is_sold status
+    is_sold = property.status == 'Sold'
+
     context = {
         'property': property,
         'user_offer': user_offer,
+        'is_sold': is_sold
     }
     return render(request, 'properties/property_details.html', context)
 
