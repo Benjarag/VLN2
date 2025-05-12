@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/property_details.css' %}">
     <link rel="stylesheet" href="{% static 'css/properties.css' %}">
+    {% block signup_css %}{% endblock %}
+    {% block login_css %}{% endblock %}
+
 </head>
 <body>
     {% include '_navigation.html' %}
