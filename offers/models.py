@@ -13,6 +13,7 @@ class PurchaseOffer(models.Model):
         ('Contingent', 'Contingent'),
         ('Expired', 'Expired'),
         ('Finalized', 'Finalized'),
+        ('Cancelled', 'Cancelled'),
     ]
 
     # Foreign keys to related models
@@ -130,3 +131,4 @@ class PurchaseFinalization(models.Model):
             self.purchase_offer.related_property.save()
 
         super().save(*args, **kwargs)
+

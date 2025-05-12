@@ -4,66 +4,59 @@
 {% block content %}
 <div class="container">
     <h1 class="my-4">My Purchase Offers</h1>
-    
+
     {% if offers %}
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Property</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Date Submitted</th>
-                        <th>Expiration Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for offer in offers %}
-                    <tr class="{% if offer.status == 'Accepted' %}table-success{% elif offer.status == 'Rejected' %}table-danger{% elif offer.status == 'Expired' %}table-secondary{% endif %}">
-                        <td>
-                            <a href="{% url 'properties:property_details' property_id=offer.related_property.id %}">
-                                {{ offer.related_property.title }}
-                            </a>
-                        </td>
-                        <td>{{ offer.amount }} kr</td>
-                        <td>
-                            <span class="badge badge-pill 
-                                {% if offer.status == 'Pending' %}badge-warning
-                                {% elif offer.status == 'Accepted' %}badge-success
-                                {% elif offer.status == 'Rejected' %}badge-danger
-                                {% elif offer.status == 'Expired' %}badge-secondary
-                                {% endif %}">
-                                {{ offer.status }}
-                            </span>
-                        </td>
-                        <td>{{ offer.date_created|date:"M d, Y" }}</td>
-                        <td>{{ offer.date_expired|date:"M d, Y" }}</td>
-                        <td>
-                            {% if offer.status == 'Pending' %}
-                                <button type="button" class="btn btn-sm btn-danger cancel-offer-btn" 
-                                        data-offer-id="{{ offer.id }}"
-                                        data-toggle="modal" 
-                                        data-target="#cancelOfferModal">
-                                    Cancel
-                                </button>
+        <div class="property-container">
+            {% for offer in offers %}
+                <div class="property-card offer-card {% if offer.status == 'Accepted' %}accepted{% elif offer.status == 'Rejected' %}rejected{% elif offer.status == 'Expired' %}expired{% elif offer.status == 'Contingent' %}contingent{% elif offer.status == 'Cancelled' %}cancelled{% endif %}" data-id="{{ offer.id }}">
+
+                    <a href="{% url 'properties:property_details' property_id=offer.related_property.id %}">
+                        <!-- Image and Status -->
+                        <div class="property-image-wrapper">
+                            {% if offer.related_property.images.first %}
+                                <img src="{{ offer.related_property.images.first.image.url }}" class="property-image" alt="Property image">
                             {% else %}
-                                <!-- Display feedback if available -->
-                                {% if offer.feedback %}
-                                    <button type="button" class="btn btn-sm btn-info" 
-                                            data-toggle="popover" 
-                                            data-placement="left" 
-                                            title="Feedback" 
-                                            data-content="{{ offer.feedback }}">
-                                        View Feedback
-                                    </button>
-                                {% endif %}
+                                <img src="{% static 'images/placeholder.png' %}" class="property-image" alt="No image available">
                             {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            <div class="property-status {{ offer.related_property.status|lower }}">{{ offer.related_property.status }}</div>
+                            <div class="favorite-icon">&#9825;</div>
+                        </div>
+
+                        <!-- Info Section -->
+                        <div class="property-info">
+                            <div class="property-address">
+                                <span class="location-icon">&#x1F4CD;</span>
+                                {{ offer.related_property.title }}{% if offer.related_property.street_address %}, {{ offer.related_property.street_address }}{% endif %}
+                            </div>
+
+                            <div class="offer-details">
+                                <div class="offer-dates">
+                                    <span class="offer-detail">Purchase offer date: {{ offer.date_created|date:"j. F Y" }}</span>
+                                    <span class="offer-detail date-divider">|</span>
+                                    <span class="offer-detail">Expiration date: {{ offer.date_expired|date:"j. F Y" }}</span>
+                                </div>
+
+                                <div class="offer-detail">Status of purchase offer:
+                                    <span class="offer-status {{ offer.status|lower }}">{{ offer.status }}</span>
+                                </div>
+
+                                <div class="offer-detail">Seller of property: {{ offer.seller_name|default:"Unknown" }}</div>
+                            </div>
+                            <div class="offer-bottom-row">
+                                <div class="offers-property-price">Purchase offer price: {{ offer.get_formatted_price }}</div>
+                            </div>
+                        </div>
+                    </a>
+
+                    {% if offer.can_finalize %}
+                    <div class="finalize-button-wrapper">
+                        <a href="{% url 'offers:finalize_purchase' offer_id=offer.id %}" class="btn btn-sm btn-success">
+                            Finalize Purchase
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
     {% else %}
         <div class="alert alert-info">
@@ -72,45 +65,4 @@
         </div>
     {% endif %}
 </div>
-
-<!-- Cancel Offer Modal -->
-<div class="modal fade" id="cancelOfferModal" tabindex="-1" role="dialog" aria-labelledby="cancelOfferModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cancelOfferModalLabel">Cancel Purchase Offer</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to cancel this purchase offer? This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No, Keep Offer</button>
-                <form id="cancel-offer-form" method="post" action="">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Yes, Cancel Offer</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% if offers %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize popovers
-        $(function () {
-            $('[data-toggle="popover"]').popover();
-        });
-        
-        // Set up cancel offer modal
-        $('.cancel-offer-btn').click(function() {
-            const offerId = $(this).data('offer-id');
-            $('#cancel-offer-form').attr('action', `/offers/${offerId}/cancel/`);
-        });
-    });
-</script>
-{% endif %}
 {% endblock %}
