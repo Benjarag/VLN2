@@ -12,9 +12,9 @@ class PropertyFilterForm(forms.Form):
     
     # Price range fields
     min_price = forms.IntegerField(required=False, label='Min Price',
-                                  widget=forms.NumberInput(attrs={'placeholder': 'Min price...'}))
+                                  widget=forms.NumberInput(attrs={'placeholder': 'Min'}))
     max_price = forms.IntegerField(required=False, label='Max Price',
-                                  widget=forms.NumberInput(attrs={'placeholder': 'Max price...'}))
+                                  widget=forms.NumberInput(attrs={'placeholder': 'Max'}))
     
     # Property type dropdown (choices come from Property model)
     property_type = forms.ChoiceField(
