@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Send request to server
-            fetch('/toggle-favorite/', {
+            fetch('/accounts/toggle-favorite/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

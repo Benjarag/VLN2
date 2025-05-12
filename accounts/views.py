@@ -55,7 +55,6 @@ def profile_update(request):
     })
 
 
-@login_required
 def toggle_favorite(request):
     if request.method == 'POST':
         property_id = request.POST.get('property_id')
@@ -74,7 +73,7 @@ def toggle_favorite(request):
 
 def favorites_view(request):
     properties = request.user.favorite_properties.all()
-    return render(request, 'properties/favorites.html', {'properties': properties})
+    return render(request, 'accounts/favorite.html', {'properties': properties})
 
 def logout_view(request):
     logout(request)

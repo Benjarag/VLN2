@@ -1,44 +1,44 @@
 {% extends 'base.html' %}
 
+{% block title %}My Favorites{% endblock %}
+
 {% block content %}
-<h2>Uppáhalds eignir</h2>
-
-<div class="property-container">
-    {% for property in properties %}
-        <div class="property-card" data-id="{{ property.id }}">
-            <a href="{% url 'properties:property_details' property_id=property.id %}">
-                <div class="property-image-wrapper">
-                    {% if property.images.first %}
-                        <img src="{{ property.images.first.image.url }}" class="property-image" alt="Property image">
-                    {% else %}
-                        <img src="{% static '../../media/properties/images/placeholder.png' %}" class="property-image" alt="No image available">
-                    {% endif %}
-                    <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                    <div class="favorite-icon">&#9825;</div>
-                </div>
-
-                <div class="property-info">
-                    <div class="property-address">
-                        <span class="location-icon">&#x1F4CD;</span> {{ property.title }}, {{ property.street_address }},
-                        {% if property.city %}
-                            {{ property.city }},
+<div class="container mt-4">
+    <h1>My Favorite Properties</h1>
+    
+    {% if properties %}
+        <div class="row">
+            {% for property in properties %}
+                <div class="col-md-4 mb-4">
+                    <div class="card property-card" data-id="{{ property.id }}">
+                        {% if property.propertyimage_set.first %}
+                            <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="{{ property.title }}">
+                        {% else %}
+                            <img src="/media/properties/images/placeholder.png" class="card-img-top" alt="No image available">
                         {% endif %}
-                        {% if property.postal_code %}
-                            {{ property.postal_code }}.
-                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ property.title }}</h5>
+                            <p class="card-text">{{ property.street_address }}, {{ property.city }}</p>
+                            <p class="card-text"><strong>{{ property.get_formatted_price }} kr</strong></p>
+                            <p class="card-text">
+                                <small>{{ property.size }} m² • {{ property.rooms }} rooms • {{ property.bedrooms }} bedrooms</small>
+                            </p>
+                            
+                            <!-- Favorite icon - already favorite by definition -->
+                            <a href="#" class="favorite-icon active">
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="property-details">
-                        <span class="detail-box">🏠 {{ property.size }} sqm</span>
-                        <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
-                    </div>
-                    <div class="property-price">{{ property.get_formatted_price }}kr.</div>
                 </div>
-            </a>
+            {% endfor %}
         </div>
-    {% empty %}
-    <div class="no-properties">
-        <p>Engar uppáhalds eignir fundust.</p>
-    </div>
-    {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            <p>You haven't added any properties to your favorites yet.</p>
+            <a href="{% url 'properties:property_list' %}" class="btn btn-primary">Browse Properties</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
