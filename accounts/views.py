@@ -54,7 +54,6 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
-
 def toggle_favorite(request):
     if request.method == 'POST':
         property_id = request.POST.get('property_id')
@@ -71,6 +70,7 @@ def toggle_favorite(request):
             return JsonResponse({'status': 'added'})
     return JsonResponse({'error': 'Bad request'}, status=400)
 
+@login_required
 def favorites_view(request):
     properties = request.user.favorite_properties.all()
     return render(request, 'accounts/favorite.html', {'properties': properties})
