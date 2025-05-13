@@ -5,46 +5,46 @@
 
 {% block content %}
 <div class="filter-container">
-     <form method="GET" action="{% url 'properties:property_listings' %}" class="filter-form">
-       {% csrf_token %}
-       <div class="filter-row">
+    <form method="GET" action="{% url 'properties:property_listings' %}" class="filter-form">
+        {% csrf_token %}
+        <div class="filter-row">
 
+            <div class="filter-title">Filter</div>
 
-        <div class="filter-title">Filter</div>
-        <div class="filter-group">
-            <label for="postal_code">Zip</label>
-            <div class="postal-code-inputs">
-                {{ filter_form.postal_code }}
+            <div class="filter-group">
+                <label for="postal_code">Zip</label>
+                <div class="postal-code-inputs">
+                    {{ filter_form.postal_code }}
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label for="price-range">Price range</label>
+                <div class="price-inputs">
+                    {{ filter_form.min_price }}
+                    {{ filter_form.max_price }}
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label for="property_type">Type</label>
+                {{ filter_form.property_type }}
+            </div>
+
+            <div class="filter-group">
+                <label for="search">Search</label>
+                {{ filter_form.search }}
+            </div>
+
+            <div class="filter-group">
+                <label for="ordering">Sort</label>
+                {{ filter_form.ordering }}
+            </div>
+
+            <div class="filter-group">
+                <button type="submit">Search</button>
             </div>
         </div>
-
-        <div class="filter-group">
-            <label for="price-range">Price range</label>
-            <div class="price-inputs">
-                {{ filter_form.min_price }}
-                {{ filter_form.max_price }}
-            </div>
-        </div>
-
-        <div class="filter-group">
-            <label for="property_type">Type</label>
-            {{ filter_form.property_type }}
-        </div>
-
-        <div class="filter-group">
-            <label for="search">Search</label>
-            {{ filter_form.search }}
-        </div>
-
-        <div class="filter-group">
-            <label for="ordering">Sort</label>
-            {{ filter_form.ordering }}
-        </div>
-
-        <div class="filter-group">
-            <button type="submit">Search</button>
-        </div>
-       </div>
     </form>
 </div>
 
@@ -60,7 +60,11 @@
                     <img src="{% static '../../media/properties/images/placeholder.png' %}" class="property-image" alt="No image available">
                 {% endif %}
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                <div class="favorite-icon">&#9825;</div>
+
+                <!-- ✅ Favorite icon block -->
+                <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}">
+                    <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
+                </div>
             </div>
 
             <!-- Info Section -->

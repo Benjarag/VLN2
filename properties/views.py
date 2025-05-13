@@ -8,13 +8,14 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from accounts.models import UserFavorite
 
 
 
 def property_listings(request):
     # Initialize queryset with all available properties
     properties = Property.objects.all()
-    
+
     filter_form = PropertyFilterForm(request.GET or None)
 
     # Apply filters if form is valid
@@ -49,11 +50,18 @@ def property_listings(request):
         if data.get('ordering'):
             properties = properties.order_by(data['ordering'])
 
+    # Get favorite IDs if user is logged in
+    favorite_ids = []
+    if request.user.is_authenticated:
+        favorite_ids = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
+
     context = {
         'properties': properties,
         'filter_form': filter_form,
+        'favorite_ids': list(favorite_ids),
     }
     return render(request, 'properties/property_listings.html', context)
+
 
 def property_details(request, property_id):
     property = get_object_or_404(Property, id=property_id)
@@ -75,6 +83,15 @@ def property_details(request, property_id):
         'is_sold': is_sold
     }
     return render(request, 'properties/property_details.html', context)
+
+
+@login_required
+#Login required to favorite a listing
+def favorite_listings(request, property_id):
+    favorite_property = get_object_or_404(Property, id=property_id)
+    request.user.favorite_properties.add(favorite_property)
+    request.user.save()
+    return redirect('properties:property_details', property_id=property_id)
 
 
 @login_required
@@ -114,11 +131,3 @@ def submit_purchase_offer(request, property_id):
 
     # This view only handles POST requests
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
-@login_required
-#Login required to favorite a listing
-def favorite_listings(request, property_id):
-    favorite_property = get_object_or_404(Property, id=property_id)
-    request.user.favorite_properties.add(favorite_property)
-    request.user.save()
-    return redirect('properties:property_details', property_id=property_id)

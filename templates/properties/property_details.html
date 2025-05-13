@@ -13,14 +13,20 @@
 <!-- Main Image with Carousel -->
 <div class="image-carousel">
     <button class="carousel-nav left">&lt;</button>
-    {% if property.images.first %}
-        <img src="{{ property.images.first.image.url }}" class="main-image" alt="Main property image">
-    {% else %}
-        <img src="{% static '../../media/properties/images/placeholder.png' %}" class="main-image" alt="No image available">
-    {% endif %}
+    <div class="carousel-images-wrapper">
+        <div class="carousel-images">
+            {% for image in property.images.all %}
+                <img src="{{ image.image.url }}" class="carousel-image" alt="Property image">
+            {% empty %}
+                <img src="{% static '../../media/properties/images/placeholder.png' %}" class="carousel-image" alt="No image available">
+            {% endfor %}
+        </div>
+    </div>
     <button class="carousel-nav right">&gt;</button>
     <div class="favorite-icon">&#9825;</div>
 </div>
+
+
 
 <!-- Property Information + Purchase -->
 <div class="info-section">
