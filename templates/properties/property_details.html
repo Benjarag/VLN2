@@ -38,8 +38,8 @@
         <div class="seller-box">
             <div class="seller-label">Listed by:</div>
             <a href="{% url 'sellers:seller_profile' property.seller.id %}" class="seller-info-card">
-                {% if property.seller.logo %}
-                    <img src="{{ property.seller.logo.url }}" alt="{{ property.seller.name }}" class="seller-photo">
+                {% if property.seller.cover_image %}
+                    <img src="{{ property.seller.cover_image.url }}" alt="{{ property.seller.name }}" class="seller-photo">
                 {% else %}
                     <div class="seller-photo-placeholder"></div>
                 {% endif %}
@@ -55,20 +55,24 @@
     </div>
 
     <!-- Submit Purchase Button -->
-    {% if not is_sold %}
+    {% if property.is_sold %}
+        <div class="property-sold-notice">
+            <p>This property has been sold and is no longer accepting offers.</p>
+        </div>
+    {% elif user.profile.is_seller %}
+        <div class="property-sold-notice">
+            <p>As a seller, you cannot submit purchase offers. To make offers on properties, please use a buyer account.</p>
+        </div>
+    {% elif not user.is_authenticated %}
+        <div class="property-sold-notice">
+            <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to submit a purchase offer.</p>
+        </div>
+    {% else %}
         {% if user_offer %}
             <a href="{% url 'offers:submit_purchase_offer' property_id=property.id %}" class="submit-button">Resubmit Purchase Offer</a>
         {% else %}
             <a href="{% url 'offers:submit_purchase_offer' property_id=property.id %}" class="submit-button">Submit Purchase Offer</a>
         {% endif %}
-    {% elif property.is_sold %}
-        <div class="property-sold-notice">
-            <p>This property has been sold and is no longer accepting offers.</p>
-        </div>
-{#    {% elif not user.is_authenticated %}#}
-{#        <div class="login-prompt">#}
-{#            <p>Please <a href="/login/?next={{ request.path }}">log in</a> to make an offer.</p>#}
-{#        </div>#}
     {% endif %}
 
 </div>

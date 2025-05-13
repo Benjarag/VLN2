@@ -21,6 +21,7 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th>Buyer</th>
                                     <th>Date</th>
                                     <th>Offer Amount</th>
                                     <th>Status</th>
@@ -31,6 +32,7 @@
                             <tbody>
                                 {% for offer in property_data.offers %}
                                 <tr>
+                                    <td>{{ offer.user.get_full_name|default:offer.user.username }}</td>
                                     <td>{{ offer.date_created|date:"M d, Y" }}</td>
                                     <td>{{ offer.get_formatted_price }}</td>
                                     <td>

@@ -98,10 +98,19 @@ def favorite_listings(request, property_id):
 def submit_purchase_offer(request, property_id):
     property = get_object_or_404(Property, id=property_id)
 
+    # Check if user is a seller - don't allow sellers to make offers
+    if hasattr(request.user, 'profile') and request.user.profile.is_seller:
+        messages.error(request, "As a seller, you cannot submit purchase offers.")
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'Sellers cannot submit purchase offers'})
+        return redirect('properties:property_details', property_id=property.id)
+
     # Check if property is sold
     if property.is_sold:
         messages.error(request, "Cannot submit offer for a sold property")
-        return JsonResponse({'success': False, 'message': 'This property is sold and not accepting offers'})
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'This property is sold and not accepting offers'})
+        return redirect('properties:property_details', property_id=property.id)
 
     if request.method == 'POST':
         # Process form submission

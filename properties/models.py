@@ -34,8 +34,6 @@ class Property(models.Model):
     date_listed = models.DateField(null=True, blank=True)
     description = models.TextField()
 
-    objects = models.Manager()
-
     # Foreign key to Seller instead of embedded data
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='properties', null=True, blank=True)
 

@@ -7,6 +7,7 @@ from .models import PurchaseOffer, PurchaseFinalization
 from properties.models import Property
 from django.utils import timezone
 from sellers.models import Seller
+from properties.models import Property
 
 @login_required
 def purchase_offers_list(request):
@@ -32,13 +33,12 @@ def seller_offers_list(request):
         # Let's create one with basic details to avoid breaking the flow
         seller = Seller.objects.create(
             user=request.user,
-            name=f"{request.user.first_name} {request.user.last_name}".strip() or request.user.username,
+            name=request.user.username,
             email=request.user.email
         )
         messages.warning(request, "Your seller profile has been automatically created.")
 
     # Get all properties for this seller
-    from properties.models import Property
     seller_properties = Property.objects.filter(seller=seller)
 
     # Get offers for these properties
