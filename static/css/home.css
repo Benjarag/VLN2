@@ -24,6 +24,11 @@
     z-index: -1;
 }
 
+.hero-section h1,
+.h-container h1 {
+    color: #1120c6 !important;
+}
+
 .search-container {
     padding-top: 20px;
     position: relative;
