@@ -185,6 +185,7 @@
   max-width: 600px;
   margin: auto;
   overflow: hidden;
+  border-radius: 12px;
 }
 
 .carousel-images-wrapper {
@@ -195,37 +196,15 @@
 .carousel-images {
   display: flex;
   transition: transform 0.5s ease;
+  will-change: transform;
 }
 
 .carousel-image {
   width: 100%;
   flex-shrink: 0;
-  display: none;
   object-fit: cover;
   height: 400px;
-}
-
-.carousel-image.active {
   display: block;
 }
 
-.carousel-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.7);
-  border: none;
-  font-size: 1.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  z-index: 10;
-}
-
-.carousel-nav.left {
-  left: 10px;
-}
-
-.carousel-nav.right {
-  right: 10px;
-}
 
