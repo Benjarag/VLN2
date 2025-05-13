@@ -11,14 +11,17 @@ class PurchaseOffer(models.Model):
         ('Accepted', 'Accepted'),
         ('Rejected', 'Rejected'),
         ('Contingent', 'Contingent'),
-        ('Expired', 'Expired'),
-        ('Finalized', 'Finalized'),
-        ('Cancelled', 'Cancelled'),
+        # ('Expired', 'Expired'),
+        # ('Finalized', 'Finalized'),
+        # ('Cancelled', 'Cancelled'),
     ]
 
-    # Foreign keys to related models
-    related_property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='purchase_offers')
+    # Add this field
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchase_offers')
+
+    # Foreign keys to related models
+    related_property = models.ForeignKey('properties.Property', on_delete=models.CASCADE, related_name='purchase_offers')
+    seller = models.ForeignKey('sellers.Seller', on_delete=models.SET_NULL, null=True, related_name='received_offers')
 
     # Original text fields
     property_name = models.CharField(max_length=255)

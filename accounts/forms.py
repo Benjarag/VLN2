@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+
+from sellers.models import Seller
 from .models import Profile
 
 
@@ -73,4 +75,17 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image', 'phone']
+        fields = ['image', 'phone', 'is_seller']
+        widgets = {
+            'is_seller': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }
+
+class SellerForm(forms.ModelForm):
+    class Meta:
+        model = Seller
+        fields = ['name', 'type', 'phone', 'email', 'logo', 'cover_image', 'bio',
+                 'street_address', 'city', 'postal_code']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4}),
+            'type': forms.Select(attrs={'class': 'form-select'})
+        }

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Seller(models.Model):
@@ -6,6 +7,8 @@ class Seller(models.Model):
         ('Individual', 'Individual'),
         ('Real Estate Agency', 'Real Estate Agency'),
     ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller_profile', null=True, blank=True)
 
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=100, choices=SELLER_TYPES, default="Individual")
