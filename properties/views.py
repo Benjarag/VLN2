@@ -10,11 +10,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 
-
 def property_listings(request):
     # Initialize queryset with all available properties
     properties = Property.objects.all()
-    
+
     filter_form = PropertyFilterForm(request.GET or None)
 
     # Apply filters if form is valid
@@ -55,8 +54,13 @@ def property_listings(request):
     }
     return render(request, 'properties/property_listings.html', context)
 
+
 def property_details(request, property_id):
     property = get_object_or_404(Property, id=property_id)
+
+    #Here we should retrieve the seller information for the specific property id
+
+    # seller_info = Property.objects.filter(id=property_id).values('seller_name', 'seller_email', 'seller_phone', 'seller_profile_pic')
 
     # Get the latest offer for this property from the current user (if logged in)
     user_offer = None
@@ -114,6 +118,7 @@ def submit_purchase_offer(request, property_id):
 
     # This view only handles POST requests
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
 
 @login_required
 #Login required to favorite a listing

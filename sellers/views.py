@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 def seller_profile(request, seller_id):
     # Get the seller from the database
     # seller = get_object_or_404(Seller, id=seller_id)
+    # there should be seller email, name, phone number, profile picture and link to profile page
 
     # Return some details about the seller (you can customize this)
     return HttpResponse(f"This is the profile page for seller ")#{seller.name}")
