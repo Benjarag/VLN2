@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-# from sellers.models import Seller
+from sellers.models import Seller
 
 
 class Property(models.Model):
@@ -37,7 +37,7 @@ class Property(models.Model):
     objects = models.Manager()
 
     # Foreign key to Seller instead of embedded data
-    # seller = models.ForeignKey(Seller, related_name='properties', on_delete=models.CASCADE, null=True, blank=True)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='properties', null=True, blank=True)
 
 
 

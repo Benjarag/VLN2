@@ -16,4 +16,13 @@ class Profile(models.Model):
         return f'{self.user.username} Profile Page'
 
 
-User.add_to_class('favorite_properties', models.ManyToManyField(Property, related_name='favorited_by_user', blank=True))
+# And instead, create a proper relationship model:
+class UserFavorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_favorites')
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='favorited_by')
+
+    class Meta:
+        unique_together = ['user', 'property']
+
+    def __str__(self):
+        return f"{self.user.username} likes {self.property}"
