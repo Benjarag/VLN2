@@ -217,22 +217,29 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   border: none;
-  font-size: 2rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
   cursor: pointer;
-  z-index: 20;
+  z-index: 10;
   border-radius: 50%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease;
 }
+
 
 .carousel-nav.left {
-  left: 10px;
+  left: 250px;
+}
+.carousel-nav.right {
+  right: 250px;
 }
 
-.carousel-nav.right {
-  right: 10px;
+
+
+.carousel-nav:hover {
+    background: rgba(255, 255, 255, 1);
 }
 
 
