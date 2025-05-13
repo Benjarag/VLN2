@@ -55,7 +55,7 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
-
+@login_required
 def toggle_favorite(request):
     if request.method == 'POST':
         property_id = request.POST.get('property_id')
