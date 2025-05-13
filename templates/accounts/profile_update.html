@@ -1,12 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block profile_update_css %}
+<link rel="stylesheet" href="{% static 'css/profile_update.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="profile-container">
-    <h1>Update Profile</h1>
-    <form method="POST" enctype="multipart/form-data">
+<div class="profile-update-container">
+    <h2 class="profile-update-title">Update Your Profile</h2>
+
+    <form method="post" enctype="multipart/form-data" class="profile-update-form">
         {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
-        <button class="button">Submit Edit</button>
+
+        <!-- User form fields -->
+        <div class="form-group">
+            <label for="{{ user_form.username.id_for_label }}">Username</label>
+            {{ user_form.username }}
+            {% if user_form.username.errors %}
+                <div class="error-message">{{ user_form.username.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Profile form fields -->
+        <div class="form-group">
+            <label for="{{ profile_form.phone.id_for_label }}">Phone</label>
+            {{ profile_form.phone }}
+            {% if profile_form.phone.errors %}
+                <div class="error-message">{{ profile_form.phone.errors }}</div>
+            {% endif %}
+        </div>
+
+
+        <div class="form-group">
+            <label for="{{ profile_form.image.id_for_label }}">Profile Image</label>
+            {{ profile_form.image }}
+            {% if profile_form.image.errors %}
+                <div class="error-message">{{ profile_form.image.errors }}</div>
+            {% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="error-message">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <button type="submit" class="update-button">Update Profile</button>
     </form>
+
+    <div class="profile-link">
+        <a href="{% url 'profile' %}">Return to Profile</a>
+    </div>
 </div>
 {% endblock %}

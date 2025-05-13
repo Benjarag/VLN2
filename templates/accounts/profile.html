@@ -15,7 +15,11 @@
         <!-- Right Column - Profile Info -->
         <div class="profile-info">
             <h2>Name: {{ user.username }}</h2>
-
+            {% if user.is_authenticated and user.profile.is_seller %}
+            <h3>User-type: Seller</h3>
+            {% else %}
+            <h3>User-type: Buyer</h3>
+            {% endif %}
             <div class="profile-details">
                 <h3>Additional Information</h3>
                 <p><b>Email:</b> {{ user.email }}</p>
