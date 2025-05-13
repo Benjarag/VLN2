@@ -10,7 +10,7 @@
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.15);
   z-index: 1000;
-  max-width: 400px;
+  max-width: 600px;
   text-align: center;
   display: none;
 }
@@ -29,8 +29,4 @@
   cursor: pointer;
 }
 
-#login-popup {
-  animation: none !important;
-  transition: none !important;
-}
 
