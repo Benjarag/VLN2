@@ -34,6 +34,7 @@ class Property(models.Model):
     date_listed = models.DateField(null=True, blank=True)
     description = models.TextField()
 
+
     objects = models.Manager()
 
     # Foreign key to Seller instead of embedded data
@@ -84,4 +85,5 @@ class PropertyImage(models.Model):
 
     class Meta:
         ordering = ['order']  # This will order images based on their "order" field.
-
+        verbose_name = 'Property Image'
+        verbose_name_plural = 'Property Images'
