@@ -6,7 +6,7 @@
 #         ('Individual', 'Individual'),
 #         ('Real Estate Agency', 'Real Estate Agency'),
 #     ]
-#
+#     id = eitthvað -> þurfum eiginlega að vera með id til þess að
 #     name = models.CharField(max_length=255)
 #     type = models.CharField(max_length=100, choices=SELLER_TYPES, default="Individual")
 #     phone = models.CharField(max_length=20, blank=True)
