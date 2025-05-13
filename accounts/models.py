@@ -15,3 +15,13 @@ class Profile(models.Model):
 
 
 User.add_to_class('favorite_properties', models.ManyToManyField(Property, related_name='favorited_by_user', blank=True))
+
+class UserFavorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_favorites')
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='favorited_by')
+
+    class Meta:
+        unique_together = ['user', 'property']
+
+    def str(self):
+        return f"{self.user.username} likes {self.property}"
