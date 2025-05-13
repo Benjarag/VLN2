@@ -7,7 +7,7 @@ from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreation
 from django.contrib import messages
 from django.contrib.auth import logout, login
 
-from accounts.models import Profile
+from accounts.models import Profile, UserFavorite
 from properties.models import Property
 
 
@@ -65,19 +65,26 @@ def toggle_favorite(request):
         if not user.is_authenticated:
             return JsonResponse({'error': 'guest-user'})
 
-        if property_obj in user.favorite_properties.all():
-            # ef hann ýtir á favorite takkann þegar búið er að favorite-a listing-ið
-            user.favorite_properties.remove(property_obj)
+        # Check if this property is already favorited by the user
+        favorite_exists = UserFavorite.objects.filter(user=user, property=property_obj).exists()
+
+        if favorite_exists:
+            # If it exists, delete it (unfavorite)
+            UserFavorite.objects.filter(user=user, property=property_obj).delete()
             return JsonResponse({'status': 'removed'})
         else:
-            user.favorite_properties.add(property_obj)
+            # If it doesn't exist, create it (favorite)
+            UserFavorite.objects.create(user=user, property=property_obj)
             return JsonResponse({'status': 'added'})
+
     return JsonResponse({'error': 'Bad request'}, status=400)
 
 
 @login_required
 def favorites_view(request):
-    properties = request.user.favorite_properties.all()
+    favorite_property_id = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
+    properties = Property.objects.filter(id__in=favorite_property_id)
+
     return render(request, 'accounts/favorite.html', {'properties': properties})
 
 
