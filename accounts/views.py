@@ -10,6 +10,7 @@ from django.contrib.auth import logout, login
 
 from accounts.models import Profile
 from properties.models import Property
+from django.views.decorators.http import require_POST
 
 
 @login_required
@@ -55,25 +56,22 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
-@login_required
+@require_POST
 def toggle_favorite(request):
-    if request.method == 'POST':
-        property_id = request.POST.get('property_id')
-        property_obj = get_object_or_404(Property, id=property_id)
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'guest-user'})
 
-        user = request.user
+    property_id = request.POST.get('property_id')
+    property_obj = get_object_or_404(Property, id=property_id)
 
-        if not user.is_authenticated:
-            return JsonResponse({'error': 'guest-user'})
+    user = request.user
 
-        if property_obj in user.favorite_properties.all():
-            # ef hann ýtir á favorite takkann þegar búið er að favorite-a listing-ið
-            user.favorite_properties.remove(property_obj)
-            return JsonResponse({'status': 'removed'})
-        else:
-            user.favorite_properties.add(property_obj)
-            return JsonResponse({'status': 'added'})
-    return JsonResponse({'error': 'Bad request'}, status=400)
+    if property_obj in user.favorite_properties.all():
+        request.user.favorite_properties.remove(property_obj)
+        return JsonResponse({'status': 'removed'})
+    else:
+        request.user.favorite_properties.add(property_obj)
+        return JsonResponse({'status': 'added'})
 
 
 

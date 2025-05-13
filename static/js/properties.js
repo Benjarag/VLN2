@@ -55,13 +55,25 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 // The guest user should still be able to see the UI effect, but we don't save it
-                if (data.status === 'guest-user' && !this.classList.contains('active')) {
-                    this.classList.add('active');
-                    return;
-                } else if (data.status === 'guest-user' && this.classList.contains('active')) {
-                    this.classList.remove('active');
+                if (data.status === 'guest-user') {
+                    // Roll back the toggle (since it won't be saved)
+                    this.classList.toggle('active', wasActive);
+                    if (heartIcon) {
+                        heartIcon.classList.toggle('fa-regular', !wasActive);
+                        heartIcon.classList.toggle('fa-solid', wasActive);
+                    } else {
+                        this.innerHTML = wasActive ? '♥' : '&#9825;';
+                    }
+
+                    // Show the popup
+                    const popup = document.getElementById('login-popup');
+                    if (popup) {
+                        popup.style.display = 'block';
+                    }
+
                     return;
                 }
+
                 console.log(`Favorite ${data.status} for property ID: ${propertyId}`);
                 // Update UI based on server response if needed
                 if (data.status === 'added' && !this.classList.contains('active')) {
