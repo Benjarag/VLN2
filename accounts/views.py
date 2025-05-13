@@ -8,7 +8,7 @@ from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreation
 from django.contrib import messages
 from django.contrib.auth import logout, login
 
-from accounts.models import Profile
+from accounts.models import Profile, UserFavorite
 from properties.models import Property
 from django.views.decorators.http import require_POST
 
@@ -77,7 +77,9 @@ def toggle_favorite(request):
 
 @login_required
 def favorites_view(request):
-    properties = request.user.favorite_properties.all()
+    favorite_property_id = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
+    properties = Property.objects.filter(id__in=favorite_property_id)
+
     return render(request, 'accounts/favorite.html', {'properties': properties})
 
 
