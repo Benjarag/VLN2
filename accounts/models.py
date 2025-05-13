@@ -21,6 +21,8 @@ class UserFavorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_favorites')
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='favorited_by')
 
+    objects = models.Manager()
+
     class Meta:
         unique_together = ['user', 'property']
 
