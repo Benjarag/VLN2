@@ -1,21 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle favorite icon clicks
     document.querySelectorAll('.favorite-icon').forEach(icon => {
         icon.addEventListener('click', function(e) {
-            // Prevent default and propagation first
             e.stopPropagation();
             e.preventDefault();
 
-            // Store initial state in case we need to rollback
             const wasActive = this.classList.contains('active');
             const propertyCard = this.closest('.property-card');
             const propertyId = propertyCard?.getAttribute('data-id');
             const heartIcon = this.querySelector('i');
 
-            // Immediately toggle UI state
             this.classList.toggle('active');
 
-            // Update visual state
             if (heartIcon) {
                 heartIcon.classList.toggle('fa-regular');
                 heartIcon.classList.toggle('fa-solid');
@@ -38,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return cookieValue;
             }
 
-            // Send request to server
             fetch('/accounts/toggle-favorite/', {
                 method: 'POST',
                 headers: {
@@ -47,16 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `property_id=${propertyId}`
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                // The guest user should still be able to see the UI effect, but we don't save it
                 if (data.status === 'guest-user') {
-                    // Roll back the visual state
                     this.classList.toggle('active', wasActive);
                     if (heartIcon) {
                         heartIcon.classList.toggle('fa-regular', !wasActive);
@@ -65,14 +52,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         this.innerHTML = wasActive ? '♥' : '&#9825;';
                     }
 
-                    // Show the popup
                     const popup = document.getElementById('login-popup');
+                    const backdrop = document.getElementById('popup-backdrop');
                     if (popup) popup.style.display = 'block';
+                    if (backdrop) backdrop.style.display = 'block';
                     return;
                 }
 
-                console.log(`Favorite ${data.status} for property ID: ${propertyId}`);
-                // Update UI based on server response if needed
                 if (data.status === 'added' && !this.classList.contains('active')) {
                     this.classList.add('active');
                 } else if (data.status === 'removed' && this.classList.contains('active')) {
@@ -81,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error toggling favorite:', error);
-                // Rollback UI changes
                 this.classList.toggle('active', wasActive);
                 if (heartIcon) {
                     heartIcon.classList.toggle('fa-regular', !wasActive);
@@ -93,7 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Property card click handler remains the same
+    // Prevent redirect while popup is open
+    document.getElementById('popup-backdrop')?.addEventListener('click', hideLoginPopup);
+
     document.querySelectorAll('.property-card').forEach(card => {
         card.addEventListener('click', function(e) {
             if (e.target.closest('.favorite-icon')) return;
