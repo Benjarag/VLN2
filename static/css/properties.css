@@ -78,8 +78,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 15px;
-  padding-left: 10px;
+  padding-right: 10px;
 }
 
 /* Form controls styling */
@@ -294,8 +293,7 @@
 .property-container {
   display: flex;
   flex-direction: column;
-  /*gap: 5px;*/
-  /*margin-top: 20px;*/
+  margin-top: 20px;
 }
 
 .no-properties {
