@@ -19,12 +19,12 @@
             {% endif %}
 
             <h1>{{ seller.name }}</h1>
-            <p class="seller-type">{{ seller.seller_type }}</p>
+            <p class="seller-type">{{ seller.type }}</p>
 
-            {% if seller.seller_type == 'Real Estate Agency' and seller.display_address %}
+            {% if seller.type == 'Real Estate Agency' and seller.street_address %}
                 <div class="address">
                     <h3>Address:</h3>
-                    <p>{{ seller.display_address }}</p>
+                    <p>{{ seller.street_address }}</p>
                 </div>
             {% endif %}
         </div>
@@ -52,6 +52,7 @@
                                     <img src="{% static 'images/placeholder.png' %}" class="property-image" alt="No image available">
                                 {% endif %}
                                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                                <div class="favorite-icon">&#9825;</div>
                             </div>
 
                             <div class="property-info">
