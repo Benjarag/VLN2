@@ -12,20 +12,22 @@
 </div>
 
 <!-- Main Image with Carousel -->
-<div class="image-carousel">
-    <button class="carousel-nav left">&lt;</button>
-    <div class="carousel-images-wrapper">
-        <div class="carousel-images">
-            {% for image in property.images.all %}
-                <img src="{{ image.image.url }}" class="carousel-image" alt="Property image">
-            {% empty %}
-                <img src="{% static '../../media/properties/images/placeholder.png' %}" class="carousel-image" alt="No image available">
-            {% endfor %}
+<div class="carousel-wrapper">  <!-- NEW wrapper -->
+    <div class="image-carousel">
+        <div class="carousel-images-wrapper">
+            <div class="carousel-images">
+                {% for img in property.images.all %}
+                    <img src="{{ img.image.url }}" class="carousel-image {% if forloop.first %}active{% endif %}" />
+                {% endfor %}
+            </div>
         </div>
     </div>
-    <div class="favorite-icon">&#9825;</div>
+
+    <!-- Arrows outside the .image-carousel -->
+    <button class="carousel-nav left">&lt;</button>
     <button class="carousel-nav right">&gt;</button>
 </div>
+
 
 
 
