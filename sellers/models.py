@@ -22,13 +22,12 @@ class Seller(models.Model):
     cover_image = models.ImageField(upload_to='sellers/images/profile_images', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
 
-
     def __str__(self):
         return self.name
 
     @property
     def show_address(self):
-        """Only show address if seller is a Real Estate Agency"""
+        """Only show address if the seller is a Real Estate Agency"""
         return self.type == 'Real Estate Agency'
 
     @property
