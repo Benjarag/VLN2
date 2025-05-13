@@ -203,7 +203,7 @@ def finalize_purchase(request, offer_id):
     # Check if offer can be finalized
     if purchase_offer.status not in ['Accepted', 'Contingent']:
         messages.error(request, "This offer cannot be finalized at this time.")
-        return redirect('offers:purchase_offers_list')
+        return redirect('offers:offers')
 
     # Check if finalization already exists
     existing_finalization = PurchaseFinalization.objects.filter(purchase_offer=purchase_offer).first()
@@ -248,9 +248,14 @@ def review_purchase(request, finalization_id):
         messages.error(request, "You don't have permission to view this finalization.")
         return redirect('offers:purchase_offers_list')
 
+    # Get the offer from the finalization
+    offer = finalization.purchase_offer
+
     return render(request, 'offers/review_purchase.html', {
-        'finalization': finalization
+        'finalization': finalization,
+        'offer': offer  # Add the offer to the context
     })
+
 
 @login_required
 def confirm_purchase(request, finalization_id):
@@ -280,3 +285,11 @@ def confirm_purchase(request, finalization_id):
     # If not a POST request, redirect back to review page
     return redirect('offers:review_purchase', finalization_id=finalization_id)
 
+@login_required
+def purchase_confirmation(request, offer_id):
+    """Display the purchase confirmation page"""
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+
+    return render(request, 'offers/purchase_confirmation.html', {
+        'offer': offer
+    })
