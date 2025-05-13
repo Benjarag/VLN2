@@ -10,7 +10,6 @@ from django.contrib.auth import logout, login
 from accounts.models import Profile
 from properties.models import Property
 
-
 @login_required
 def profile(request):
     if request.method == "POST":
