@@ -203,18 +203,29 @@ def finalize_purchase(request, offer_id):
     # Check if offer can be finalized
     if purchase_offer.status not in ['Accepted', 'Contingent']:
         messages.error(request, "This offer cannot be finalized at this time.")
-        return redirect('offers:purchase_offers_list')  # Assuming you have this URL
+        return redirect('offers:purchase_offers_list')
+
+    # Check if finalization already exists
+    existing_finalization = PurchaseFinalization.objects.filter(purchase_offer=purchase_offer).first()
 
     if request.method == 'POST':
-        form = PurchaseFinalizationForm(request.POST)
+        # If finalization exists, update it rather than create a new one
+        if existing_finalization:
+            form = PurchaseFinalizationForm(request.POST, instance=existing_finalization)
+        else:
+            form = PurchaseFinalizationForm(request.POST)
+
         if form.is_valid():
             finalization = form.save(commit=False)
-            finalization.purchase_offer = purchase_offer
+
+            # Only set the purchase_offer if this is a new finalization
+            if not existing_finalization:
+                finalization.purchase_offer = purchase_offer
+
             finalization.save()
             return redirect('offers:review_purchase', finalization_id=finalization.id)
     else:
         # Check if finalization already exists
-        existing_finalization = PurchaseFinalization.objects.filter(purchase_offer=purchase_offer).first()
         if existing_finalization:
             form = PurchaseFinalizationForm(instance=existing_finalization)
             messages.info(request, "You're continuing an existing finalization process.")
@@ -225,6 +236,7 @@ def finalize_purchase(request, offer_id):
         'form': form,
         'offer': purchase_offer
     })
+
 
 @login_required
 def review_purchase(request, finalization_id):
