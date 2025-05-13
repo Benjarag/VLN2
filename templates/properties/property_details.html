@@ -8,6 +8,7 @@
 <div class="header-row">
     <a href="{% url 'properties:property_listings' %}" class="back-button">&larr;</a>
     <h1 class="property-title">Property address: {{ property.street_address }}</h1>
+
 </div>
 
 <!-- Main Image with Carousel -->
@@ -22,8 +23,8 @@
             {% endfor %}
         </div>
     </div>
-    <button class="carousel-nav right">&gt;</button>
     <div class="favorite-icon">&#9825;</div>
+    <button class="carousel-nav right">&gt;</button>
 </div>
 
 

@@ -36,8 +36,8 @@
 
 .favorite-icon {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 30px;
     background: rgba(255, 255, 255, 0.8);
     width: 30px;
     height: 30px;
@@ -150,6 +150,11 @@
     padding: 2px 4px;
     font-size: 0.8rem;
     flex: 1;
+    min-width: 120px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .property-description {
@@ -186,6 +191,7 @@
   margin: auto;
   overflow: hidden;
   border-radius: 12px;
+  margin-bottom: 2rem;
 }
 
 .carousel-images-wrapper {
@@ -206,5 +212,28 @@
   height: 400px;
   display: block;
 }
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  font-size: 2rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.carousel-nav.left {
+  left: 10px;
+}
+
+.carousel-nav.right {
+  right: 10px;
+}
+
 
 
