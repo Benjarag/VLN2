@@ -46,8 +46,8 @@
         <span class="close-popup" onclick="document.getElementById('login-popup').style.display='none'">&times;</span>
         <p>
             <i class="fas fa-exclamation-circle"></i>
-            Til þess að vista eign þarftu að <a href="{% url 'login' %}?next={{ request.path }}">skrá þig inn</a>.<br>
-            Ef þú hefur ekki skráð þig áður getur þú <a href="{% url 'signup' %}">nýskráð þig</a>.
+            To save a property to your favorites, you need to <a href="{% url 'login' %}?next={{ request.path }}">log in</a>.<br>
+            Don't have an account?<a href="{% url 'signup' %}">Create one here</a>.
         </p>
     </div>
 
