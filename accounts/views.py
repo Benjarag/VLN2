@@ -56,24 +56,29 @@ def profile_update(request):
         'profile_form': profile_form
     })
 
-@require_POST
 def toggle_favorite(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'status': 'guest-user'})
+    if request.method == 'POST':
+        property_id = request.POST.get('property_id')
+        property_obj = get_object_or_404(Property, id=property_id)
 
-    property_id = request.POST.get('property_id')
-    property_obj = get_object_or_404(Property, id=property_id)
+        user = request.user
 
-    user = request.user
+        if not user.is_authenticated:
+            return JsonResponse({'error': 'guest-user'})
 
-    if property_obj in user.favorite_properties.all():
-        request.user.favorite_properties.remove(property_obj)
-        return JsonResponse({'status': 'removed'})
-    else:
-        request.user.favorite_properties.add(property_obj)
-        return JsonResponse({'status': 'added'})
+        # Check if this property is already favorited by the user
+        favorite_exists = UserFavorite.objects.filter(user=user, property=property_obj).exists()
 
+        if favorite_exists:
+            # If it exists, delete it (unfavorite)
+            UserFavorite.objects.filter(user=user, property=property_obj).delete()
+            return JsonResponse({'status': 'removed'})
+        else:
+            # If it doesn't exist, create it (favorite)
+            UserFavorite.objects.create(user=user, property=property_obj)
+            return JsonResponse({'status': 'added'})
 
+    return JsonResponse({'error': 'Bad request'}, status=400)
 
 @login_required
 def favorites_view(request):
