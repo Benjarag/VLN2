@@ -45,8 +45,6 @@
     }
 }
 
-
-
 /* Profile container positioning */
 .profile-container {
     margin-left: auto; /* Push to far right */
@@ -99,3 +97,4 @@ body {
 .button:hover {
     background: #e6ae3e;
 }
+

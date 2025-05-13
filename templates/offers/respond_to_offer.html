@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Respond to Offer{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Respond to Offer</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Property: {{ offer.related_property.title }}</h4>
+                    <p><strong>Address:</strong> {{ offer.related_property.street_address }}, {{ offer.related_property.city }}</p>
+                    
+                    <hr>
+                    
+                    <h5>Offer Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Buyer:</strong> {{ offer.user.username }}</p>
+                            <p><strong>Date Submitted:</strong> {{ offer.date_created|date:"M d, Y" }}</p>
+                            <p><strong>Expires:</strong> {{ offer.date_expired|date:"M d, Y" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Offer Amount:</strong> {{ offer.get_formatted_price }}</p>
+                            <p><strong>Property Price:</strong> {{ offer.related_property.get_formatted_price }} kr</p>
+                            <p><strong>Status:</strong> {{ offer.status }}</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5>Your Response</h5>
+                    
+                    <form method="post" action="{% url 'offers:respond_to_offer' offer.id %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <div class="d-grid gap-2">
+                                <button type="submit" name="response" value="accept" class="btn btn-success">
+                                    Accept Offer
+                                </button>
+                                <button type="submit" name="response" value="contingent" class="btn btn-info text-white">
+                                    Mark as Contingent (Negotiating)
+                                </button>
+                                <button type="submit" name="response" value="reject" class="btn btn-danger">
+                                    Reject Offer
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <strong>Important:</strong>
+                            <ul>
+                                <li><strong>Accept:</strong> Accepting this offer will automatically reject all other pending offers on this property.</li>
+                                <li><strong>Contingent:</strong> This indicates the offer is being considered but requires additional negotiation.</li>
+                                <li><strong>Reject:</strong> The offer will be permanently rejected.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="text-end mt-3">
+                            <a href="{% url 'offers:myoffers' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

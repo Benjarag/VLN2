@@ -1,5 +1,5 @@
-/*Login containerinn*/
-.login-container {
+/* Overall container */
+.profile-update-container {
     max-width: 400px;
     margin: 30px auto;
     padding: 25px;
@@ -8,25 +8,29 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.login-title {
+/* Form title */
+.profile-update-title {
     font-size: 20px;
     color: #333;
     margin-bottom: 20px;
     text-align: center;
 }
 
-.login-form {
+/* Form styling */
+.profile-update-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
+/* Individual form groups */
 .form-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
 }
 
+/* Labels */
 .form-group label {
     font-weight: 500;
     margin-bottom: 3px;
@@ -34,6 +38,7 @@
     font-size: 14px;
 }
 
+/* Input fields */
 .form-group input {
     padding: 8px 10px;
     border: 1px solid #ddd;
@@ -43,19 +48,20 @@
 }
 
 .form-group input:focus {
-    /*border-color: #007bff;*/
+    border-color: #007bff;
     outline: none;
-    /*box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);*/
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 
+/* Error messages */
 .error-message {
     color: #dc3545;
     font-size: 12px;
     margin-top: 3px;
 }
 
-/* Login button - smaller padding */
-.login-button {
+/* Submit button */
+.update-button {
     background-color: #ffce69;
     color: white;
     border: none;
@@ -67,21 +73,30 @@
     margin-top: 5px;
 }
 
-.login-button:hover {
+.update-button:hover {
     background-color: #e6ae3e;
 }
 
-.signup-link {
+/* Profile link area */
+.profile-link {
     text-align: center;
     margin-top: 15px;
     font-size: 13px;
     color: #666;
 }
 
+.profile-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.profile-link a:hover {
+    text-decoration: underline;
+}
 
 /* Responsive adjustments */
 @media (max-width: 570px) {
-    .login-container {
+    .profile-update-container {
         margin: 15px;
         padding: 15px;
     }

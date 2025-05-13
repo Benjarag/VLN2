@@ -37,6 +37,7 @@
             {% endif %}
         </div>
 
+
         <div class="form-group">
             <label for="signup_password2">Confirm Password</label>
             {{ form.password2 }}
@@ -44,6 +45,19 @@
                 <div class="error-message">{{ form.password2.errors }}</div>
             {% endif %}
         </div>
+
+
+        <div class="form-group form-check">
+            {{ form.usertype }}
+            <label class="form-check-label" for="id_usertype">{{ form.usertype.label }}</label>
+            {% if form.usertype.help_text %}
+                <small class="form-text text-muted">{{ form.usertype.help_text }}</small>
+            {% endif %}
+            {% if form.usertype.errors %}
+                <div class="error-message">{{ form.usertype.errors }}</div>
+            {% endif %}
+        </div>
+
 
         <button type="submit" class="signup-button">Sign Up</button>
     </form>

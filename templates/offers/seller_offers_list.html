@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Property Offers{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Offers on My Properties</h1>
+    
+    {% if properties_with_offers %}
+        {% for property_data in properties_with_offers %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ property_data.property.title }}</h3>
+                        <a href="{% url 'properties:property_details' property_data.property.id %}" class="btn btn-outline-secondary">View Property</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Offer Amount</th>
+                                    <th>Status</th>
+                                    <th>Expires</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for offer in property_data.offers %}
+                                <tr>
+                                    <td>{{ offer.date_created|date:"M d, Y" }}</td>
+                                    <td>{{ offer.get_formatted_price }}</td>
+                                    <td>
+                                        <span class="badge {% if offer.status == 'Pending' %}bg-warning{% elif offer.status == 'Accepted' %}bg-success{% elif offer.status == 'Rejected' %}bg-danger{% elif offer.status == 'Contingent' %}bg-info{% endif %}">
+                                            {{ offer.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ offer.date_expired|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if offer.status == 'Pending' %}
+                                            <a href="{% url 'offers:respond_to_offer' offer.id %}" class="btn btn-sm btn-primary">Respond</a>
+                                        {% elif offer.status == 'Contingent' %}
+                                            <a href="{% url 'offers:respond_to_offer' offer.id %}" class="btn btn-sm btn-outline-primary">Update</a>
+                                        {% else %}
+                                            <button class="btn btn-sm btn-outline-secondary" disabled>Processed</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            <p>You have no offers on your properties at this time.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
