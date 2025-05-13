@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 // The guest user should still be able to see the UI effect, but we don't save it
                 if (data.status === 'guest-user') {
-                    // Roll back the toggle (since it won't be saved)
+                    // Roll back the visual state
                     this.classList.toggle('active', wasActive);
                     if (heartIcon) {
                         heartIcon.classList.toggle('fa-regular', !wasActive);
@@ -67,10 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Show the popup
                     const popup = document.getElementById('login-popup');
-                    if (popup) {
-                        popup.style.display = 'block';
-                    }
-
+                    if (popup) popup.style.display = 'block';
                     return;
                 }
 

@@ -28,3 +28,9 @@
   font-size: 1.2rem;
   cursor: pointer;
 }
+
+#login-popup {
+  animation: none !important;
+  transition: none !important;
+}
+
