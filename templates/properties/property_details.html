@@ -8,19 +8,28 @@
 <div class="header-row">
     <a href="{% url 'properties:property_listings' %}" class="back-button">&larr;</a>
     <h1 class="property-title">Property address: {{ property.street_address }}</h1>
+
 </div>
 
 <!-- Main Image with Carousel -->
-<div class="image-carousel">
+<div class="carousel-wrapper">  <!-- NEW wrapper -->
+    <div class="image-carousel">
+        <div class="carousel-images-wrapper">
+            <div class="carousel-images">
+                {% for img in property.images.all %}
+                    <img src="{{ img.image.url }}" class="carousel-image {% if forloop.first %}active{% endif %}" />
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Arrows outside the .image-carousel -->
     <button class="carousel-nav left">&lt;</button>
-    {% if property.images.first %}
-        <img src="{{ property.images.first.image.url }}" class="main-image" alt="Main property image">
-    {% else %}
-        <img src="{% static '../../media/properties/images/placeholder.png' %}" class="main-image" alt="No image available">
-    {% endif %}
     <button class="carousel-nav right">&gt;</button>
-    <div class="favorite-icon">&#9825;</div>
 </div>
+
+
+
 
 <!-- Property Information + Purchase -->
 <div class="info-section">
