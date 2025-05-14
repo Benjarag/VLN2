@@ -88,15 +88,18 @@ def respond_to_offer(request, offer_id):
     if request.method == 'POST':
         response = request.POST.get('response')
 
+
         if response == 'accept':
             # Accept this offer
             offer.status = 'Accepted'
             offer.save()
             try:
                 send_offer_status_notification_to_buyer(offer)
-                messages.success(request, "Offer statut updated to ACCEPTED!")
+                email_sent = True
+                messages.success(request, "Offer status updated to ACCEPTED!")
             except Exception as e:
-                print(e)
+                messages.error(request, f"Failed to send notification email to buyer: {str(e)}")
+                print(f"Error sending email to buyer: {str(e)}")
 
             # Reject all other pending offers for this property
             PurchaseOffer.objects.filter(
@@ -105,7 +108,10 @@ def respond_to_offer(request, offer_id):
             ).exclude(id=offer.id).update(status='Rejected')
 
             messages.success(request, "You've accepted the offer.")
-
+            if email_sent:
+                print("Success sending email here")
+            else:
+                print("Something is failing")
         elif response == 'reject':
             # Reject this offer
             offer.status = 'Rejected'

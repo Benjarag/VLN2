@@ -51,71 +51,59 @@ def profile_update(request):
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if request.user.profile.is_seller:
+        is_still_seller = 'is_seller' in request.POST
+
+        if is_user_seller or is_still_seller:
             seller, created = Seller.objects.get_or_create(user=request.user)
             seller_form = SellerForm(request.POST, request.FILES, instance=seller)
 
-            profile_data = request.POST.copy()
-            profile_data['is_seller'] = True
-            profile_form = ProfileUpdateForm(profile_data, request.FILES, instance=request.user.profile)
-
-            if not user_form.is_valid():
-                print("User form is not valid")
-
-            if not profile_form.is_valid():
-                print("Profile form is not valid")
-
-            if not seller_form.is_valid():
-                print("Seller form is not valid")
-
             if user_form.is_valid() and profile_form.is_valid() and seller_form.is_valid():
-                user_form.save()
-                seller_profile = profile_form.save(commit=False)
-                seller_profile.is_seller = True
-                if seller_profile.image:
-                    seller.cover_image = seller_profile.image
+                user = user_form.save()
 
-                seller_profile.save()
+                new_profile = profile_form.save(commit=False)
+                new_profile.is_seller = True
+                new_profile.save()
+
+                seller.email = user.email
+                seller.name = user.username
+
+                # If profile has an image, use it for seller cover image
+                if new_profile.image:
+                    seller.cover_image = new_profile.image
+
                 seller_form.save()
-                messages.success(request, f'Your seller profile has been updated successfully!')
+
+                messages.success(request, 'Your seller profile has been updated successfully!')
                 return redirect('accounts:profile')
             else:
-                # Add specific error messages
-                if not user_form.is_valid():
-                    for field, errors in user_form.errors.items():
-                        for error in errors:
-                            messages.error(request, f"User form - {field}: {error}")
-
-                if not profile_form.is_valid():
-                    for field, errors in profile_form.errors.items():
-                        for error in errors:
-                            messages.error(request, f"Profile form - {field}: {error}")
-
-                if not seller_form.is_valid():
-                    for field, errors in seller_form.errors.items():
-                        for error in errors:
-                            messages.error(request, f"Seller form - {field}: {error}")
+                # Add specific error messages for invalid forms
+                for form_name, form in [("User form", user_form),
+                                        ("Profile form", profile_form),
+                                        ("Seller form", seller_form)]:
+                    if not form.is_valid():
+                        for field, errors in form.errors.items():
+                            for error in errors:
+                                messages.error(request, f"{form_name} - {field}: {error}")
 
                 messages.error(request,
                                'There was an error updating your profile. Please check the form and try again.')
-
         else:
+            # User is not a seller, just handle the user and profile forms
             if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
-                messages.success(request, f'Your profile has been updated successfully!')
+                user = user_form.save()
+                profile = profile_form.save()
+                messages.success(request, 'Your profile has been updated successfully!')
                 return redirect('accounts:profile')
             else:
                 messages.error(request,
                                'There was an error updating your profile. Please check the form and try again.')
     else:
+        # GET request - initialize forms
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-        # Initialize seller_form as None
-
-        # If user is a seller, get or create a seller profile and initialize the form
-        if request.user.profile.is_seller:
+        # Initialize seller form if user is a seller
+        if is_user_seller:
             seller, created = Seller.objects.get_or_create(user=request.user)
             seller_form = SellerForm(instance=seller)
 
@@ -124,7 +112,7 @@ def profile_update(request):
         'profile_form': profile_form,
     }
 
-    # Add seller_form to context if the user is a seller
+    # Add seller_form to context if it exists
     if seller_form is not None:
         context['seller_form'] = seller_form
 
