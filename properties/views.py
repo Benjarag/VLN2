@@ -11,7 +11,6 @@ from django.db.models import Q
 from accounts.models import UserFavorite
 
 
-
 def property_listings(request):
     # Initialize queryset with all available properties
     properties = Property.objects.all()
