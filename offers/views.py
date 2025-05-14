@@ -79,9 +79,9 @@ def respond_to_offer(request, offer_id):
         messages.error(request, "You don't have permission to respond to this offer.")
         return redirect('offers:myoffers')
 
-    # Only allow responding to pending offers
-    if offer.status != 'Pending':
-        messages.error(request, "This offer has already been processed.")
+    # Check if the property is sold
+    if offer.related_property.status == 'Sold':
+        messages.error(request, "This property has been sold and offers can no longer be updated.")
         return redirect('offers:myoffers')
 
     if request.method == 'POST':
