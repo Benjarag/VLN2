@@ -63,3 +63,22 @@ class PurchaseFinalizationForm(forms.ModelForm):
                 self.add_error('mortgage_provider', 'Required for mortgage payment')
         
         return cleaned_data
+
+    
+
+class CreditCardForm(forms.Form):
+    cardholder_name = forms.CharField(label="Cardholder Name", max_length=100)
+    credit_card_number = forms.CharField(label="Card Number", max_length=25)  # Increased to handle formatting
+    credit_card_expiry = forms.CharField(label="Expiry Date (MM/YY)", max_length=5)
+    credit_card_cvc = forms.CharField(label="CVC", max_length=4)
+    
+    def clean_credit_card_number(self):
+        """Remove formatting characters before validation"""
+        return self.cleaned_data['credit_card_number'].replace(' ', '').replace('-', '')
+    
+    def clean_credit_card_expiry(self):
+        """Validate expiry date format"""
+        expiry = self.cleaned_data['credit_card_expiry']
+        if '/' not in expiry:
+            raise forms.ValidationError("Please enter the expiry date in MM/YY format")
+        return expiry
