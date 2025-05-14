@@ -96,18 +96,20 @@
 }
 
  /*Style the select dropdowns to have the classic dropdown colour */
-.filter-group select {
-  color: #6c757d;
-}
+/*skoða þennan kóða veit ekki alveg hversu mikil áhrif hann hefur*/
+/*.filter-group select {*/
+/*  color: #6c757d;*/
+/*}*/
 
-.filter-group select option[value=""] {
-  color: #6c757d;
-}
+/*.filter-group select option[value=""] {*/
+/*  color: #6c757d;*/
+/*}*/
 
-.filter-group select option:not([value=""]) {
-  color: #212529;
-}
+/*.filter-group select option:not([value=""]) {*/
+/*  color: #212529;*/
+/*}*/
 
+/*hægt að combina postal code og price inputs*/
 .postal-code-inputs {
   display: flex;
   justify-content: center;
