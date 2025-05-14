@@ -66,10 +66,11 @@ class CustomLoginForm(AuthenticationForm):
 
 class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(help_text='')  # Empty help text
+    email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ['username']
+        fields = ['username', 'email']
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
