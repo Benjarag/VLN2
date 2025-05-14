@@ -21,13 +21,11 @@
     <link rel="stylesheet" href="{% static 'css/purchase_offer_list.css' %}">
     <link rel="stylesheet" href="{% static 'css/submit_purchase_offer.css' %}">
     <link rel="stylesheet" href="{% static 'css/popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile_update.css' %}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'images/favicon-32x32.png' %}" sizes="32x32">
 
-    <!-- Optional page-specific styles -->
-    {% block login_css %}{% endblock %}
-    {% block signup_css %}{% endblock %}
 </head>
 <body>
     {% include '_navigation.html' %}
@@ -48,8 +46,8 @@
         <span class="close-popup" onclick="document.getElementById('login-popup').style.display='none'">&times;</span>
         <p>
             <i class="fas fa-exclamation-circle"></i>
-            To save a property to your favorites, you need to <a href="{% url 'login' %}?next={{ request.path }}">log in</a>.<br>
-            Don't have an account? <a href="{% url 'signup' %}">Create one here</a>.
+            To save a property to your favorites, you need to <a href="{% url 'accounts:login' %}?next={{ request.path }}">log in</a>.<br>
+            Don't have an account? <a href="{% url 'accounts:signup' %}">Create one here</a>.
         </p>
     </div>
 
@@ -60,6 +58,7 @@
     <footer class="footer">
         &copy; {{ year }} Castle Apartments
         <div class="social-icons">
+            <!--<a href="{% url 'mail:mail' %}" class="social-icon"><i class="fab fa-facebook-f"></i></a>-->
             <a href="https://www.facebook.com/" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.twitter.com/" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
             <a href="https://www.instagram.com/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>

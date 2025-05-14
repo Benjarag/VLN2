@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <form method="post" action="{% url 'confirm_purchase' finalization.id %}">
+    <form method="post" action="{% url 'offers:confirm_purchase' finalization.id %}">
         {% csrf_token %}
         <div class="form-group">
             <div class="form-check">
@@ -69,7 +69,7 @@
         </div>
 
         <div class="d-flex justify-content-between mt-4">
-            <a href="{% url 'finalize_purchase' offer.id %}" class="btn btn-secondary">Go Back</a>
+            <a href="{% url 'offers:finalize_purchase' offer.id %}" class="btn btn-secondary">Go Back</a>
             <button type="submit" class="btn btn-primary">Confirm Purchase</button>
         </div>
     </form>

@@ -14,22 +14,33 @@
 
         <!-- Right Column - Profile Info -->
         <div class="profile-info">
-            <h2>Name: {{ user.username }}</h2>
+            <h2 class="profile-info-name"><b>Name:</b> {{ user.username }}</h2>
             {% if user.is_authenticated and user.profile.is_seller %}
-            <h3>User-type: Seller</h3>
+            <h4 class="profile-info-user-type"><b>User-type:</b> Seller</h4>
+
+            {% if user.seller_profile %}
+                <h4 class="profile-info-seller-type"><b>Seller-type:</b> {{ user.seller_profile.type }}</h4>
+                {% if user.seller_profile.type == 'Real Estate Agency' %}
+                    <h4 class="profile-info-street-address"> <b>Street Address:</b> {{ user.seller_profile.street_address }}</h4>
+                {% endif %}
             {% else %}
-            <h3>User-type: Buyer</h3>
+                <p><b>Complete your seller profile to list properties</b></p>
+                <!-- No URL yet for creating seller profiles -->
+            {% endif %}
+
+            {% else %}
+            <h3 class="profile-info-user-type">User-type: Buyer</h3>
             {% endif %}
             <div class="profile-details">
-                <h3>Additional Information</h3>
-                <p><b>Email:</b> {{ user.email }}</p>
+                <h5 class="profile-info-additional-info">Additional Information: </h5>
+                <p class="profile-info-email"><b>Email: {{ user.email }}</b></p>
                 {% if user.profile.phone %}
-                <p><b>Phone:</b> {{ user.profile.phone }}</p>
+                <p class="profile-info-phone-number"><b>Phone:</b> {{ user.profile.phone }}</p>
                 {% endif %}
             </div>
             <div class="profile-actions">
-                <button onclick="window.location.href='{% url 'update_profile' %}'" class="button">Update Profile</button>
-                <button onclick="window.location.href='{% url 'logout' %}'" class="button">Logout</button>
+                <button onclick="window.location.href='{% url 'accounts:update_profile' %}'" class="button">Update Profile</button>
+                <button onclick="window.location.href='{% url 'accounts:logout' %}'" class="button">Logout</button>
             </div>
         </div>
     </div>

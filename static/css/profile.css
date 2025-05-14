@@ -1,24 +1,18 @@
-/* Main Heading */
 .profile-container h1 {
     font-size: 2rem;
     padding-bottom: 2rem;
     margin: 2rem auto;
     border-bottom: 1px solid;
 }
-
-/* Profile Content Layout */
 .profile-content {
     display: flex;
     gap: 3rem;
     align-items: flex-start;
 }
-
-/* Profile Image */
 .profile-image img {
     border-radius: 50%;
 }
 
-/* Profile Info */
 .profile-info h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;

@@ -4,6 +4,8 @@ from django.urls import path
 from . import views
 from .forms import CustomLoginForm
 
+app_name = 'accounts'
+
 urlpatterns = [
     path('login/', LoginView.as_view(template_name='accounts/login.html', authentication_form=CustomLoginForm), name='login'),
     path('signup/', views.signup_view, name='signup'),

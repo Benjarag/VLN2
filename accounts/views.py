@@ -30,7 +30,7 @@ def profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('profile')
+            return redirect('accounts:profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
@@ -78,7 +78,7 @@ def profile_update(request):
                 seller_profile.save()
                 seller_form.save()
                 messages.success(request, f'Your seller profile has been updated successfully!')
-                return redirect('profile')
+                return redirect('accounts:profile')
             else:
                 # Add specific error messages
                 if not user_form.is_valid():
@@ -104,7 +104,7 @@ def profile_update(request):
                 user_form.save()
                 profile_form.save()
                 messages.success(request, f'Your profile has been updated successfully!')
-                return redirect('profile')
+                return redirect('accounts:profile')
             else:
                 messages.error(request,
                                'There was an error updating your profile. Please check the form and try again.')
@@ -152,9 +152,9 @@ def toggle_favorite(request):
 @login_required
 def favorites_view(request):
     favorite_property_id = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
-    properties = Property.objects.filter(id__in=favorite_property_id)
+    favorites = Property.objects.filter(id__in=favorite_property_id)
 
-    return render(request, 'accounts/favorite.html', {'properties': properties})
+    return render(request, 'accounts/favorite.html', {'favorites': favorites})
 
 
 def logout_view(request):

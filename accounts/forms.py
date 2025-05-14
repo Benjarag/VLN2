@@ -71,7 +71,6 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username']
 
-
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile

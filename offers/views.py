@@ -7,6 +7,8 @@ from .models import PurchaseOffer, PurchaseFinalization
 from properties.models import Property
 from django.utils import timezone
 from sellers.models import Seller
+from properties.models import Property
+from mail.views import send_offer_status_notification_to_buyer, send_offer_notification_to_seller
 
 @login_required
 def purchase_offers_list(request):
@@ -32,13 +34,12 @@ def seller_offers_list(request):
         # Let's create one with basic details to avoid breaking the flow
         seller = Seller.objects.create(
             user=request.user,
-            name=f"{request.user.first_name} {request.user.last_name}".strip() or request.user.username,
+            name=request.user.username,
             email=request.user.email
         )
         messages.warning(request, "Your seller profile has been automatically created.")
 
     # Get all properties for this seller
-    from properties.models import Property
     seller_properties = Property.objects.filter(seller=seller)
 
     # Get offers for these properties
@@ -91,6 +92,11 @@ def respond_to_offer(request, offer_id):
             # Accept this offer
             offer.status = 'Accepted'
             offer.save()
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer statut updated to ACCEPTED!")
+            except Exception as e:
+                print(e)
 
             # Reject all other pending offers for this property
             PurchaseOffer.objects.filter(
@@ -104,13 +110,21 @@ def respond_to_offer(request, offer_id):
             # Reject this offer
             offer.status = 'Rejected'
             offer.save()
-            messages.success(request, "You've rejected the offer.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to REJECTED!")
+            except Exception as e:
+                print(e)
 
         elif response == 'contingent':
             # Mark as contingent
             offer.status = 'Contingent'
             offer.save()
-            messages.success(request, "You've marked the offer as contingent.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to CONTINGENT!")
+            except Exception as e:
+                print(e)
 
         return redirect('offers:myoffers')
 
@@ -161,6 +175,13 @@ def submit_purchase_offer(request, property_id):
 
             offer.save()
 
+            try:
+                send_offer_notification_to_seller(offer)
+                messages.success(request, "Your offer has been submitted successfully!")
+            except Exception as e:
+                messages.error(request, "An error occurred while sending the offer notification. Please try again later.")
+                print(e)
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
             
@@ -203,7 +224,7 @@ def finalize_purchase(request, offer_id):
     # Check if offer can be finalized
     if purchase_offer.status not in ['Accepted', 'Contingent']:
         messages.error(request, "This offer cannot be finalized at this time.")
-        return redirect('offers:purchase_offers_list')
+        return redirect('offers:offers')
 
     # Check if finalization already exists
     existing_finalization = PurchaseFinalization.objects.filter(purchase_offer=purchase_offer).first()
@@ -248,9 +269,14 @@ def review_purchase(request, finalization_id):
         messages.error(request, "You don't have permission to view this finalization.")
         return redirect('offers:purchase_offers_list')
 
+    # Get the offer from the finalization
+    offer = finalization.purchase_offer
+
     return render(request, 'offers/review_purchase.html', {
-        'finalization': finalization
+        'finalization': finalization,
+        'offer': offer  # Add the offer to the context
     })
+
 
 @login_required
 def confirm_purchase(request, finalization_id):
@@ -280,3 +306,11 @@ def confirm_purchase(request, finalization_id):
     # If not a POST request, redirect back to review page
     return redirect('offers:review_purchase', finalization_id=finalization_id)
 
+@login_required
+def purchase_confirmation(request, offer_id):
+    """Display the purchase confirmation page"""
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+
+    return render(request, 'offers/purchase_confirmation.html', {
+        'offer': offer
+    })
