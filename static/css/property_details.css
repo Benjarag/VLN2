@@ -213,6 +213,15 @@
   display: block;
 }
 
+
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 .carousel-nav {
   position: absolute;
   top: 50%;
@@ -230,10 +239,10 @@
 
 
 .carousel-nav.left {
-  left: 250px;
+  left: -10px;
 }
 .carousel-nav.right {
-  right: 250px;
+  right: -10px;
 }
 
 
@@ -241,6 +250,5 @@
 .carousel-nav:hover {
     background: rgba(255, 255, 255, 1);
 }
-
 
 

@@ -12,21 +12,24 @@
 </div>
 
 <!-- Main Image with Carousel -->
-<div class="carousel-wrapper">  <!-- NEW wrapper -->
-    <div class="image-carousel">
-        <div class="carousel-images-wrapper">
-            <div class="carousel-images">
-                {% for img in property.images.all %}
-                    <img src="{{ img.image.url }}" class="carousel-image {% if forloop.first %}active{% endif %}" />
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+<div class="carousel-wrapper">  <!-- position: relative -->
 
-    <!-- Arrows outside the .image-carousel -->
-    <button class="carousel-nav left">&lt;</button>
-    <button class="carousel-nav right">&gt;</button>
+  <!-- Arrows are outside the image carousel -->
+  <button class="carousel-nav left">&lt;</button>
+
+  <div class="image-carousel">  <!-- this centers and sizes the images -->
+    <div class="carousel-images-wrapper">
+      <div class="carousel-images">
+        {% for img in property.images.all %}
+          <img src="{{ img.image.url }}" class="carousel-image {% if forloop.first %}active{% endif %}" />
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-nav right">&gt;</button>
 </div>
+
 
 
 
