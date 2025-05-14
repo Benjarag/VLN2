@@ -13,5 +13,6 @@ urlpatterns = [
     path('confirmation/<int:offer_id>/', views.purchase_confirmation, name='purchase_confirmation'),
     path('<int:offer_id>/finalize/', views.finalize_purchase, name='finalize_purchase'),
     # path('<int:offer_id>/cancel/', views.cancel_offer, name='cancel_offer'),
+    path('update/<int:offer_id>/', views.respond_to_offer, name='update_offer_status')
 
 ]

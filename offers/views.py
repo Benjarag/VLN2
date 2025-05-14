@@ -8,6 +8,7 @@ from properties.models import Property
 from django.utils import timezone
 from sellers.models import Seller
 from properties.models import Property
+from mail.views import send_offer_status_notification_to_buyer, send_offer_notification_to_seller
 
 @login_required
 def purchase_offers_list(request):
@@ -91,6 +92,11 @@ def respond_to_offer(request, offer_id):
             # Accept this offer
             offer.status = 'Accepted'
             offer.save()
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer statut updated to ACCEPTED!")
+            except Exception as e:
+                print(e)
 
             # Reject all other pending offers for this property
             PurchaseOffer.objects.filter(
@@ -104,13 +110,21 @@ def respond_to_offer(request, offer_id):
             # Reject this offer
             offer.status = 'Rejected'
             offer.save()
-            messages.success(request, "You've rejected the offer.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to REJECTED!")
+            except Exception as e:
+                print(e)
 
         elif response == 'contingent':
             # Mark as contingent
             offer.status = 'Contingent'
             offer.save()
-            messages.success(request, "You've marked the offer as contingent.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to CONTINGENT!")
+            except Exception as e:
+                print(e)
 
         return redirect('offers:myoffers')
 
@@ -160,6 +174,13 @@ def submit_purchase_offer(request, property_id):
             ).replace(tzinfo=timezone.get_current_timezone())
 
             offer.save()
+
+            try:
+                send_offer_notification_to_seller(offer)
+                messages.success(request, "Your offer has been submitted successfully!")
+            except Exception as e:
+                messages.error(request, "An error occurred while sending the offer notification. Please try again later.")
+                print(e)
 
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
