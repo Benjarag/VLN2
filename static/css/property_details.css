@@ -236,11 +236,15 @@
   right: 250px;
 }
 
-
-
 .carousel-nav:hover {
     background: rgba(255, 255, 255, 1);
 }
 
+@media (max-width: 50rem) {
+    .carousel-nav.left,
+    .carousel-nav.right {
+        display: none;
+    }
+}
 
 

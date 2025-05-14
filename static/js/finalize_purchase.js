@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const bankTransferFields = document.getElementById('bank-transfer-fields');
     const mortgageFields = document.getElementById('mortgage-fields');
 
+    if (!creditCardFields || !bankTransferFields || !mortgageFields) {
+        return;
+    }
     // Show appropriate fields based on initial selection
     showSelectedPaymentFields();
 
