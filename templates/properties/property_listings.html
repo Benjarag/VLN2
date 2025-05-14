@@ -64,7 +64,7 @@
                 {% endif %}
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
 
-                <!-- ✅ Favorite icon block -->
+                <!-- Favorite icon block -->
                 <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}">
                     <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
                 </div>
