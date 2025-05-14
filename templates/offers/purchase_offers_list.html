@@ -8,7 +8,7 @@
     {% if offers %}
         <div class="property-container">
             {% for offer in offers %}
-                <div class="property-card offer-card {% if offer.status == 'Accepted' %}accepted{% elif offer.status == 'Rejected' %}rejected{% elif offer.status == 'Expired' %}expired{% elif offer.status == 'Contingent' %}contingent{% elif offer.status == 'Cancelled' %}cancelled{% endif %}" data-id="{{ offer.id }}">
+                <div class="property-card offer-card {% if offer.status == 'Accepted' %}accepted{% elif offer.status == 'Rejected' %}rejected{% elif offer.status == 'Expired' %}expired{% elif offer.status == 'Contingent' %}contingent{% elif offer.status == 'Cancelled' %}cancelled{% endif %}" data-id="{{ offer.related_property.id }}">
 
                     <a href="{% url 'properties:property_details' property_id=offer.related_property.id %}">
                         <!-- Image and Status -->
@@ -19,7 +19,10 @@
                                 <img src="{% static 'images/placeholder.png' %}" class="property-image" alt="No image available">
                             {% endif %}
                             <div class="property-status {{ offer.related_property.status|lower }}">{{ offer.related_property.status }}</div>
-                            <div class="favorite-icon">&#9825;</div>
+                            <!-- Favorite icon block -->
+                            <div class="favorite-icon {% if offer.related_property.id in favorite_ids %}active{% endif %}">
+                                <i class="fa{% if offer.related_property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
+                            </div>
                         </div>
 
                         <!-- Info Section -->
@@ -65,4 +68,8 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/properties.js' %}"></script>
 {% endblock %}

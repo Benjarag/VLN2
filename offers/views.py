@@ -13,9 +13,19 @@ from properties.models import Property
 def purchase_offers_list(request):
     # Get all offers from the current user
     offers = PurchaseOffer.objects.filter(user=request.user).order_by('-date_created')
+    # Get the properties for these offers
+    properties = [offer.related_property for offer in offers]
+
+    # Get favorite IDs from UserFavorite table
+    favorite_ids = []
+    if request.user.is_authenticated:
+        from accounts.models import UserFavorite
+        favorite_ids = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
 
     return render(request, 'offers/purchase_offers_list.html', {
-        'offers': offers
+        'offers': offers,
+        'properties': properties,
+        'favorite_ids': favorite_ids,
     })
 
 
