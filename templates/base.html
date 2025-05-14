@@ -46,8 +46,8 @@
         <span class="close-popup" onclick="document.getElementById('login-popup').style.display='none'">&times;</span>
         <p>
             <i class="fas fa-exclamation-circle"></i>
-            To save a property to your favorites, you need to <a href="{% url 'login' %}?next={{ request.path }}">log in</a>.<br>
-            Don't have an account? <a href="{% url 'signup' %}">Create one here</a>.
+            To save a property to your favorites, you need to <a href="{% url 'accounts:login' %}?next={{ request.path }}">log in</a>.<br>
+            Don't have an account? <a href="{% url 'accounts:signup' %}">Create one here</a>.
         </p>
     </div>
 
