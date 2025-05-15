@@ -72,8 +72,11 @@ class Property(models.Model):
     @property
     def is_sold(self):
         """Check if property is sold based on status or finalized offer"""
-        return self.status == 'Sold' or self.purchase_offers.filter(status='Finalized').exists()
-
+        return (
+                self.status == 'Sold' or
+                self.purchase_offers.filter(status='Finalized').exists() or
+                self.purchase_offers.filter(status='Accepted').exists()
+                )
 
 class PropertyImage(models.Model):
     related_property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)

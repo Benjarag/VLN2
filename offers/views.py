@@ -74,6 +74,13 @@ def seller_offers_list(request):
 def respond_to_offer(request, offer_id):
     # Get the offer
     offer = get_object_or_404(PurchaseOffer, id=offer_id)
+    
+    # Check if property already has an accepted offer
+    if offer.related_property.has_accepted_offer and offer.status != 'Accepted':
+        messages.error(request, "This property already has an accepted offer and cannot receive further responses.")
+        return redirect('offers:myoffers')
+        
+    # Rest of your view code...
 
     # Check if user is a seller
     if not request.user or not request.user.profile.is_seller:
@@ -104,6 +111,12 @@ def respond_to_offer(request, offer_id):
             # Accept this offer
             offer.status = 'Accepted'
             offer.save()
+
+            # Mark the property as sold
+            property = offer.related_property
+            property.status = 'Sold'
+            property.save()
+
             try:
                 send_offer_status_notification_to_buyer(offer)
                 email_sent = True
@@ -153,13 +166,14 @@ def respond_to_offer(request, offer_id):
 def submit_purchase_offer(request, property_id):
     property = get_object_or_404(Property, id=property_id)
 
-    # Check if property is sold
+    # Check if property is sold or has an accepted offer
     if property.is_sold:
-        messages.error(request, "Cannot submit offer for a sold property")
+        messages.error(request, "Cannot submit offer for a property that is sold or has an accepted offer")
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'message': 'This property is sold and not accepting offers'})
+            return JsonResponse({'success': False, 'message': 'This property is not accepting offers'})
         return redirect('properties:property_details', property_id=property.id)
-
+    
+    # Rest of the view code remains the same
     if request.method == 'POST':
         # Process form submission
         form = PurchaseOfferForm(request.POST)

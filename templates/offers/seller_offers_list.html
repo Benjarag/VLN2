@@ -42,7 +42,7 @@
                                     </td>
                                     <td>{{ offer.date_expired|date:"M d, Y" }}</td>
                                     <td>
-                                        {% if  offer.related_property.status == 'Sold' %}
+                                        {% if offer.related_property.has_accepted_offer or offer.related_property.status == 'Sold' %}
                                             <button class="btn btn-sm btn-outline-secondary" disabled>Processed</button>
                                         {% elif offer.status == 'Pending' %}
                                             <a href="{% url 'offers:respond_to_offer' offer.id %}" class="btn btn-sm btn-primary">Respond</a>
