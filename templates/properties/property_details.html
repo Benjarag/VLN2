@@ -26,9 +26,11 @@
       </div>
     </div>
   </div>
-  <div class="favorite-icon {% if offer.related_property.id in favorite_ids %}active{% endif %}">
-      <i class="fa{% if offer.related_property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
-  </div>
+<!--  <div class="property-detail-card" data-id="{{ property.id }}">-->
+    <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}">
+        <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
+    </div>
+
   <button class="carousel-nav right">&gt;</button>
 </div>
 
@@ -105,7 +107,6 @@
     </div>
 </div>
 {% endblock %}
-
 {% block scripts %}
 <script src="{% static 'js/properties.js' %}"></script>
 {% endblock %}
