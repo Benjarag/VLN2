@@ -34,19 +34,12 @@ def send_offer_notification_to_seller(offer):
     """
     Send an email notification to the property seller when a new offer is submitted
     """
-    # Get buyer's name
-    buyer_name = f"{offer.user.first_name} {offer.user.last_name}" if (
-                offer.user.first_name and offer.user.last_name) else offer.user.username
+    buyer_name = f"{offer.user.username}"
 
-    # Get seller name
-    seller_name = f"{offer.seller.user.first_name} {offer.seller.user.last_name}" if (
-                offer.seller and offer.seller.user.first_name and offer.seller.user.last_name) else (
-                offer.seller.user.username if offer.seller else "Property Seller")
+    seller_name = f"{offer.seller.user.username}"
 
-    # Get seller's email - check if seller has email, otherwise use site admin email
-    seller_email = offer.seller.email if offer.seller and hasattr(offer.seller, 'email') else settings.EMAIL_HOST_USER
+    seller_email = offer.seller.email
 
-    # Ensure we have an expiration date
     expiration_date = getattr(offer, 'date_expired', None)
     if not expiration_date and hasattr(offer, 'expiration_date'):
         expiration_date = offer.expiration_date
