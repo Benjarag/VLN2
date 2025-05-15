@@ -73,13 +73,20 @@ def property_details(request, property_id):
             user=request.user
         ).order_by('-date_created').first()
 
+        # Get user's favorite property Ids
+        favorite_ids = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
+    else:
+        favorite_ids = []
+
     # Pre-calculate is_sold status
     is_sold = property.status == 'Sold'
 
     context = {
         'property': property,
         'user_offer': user_offer,
-        'is_sold': is_sold
+        'is_sold': is_sold,
+        'favorite_ids': list(favorite_ids),
+
     }
     return render(request, 'properties/property_details.html', context)
 

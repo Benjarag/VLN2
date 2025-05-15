@@ -5,8 +5,22 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
 
             const wasActive = this.classList.contains('active');
-            const propertyCard = this.closest('.property-card');
-            const propertyId = propertyCard?.getAttribute('data-id');
+            
+            // First try to get ID from the favorite icon itself
+            let propertyId = this.getAttribute('data-id');
+            
+            // If not found, try to get it from the parent property card
+            if (!propertyId) {
+                const propertyCard = this.closest('.property-card');
+                propertyId = propertyCard?.getAttribute('data-id');
+            }
+            
+            // If still no ID, log error and return
+            if (!propertyId) {
+                console.error('No property ID found for favorite action');
+                return;
+            }
+            
             const heartIcon = this.querySelector('i');
 
             this.classList.toggle('active');
@@ -78,14 +92,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Prevent redirect while popup is open
-    document.getElementById('popup-backdrop')?.addEventListener('click', hideLoginPopup);
-
-    document.querySelectorAll('.property-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            if (e.target.closest('.favorite-icon')) return;
-            const propertyId = this.getAttribute('data-id');
-            if (propertyId) window.location.href = `/properties/${propertyId}/`;
-        });
-    });
+    // Other event listeners...
 });

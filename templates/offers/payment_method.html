@@ -1,106 +1,213 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Payment Method - Finalize Purchase{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/finalize_purchase.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="finalize-container">
-    <h2>Finalize Your Purchase: Step 2 of 4</h2>
-    <h3>Payment Method</h3>
-    
-    <!-- Display form-wide errors prominently -->
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger">
-        {% for error in form.non_field_errors %}
-            {{ error }}
-        {% endfor %}
-    </div>
-    {% endif %}
-    
-    <!-- Display individual field errors at the top for visibility -->
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        <strong>Please correct the following errors:</strong>
-        <ul>
-            {% for field, errors in form.errors.items %}
-                {% if field != '__all__' %}
-                    {% for error in errors %}
-                        <li>{{ field|title }}: {{ error }}</li>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    
+<div class="finalization-container">
+    <h1>Finalize Your Purchase: Step 2 of 4</h1>
+    <h2>Payment Method</h2>
+
     <form method="post" id="payment-form">
         {% csrf_token %}
         
         <div class="payment-options">
-            {{ form.payment_option }}
-            {{ form.payment_option.errors }}
+            <div class="form-group">
+                <label>Select Payment Method:</label>
+                <div class="radio-options">
+                    {% for value, text in form.payment_option.field.choices %}
+                    <div class="radio-option">
+                        <input type="radio" name="payment_option" id="payment_{{ value|slugify }}" 
+                               value="{{ value }}" {% if form.payment_option.value == value %}checked{% endif %} 
+                               class="payment-radio">
+                        <label for="payment_{{ value|slugify }}">{{ text }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if form.payment_option.errors %}
+                <div class="error-message">{{ form.payment_option.errors }}</div>
+                {% endif %}
+            </div>
         </div>
         
-        <!-- Credit Card Fields -->
-        <div id="credit-card-fields" class="payment-details" style="display: none;">
+        <!-- Credit Card Fields (initially hidden) -->
+        <div id="credit-card-fields" class="payment-fields" style="display: none;">
             <div class="form-group">
-                {{ form.cardholder_name.label_tag }}
+                <label for="{{ form.cardholder_name.id_for_label }}">Cardholder name:</label>
                 {{ form.cardholder_name }}
-                {{ form.cardholder_name.errors }}
+                {% if form.cardholder_name.errors %}
+                <div class="error-message">{{ form.cardholder_name.errors }}</div>
+                {% endif %}
             </div>
             
             <div class="form-group">
-                {{ form.credit_card_number.label_tag }}
+                <label for="{{ form.credit_card_number.id_for_label }}">Credit card number:</label>
                 {{ form.credit_card_number }}
-                <small class="form-text text-muted">Must be 16 digits</small>
-                {{ form.credit_card_number.errors }}
+                <div class="field-help">Format: XXXX-XXXX-XXXX-XXXX</div>
+                {% if form.credit_card_number.errors %}
+                <div class="error-message">{{ form.credit_card_number.errors }}</div>
+                {% endif %}
             </div>
             
-            <div class="card-details-row">
+            <div class="form-row">
                 <div class="form-group">
-                    {{ form.credit_card_expiry.label_tag }}
+                    <label for="{{ form.credit_card_expiry.id_for_label }}">Credit card expiry:</label>
                     {{ form.credit_card_expiry }}
-                    <small class="form-text text-muted">MM/YY format</small>
-                    {{ form.credit_card_expiry.errors }}
+                    <div class="field-help">MM/YY format</div>
+                    {% if form.credit_card_expiry.errors %}
+                    <div class="error-message">{{ form.credit_card_expiry.errors }}</div>
+                    {% endif %}
                 </div>
                 
                 <div class="form-group">
-                    {{ form.credit_card_cvc.label_tag }}
+                    <label for="{{ form.credit_card_cvc.id_for_label }}">Credit card CVC:</label>
                     {{ form.credit_card_cvc }}
-                    <small class="form-text text-muted">Must be exactly 3 digits (e.g., 123)</small>
-                    {{ form.credit_card_cvc.errors }}
+                    <div class="field-help">3 digits</div>
+                    {% if form.credit_card_cvc.errors %}
+                    <div class="error-message">{{ form.credit_card_cvc.errors }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
         
-        <!-- Bank Transfer Fields -->
-        <div id="bank-transfer-fields" class="payment-details" style="display: none;">
+        <!-- Bank Transfer Fields (initially hidden) -->
+        <div id="bank-transfer-fields" class="payment-fields" style="display: none;">
             <div class="form-group">
-                {{ form.bank_account.label_tag }}
+                <label for="{{ form.bank_account.id_for_label }}">Bank account information:</label>
                 {{ form.bank_account }}
-                {{ form.bank_account.errors }}
+                <div class="field-help">IBAN, Swift or Icelandic format</div>
+                {% if form.bank_account.errors %}
+                <div class="error-message">{{ form.bank_account.errors }}</div>
+                {% endif %}
             </div>
         </div>
         
-        <!-- Mortgage Fields -->
-        <div id="mortgage-fields" class="payment-details" style="display: none;">
+        <!-- Mortgage Fields (initially hidden) -->
+        <div id="mortgage-fields" class="payment-fields" style="display: none;">
             <div class="form-group">
-                {{ form.mortgage_provider.label_tag }}
+                <label for="{{ form.mortgage_provider.id_for_label }}">Mortgage provider:</label>
                 {{ form.mortgage_provider }}
-                {{ form.mortgage_provider.errors }}
+                {% if form.mortgage_provider.errors %}
+                <div class="error-message">{{ form.mortgage_provider.errors }}</div>
+                {% endif %}
             </div>
         </div>
-
-        <div class="action-buttons">
-            <a href="{% url 'offers:contact_info' offer.id %}" class="back-button">Back</a>
-            <button type="submit" class="submit-button">Continue to Review</button>
+        
+        <div class="button-container">
+            <a href="{% url 'offers:contact_info' offer.id %}" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-primary">Continue to Review</button>
         </div>
     </form>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-    <script src="{% static 'js/payment_method.js' %}"></script>
+<script>
+// This script shows/hides payment fields based on selected payment option
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all radio buttons
+    const paymentRadios = document.querySelectorAll('.payment-radio');
+    
+    // Get input fields for formatting
+    const cardNumberInput = document.getElementById('{{ form.credit_card_number.id_for_label }}');
+    const expiryInput = document.getElementById('{{ form.credit_card_expiry.id_for_label }}');
+    const cvcInput = document.getElementById('{{ form.credit_card_cvc.id_for_label }}');
+    
+    // Function to show/hide fields based on selection
+    function togglePaymentFields() {
+        // Hide all payment fields first
+        document.querySelectorAll('.payment-fields').forEach(field => {
+            field.style.display = 'none';
+        });
+        
+        // Find the checked radio button
+        const checkedRadio = document.querySelector('input[name="payment_option"]:checked');
+        
+        if (checkedRadio) {
+            const value = checkedRadio.value;
+            
+            // Show the corresponding fields
+            if (value === 'Credit Card') {
+                document.getElementById('credit-card-fields').style.display = 'block';
+            } else if (value === 'Bank Transfer') {
+                document.getElementById('bank-transfer-fields').style.display = 'block';
+            } else if (value === 'Mortgage') {
+                document.getElementById('mortgage-fields').style.display = 'block';
+            }
+        }
+    }
+    
+    // Format credit card number with dashes after every 4 digits
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            // Get input value and remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 16 digits
+            if (value.length > 16) {
+                value = value.slice(0, 16);
+            }
+            
+            // Format with dashes after every 4 digits
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += '-';
+                }
+                formattedValue += value[i];
+            }
+            
+            // Update input value
+            this.value = formattedValue;
+        });
+    }
+    
+    // Format expiry date with slash after MM
+    if (expiryInput) {
+        expiryInput.addEventListener('input', function(e) {
+            // Get input value and remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 4 digits (MM/YY)
+            if (value.length > 4) {
+                value = value.slice(0, 4);
+            }
+            
+            // Format with slash after first 2 digits
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            
+            // Update input value
+            this.value = value;
+        });
+    }
+    
+    // Limit CVC to 3 digits
+    if (cvcInput) {
+        cvcInput.addEventListener('input', function(e) {
+            // Get input value and remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 3 digits
+            if (value.length > 3) {
+                value = value.slice(0, 3);
+            }
+            
+            // Update input value
+            this.value = value;
+        });
+    }
+    
+    // Add event listeners to all radio buttons
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', togglePaymentFields);
+    });
+    
+    // Initial toggle based on any pre-selected option
+    togglePaymentFields();
+});
+</script>
 {% endblock %}

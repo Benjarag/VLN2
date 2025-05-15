@@ -17,21 +17,30 @@
 </div>
 
 <!-- Main Image with Carousel -->
-<div class="carousel-wrapper">  <!-- NEW wrapper -->
-    <div class="image-carousel">
-        <div class="carousel-images-wrapper">
-            <div class="carousel-images">
-                {% for img in property.images.all %}
-                    <img src="{{ img.image.url }}" class="carousel-image {% if forloop.first %}active{% endif %}" />
-                {% endfor %}
-            </div>
+<div class="carousel-wrapper">  <!-- position: relative -->
+
+  <!-- Arrows are outside the image carousel -->
+  <button class="carousel-nav left">&lt;</button>
+
+  <div class="image-carousel">  <!-- this centers and sizes the images -->
+    <div class="carousel-images-wrapper">
+      <div class="carousel-images">
+        {% for img in property.images.all %}
+          <img src="{{ img.image.url }}" class="carousel-image {% if forloop.first %}active{% endif %}" />
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+    <!--  <div class="property-detail-card" data-id="{{ property.id }}">-->
+    <div class="property-detail-card" data-id="{{ property.id }}">
+        <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}" data-id="{{ property.id }}">
+            <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
         </div>
     </div>
 
-    <!-- Arrows outside the .image-carousel -->
-    <button class="carousel-nav left">&lt;</button>
-    <button class="carousel-nav right">&gt;</button>
+  <button class="carousel-nav right">&gt;</button>
 </div>
+
 
 
 
@@ -104,4 +113,7 @@
         <p class="property-description">{{ property.description }}</p>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/properties.js' %}"></script>
 {% endblock %}

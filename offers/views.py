@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django import forms  # Add this import here
+
+from mail.views import send_offer_status_notification_to_buyer, send_offer_notification_to_seller
 from .forms import PurchaseFinalizationForm, PurchaseOfferForm
 from .models import PurchaseOffer, PurchaseFinalization
 from properties.models import Property
@@ -102,6 +104,13 @@ def respond_to_offer(request, offer_id):
             # Accept this offer
             offer.status = 'Accepted'
             offer.save()
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                email_sent = True
+                messages.success(request, "Offer status updated to ACCEPTED!")
+            except Exception as e:
+                messages.error(request, f"Failed to send notification email to buyer: {str(e)}")
+                print(f"Error sending email to buyer: {str(e)}")
 
             # Reject all other pending offers for this property
             PurchaseOffer.objects.filter(
@@ -110,22 +119,35 @@ def respond_to_offer(request, offer_id):
             ).exclude(id=offer.id).update(status='Rejected')
 
             messages.success(request, "You've accepted the offer.")
+            if email_sent:
+                print("Success sending email here")
+            else:
+                print("Something is failing")
 
         elif response == 'reject':
             # Reject this offer
             offer.status = 'Rejected'
             offer.save()
-            messages.success(request, "You've rejected the offer.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to REJECTED!")
+            except Exception as e:
+                print(e)
 
         elif response == 'contingent':
             # Mark as contingent
             offer.status = 'Contingent'
             offer.save()
-            messages.success(request, "You've marked the offer as contingent.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to CONTINGENT!")
+            except Exception as e:
+                print(e)
 
         return redirect('offers:myoffers')
 
     return render(request, 'offers/respond_to_offer.html', {'offer': offer})
+
 
 @login_required
 def submit_purchase_offer(request, property_id):
@@ -151,12 +173,26 @@ def submit_purchase_offer(request, property_id):
 
             # Create the purchase offer
             offer = form.save(commit=False)
-            
+
             # Set the required fields
             offer.related_property = property
             offer.user = request.user
             offer.property_name = property.title
             offer.seller = property.seller
+
+            # Set the expiration date explicitly
+            offer.date_expired = form.cleaned_data['expiration_date']  # Make sure this field exists on your model
+
+            # Save the offer first so it has an ID for the notification
+            offer.save()
+
+            try:
+                send_offer_notification_to_seller(offer)
+                messages.success(request, "Buyer has been notified about your offer! Please wait for a response from them!")
+            except Exception as e:
+                messages.error(request, "An error occurred while sending the offer notification. Please try again later.")
+                print(f"Notification error: {str(e)}")
+                # The offer is still saved, just without the notification
 
             # Set seller_name directly from the seller object
             if property.seller:
@@ -173,14 +209,15 @@ def submit_purchase_offer(request, property_id):
             offer.save()
 
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
-            
+                return JsonResponse(
+                    {'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
+
             messages.success(request, "Your purchase offer has been submitted successfully!")
             return redirect('properties:property_details', property_id=property.id)
         else:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': False, 'message': form.errors.as_text()})
-            
+
             return render(request, 'offers/submit_purchase_offer.html', {'form': form, 'property': property})
 
     # GET request - display the form
@@ -202,7 +239,7 @@ def contact_info_view(request, offer_id):
 
     # Initialize existing_finalization to None first
     existing_finalization = None
-    
+
     # Check if an existing finalization exists
     try:
         existing_finalization = PurchaseFinalization.objects.get(purchase_offer=offer)
@@ -228,7 +265,7 @@ def contact_info_view(request, offer_id):
 
     if request.method == 'POST':
         form = ContactInfoForm(request.POST)
-            
+
         if form.is_valid():
             # Store form data in session
             request.session['finalization_contact_info'] = {
@@ -238,7 +275,7 @@ def contact_info_view(request, offer_id):
                 'country': form.cleaned_data['country'],
                 'national_id': form.cleaned_data['national_id'],
             }
-            
+
             # If finalization exists, update it
             if existing_finalization:
                 existing_finalization.street_address = form.cleaned_data['street_address']
@@ -258,7 +295,7 @@ def contact_info_view(request, offer_id):
                     national_id=form.cleaned_data['national_id']
                 )
                 finalization.save()
-            
+
             # Redirect to payment method page
             return redirect('offers:payment_method', offer_id=offer_id)
     else:
@@ -271,24 +308,25 @@ def contact_info_view(request, offer_id):
         'property': property,
     })
 
+
 @login_required
 def payment_method_view(request, offer_id):
     """Second step of the finalization process - payment method"""
     offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
-    
+
     # Check if offer can be finalized
     if not offer.can_finalize:
         messages.error(request, "This offer cannot be finalized at this time.")
         return redirect('offers:offers')
-    
+
     # Check if contact info is in session
     if 'finalization_contact_info' not in request.session:
         messages.warning(request, "Please complete the contact information first.")
         return redirect('offers:contact_info', offer_id=offer.id)
-    
+
     # Get or create finalization object with contact info
     contact_info = request.session['finalization_contact_info']
-    
+
     try:
         finalization = PurchaseFinalization.objects.get(purchase_offer=offer)
         # Update contact info to make sure it's current
@@ -308,12 +346,12 @@ def payment_method_view(request, offer_id):
             country=contact_info['country'],
             national_id=contact_info['national_id']
         )
-    
+
     if request.method == 'POST':
         # Create a dict with contact info to combine with POST data
         # This ensures contact info is preserved during form validation
         form_data = request.POST.copy()
-        
+
         # Add the contact info to the form data
         form_data.update({
             'street_address': contact_info['street_address'],
@@ -322,13 +360,13 @@ def payment_method_view(request, offer_id):
             'country': contact_info['country'],
             'national_id': contact_info['national_id'],
         })
-        
+
         form = PurchaseFinalizationForm(form_data, instance=finalization)
-        
+
         if form.is_valid():
             # Save payment info to finalization object
             finalization = form.save()
-            
+
             # Redirect to review page
             return redirect('offers:review_purchase', finalization_id=finalization.id)
         else:
@@ -336,11 +374,12 @@ def payment_method_view(request, offer_id):
             print("Form errors:", form.errors)
     else:
         form = PurchaseFinalizationForm(instance=finalization)
-    
+
     return render(request, 'offers/payment_method.html', {
         'form': form,
         'offer': offer
     })
+
 
 @login_required
 def review_purchase(request, finalization_id):

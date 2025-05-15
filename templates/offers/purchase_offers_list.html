@@ -25,7 +25,7 @@
                             {% endif %}
                             <div class="property-status {{ offer.related_property.status|lower }}">{{ offer.related_property.status }}</div>
                             <!-- Favorite icon block -->
-                            <div class="favorite-icon {% if offer.related_property.id in favorite_ids %}active{% endif %}">
+                            <div class="favorite-icon {% if offer.related_property.id in favorite_ids %}active{% endif %}" data-id="{{ offer.related_property.id }}">
                                 <i class="fa{% if offer.related_property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
                             </div>
                         </div>
