@@ -8,8 +8,6 @@ from .models import PurchaseOffer, PurchaseFinalization
 from properties.models import Property
 from django.utils import timezone
 from sellers.models import Seller
-from properties.models import Property
-from mail.views import send_offer_status_notification_to_buyer, send_offer_notification_to_seller
 
 
 @login_required
@@ -129,6 +127,7 @@ def respond_to_offer(request, offer_id):
 
     return render(request, 'offers/respond_to_offer.html', {'offer': offer})
 
+
 @login_required
 def submit_purchase_offer(request, property_id):
     property = get_object_or_404(Property, id=property_id)
@@ -153,7 +152,7 @@ def submit_purchase_offer(request, property_id):
 
             # Create the purchase offer
             offer = form.save(commit=False)
-            
+
             # Set the required fields
             offer.related_property = property
             offer.user = request.user
@@ -175,79 +174,175 @@ def submit_purchase_offer(request, property_id):
             offer.save()
 
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
-            
+                return JsonResponse(
+                    {'success': True, 'message': 'Your purchase offer has been submitted successfully!'})
+
             messages.success(request, "Your purchase offer has been submitted successfully!")
             return redirect('properties:property_details', property_id=property.id)
         else:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': False, 'message': form.errors.as_text()})
-            
+
             return render(request, 'offers/submit_purchase_offer.html', {'form': form, 'property': property})
 
     # GET request - display the form
     form = PurchaseOfferForm()
     return render(request, 'offers/submit_purchase_offer.html', {'form': form, 'property': property})
 
-# @login_required
-# def cancel_offer(request, offer_id):
-#     offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
-#
-#     # Only pending offers can be cancelled
-#     if offer.status != 'Pending':
-#         messages.error(request, "Only pending offers can be cancelled.")
-#         return redirect('offers:purchase_offers_list')
-#
-#     if request.method == 'POST':
-#         # Update the offer status to Cancelled
-#         offer.status = 'Cancelled'
-#         offer.save()
-#         messages.success(request, "Your purchase offer has been cancelled successfully.")
-#
-#     return redirect('offers:purchase_offers_list')
 
-
-# Create your views here.
 @login_required
-def finalize_purchase(request, offer_id):
-    # Add user ownership check
-    purchase_offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+def contact_info_view(request, offer_id):
+    """First step of the finalization process - collecting contact information"""
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+    # Use related_property instead of property
+    property = offer.related_property
 
     # Check if offer can be finalized
-    if purchase_offer.status not in ['Accepted', 'Contingent']:
+    if not offer.can_finalize:
         messages.error(request, "This offer cannot be finalized at this time.")
         return redirect('offers:offers')
 
-    # Check if finalization already exists
-    existing_finalization = PurchaseFinalization.objects.filter(purchase_offer=purchase_offer).first()
+    # Initialize existing_finalization to None first
+    existing_finalization = None
+
+    # Check if an existing finalization exists
+    try:
+        existing_finalization = PurchaseFinalization.objects.get(purchase_offer=offer)
+        initial_data = {
+            'street_address': existing_finalization.street_address,
+            'city': existing_finalization.city,
+            'postal_code': existing_finalization.postal_code,
+            'country': existing_finalization.country,
+            'national_id': existing_finalization.national_id,
+        }
+    except PurchaseFinalization.DoesNotExist:
+        # Try to get data from session if no finalization exists
+        if 'finalization_contact_info' in request.session:
+            initial_data = request.session['finalization_contact_info']
+        else:
+            initial_data = {}
+
+    # Create a form with only the contact fields
+    class ContactInfoForm(forms.ModelForm):
+        class Meta:
+            model = PurchaseFinalization
+            fields = ['street_address', 'city', 'postal_code', 'country', 'national_id']
 
     if request.method == 'POST':
-        # If finalization exists, update it rather than create a new one
-        if existing_finalization:
-            form = PurchaseFinalizationForm(request.POST, instance=existing_finalization)
-        else:
-            form = PurchaseFinalizationForm(request.POST)
+        form = ContactInfoForm(request.POST)
 
         if form.is_valid():
-            finalization = form.save(commit=False)
+            # Store form data in session
+            request.session['finalization_contact_info'] = {
+                'street_address': form.cleaned_data['street_address'],
+                'city': form.cleaned_data['city'],
+                'postal_code': form.cleaned_data['postal_code'],
+                'country': form.cleaned_data['country'],
+                'national_id': form.cleaned_data['national_id'],
+            }
 
-            # Only set the purchase_offer if this is a new finalization
-            if not existing_finalization:
-                finalization.purchase_offer = purchase_offer
+            # If finalization exists, update it
+            if existing_finalization:
+                existing_finalization.street_address = form.cleaned_data['street_address']
+                existing_finalization.city = form.cleaned_data['city']
+                existing_finalization.postal_code = form.cleaned_data['postal_code']
+                existing_finalization.country = form.cleaned_data['country']
+                existing_finalization.national_id = form.cleaned_data['national_id']
+                existing_finalization.save()
+            else:
+                # Create a new finalization object if one doesn't exist
+                finalization = PurchaseFinalization(
+                    purchase_offer=offer,
+                    street_address=form.cleaned_data['street_address'],
+                    city=form.cleaned_data['city'],
+                    postal_code=form.cleaned_data['postal_code'],
+                    country=form.cleaned_data['country'],
+                    national_id=form.cleaned_data['national_id']
+                )
+                finalization.save()
 
-            finalization.save()
-            return redirect('offers:review_purchase', finalization_id=finalization.id)
+            # Redirect to payment method page
+            return redirect('offers:payment_method', offer_id=offer_id)
     else:
-        # Check if finalization already exists
-        if existing_finalization:
-            form = PurchaseFinalizationForm(instance=existing_finalization)
-            messages.info(request, "You're continuing an existing finalization process.")
-        else:
-            form = PurchaseFinalizationForm()
+        # Initialize form with saved data
+        form = ContactInfoForm(initial=initial_data)
 
-    return render(request, 'offers/finalize_purchase.html', {
+    return render(request, 'offers/contact_info.html', {
         'form': form,
-        'offer': purchase_offer
+        'offer': offer,
+        'property': property,
+    })
+
+
+@login_required
+def payment_method_view(request, offer_id):
+    """Second step of the finalization process - payment method"""
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+
+    # Check if offer can be finalized
+    if not offer.can_finalize:
+        messages.error(request, "This offer cannot be finalized at this time.")
+        return redirect('offers:offers')
+
+    # Check if contact info is in session
+    if 'finalization_contact_info' not in request.session:
+        messages.warning(request, "Please complete the contact information first.")
+        return redirect('offers:contact_info', offer_id=offer.id)
+
+    # Get or create finalization object with contact info
+    contact_info = request.session['finalization_contact_info']
+
+    try:
+        finalization = PurchaseFinalization.objects.get(purchase_offer=offer)
+        # Update contact info to make sure it's current
+        finalization.street_address = contact_info['street_address']
+        finalization.city = contact_info['city']
+        finalization.postal_code = contact_info['postal_code']
+        finalization.country = contact_info['country']
+        finalization.national_id = contact_info['national_id']
+        finalization.save()
+    except PurchaseFinalization.DoesNotExist:
+        # Create new finalization with contact info
+        finalization = PurchaseFinalization.objects.create(
+            purchase_offer=offer,
+            street_address=contact_info['street_address'],
+            city=contact_info['city'],
+            postal_code=contact_info['postal_code'],
+            country=contact_info['country'],
+            national_id=contact_info['national_id']
+        )
+
+    if request.method == 'POST':
+        # Create a dict with contact info to combine with POST data
+        # This ensures contact info is preserved during form validation
+        form_data = request.POST.copy()
+
+        # Add the contact info to the form data
+        form_data.update({
+            'street_address': contact_info['street_address'],
+            'city': contact_info['city'],
+            'postal_code': contact_info['postal_code'],
+            'country': contact_info['country'],
+            'national_id': contact_info['national_id'],
+        })
+
+        form = PurchaseFinalizationForm(form_data, instance=finalization)
+
+        if form.is_valid():
+            # Save payment info to finalization object
+            finalization = form.save()
+
+            # Redirect to review page
+            return redirect('offers:review_purchase', finalization_id=finalization.id)
+        else:
+            # If there are validation errors, print them for debugging
+            print("Form errors:", form.errors)
+    else:
+        form = PurchaseFinalizationForm(instance=finalization)
+
+    return render(request, 'offers/payment_method.html', {
+        'form': form,
+        'offer': offer
     })
 
 
@@ -264,6 +359,16 @@ def review_purchase(request, finalization_id):
     # Get the offer from the finalization
     offer = finalization.purchase_offer
 
+    # Store the contact info back in session for when user navigates back to payment method
+    # This ensures the back button will work properly
+    request.session['finalization_contact_info'] = {
+        'street_address': finalization.street_address,
+        'city': finalization.city,
+        'postal_code': finalization.postal_code,
+        'country': finalization.country,
+        'national_id': finalization.national_id,
+    }
+
     return render(request, 'offers/review_purchase.html', {
         'finalization': finalization,
         'offer': offer  # Add the offer to the context
@@ -271,38 +376,23 @@ def review_purchase(request, finalization_id):
 
 
 @login_required
-def confirm_purchase(request, finalization_id):
-    """Handle the final purchase confirmation"""
+def purchase_confirmation(request, finalization_id):
+    """Display the purchase confirmation page"""
     finalization = get_object_or_404(PurchaseFinalization, id=finalization_id)
 
     # Make sure the user owns this finalization
     if finalization.purchase_offer.user != request.user:
-        messages.error(request, "You don't have permission to confirm this purchase.")
+        messages.error(request, "You don't have permission to view this finalization.")
         return redirect('offers:purchase_offers_list')
 
+    # Get the offer from the finalization
     offer = finalization.purchase_offer
 
-    if request.method == 'POST':
-        # Check if terms agreement checkbox was checked
-        if 'terms_agreement' in request.POST:
-            # Mark the finalization as completed
-            finalization.completed = True
-            finalization.save()
-            # The model's save method will update the offer and property status
-            messages.success(request, "Purchase has been successfully finalized!")
-            return redirect('offers:purchase_confirmation', offer_id=offer.id)
-        else:
-            messages.error(request, 'You must agree to the terms to proceed.')
-            return redirect('offers:review_purchase', finalization_id=finalization_id)
-
-    # If not a POST request, redirect back to review page
-    return redirect('offers:review_purchase', finalization_id=finalization_id)
-
-@login_required
-def purchase_confirmation(request, offer_id):
-    """Display the purchase confirmation page"""
-    offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
+    # Mark the finalization as completed
+    finalization.completed = True
+    finalization.save()
 
     return render(request, 'offers/purchase_confirmation.html', {
-        'offer': offer
+        'offer': offer,
+        'finalization': finalization
     })
