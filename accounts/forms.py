@@ -66,11 +66,12 @@ class CustomLoginForm(AuthenticationForm):
 
 class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(help_text='')  # Empty help text
-    email = forms.EmailField()
+    email = forms.EmailField(required=False)
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username']
+
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
@@ -80,11 +81,11 @@ class ProfileUpdateForm(forms.ModelForm):
             'is_seller': forms.CheckboxInput(attrs={'class': 'form-check-input'})
         }
 
-class SellerForm(forms.ModelForm):
+
+class SellerUpdateForm(forms.ModelForm):
     class Meta:
         model = Seller
-        fields = ['name', 'type', 'phone', 'email', 'logo', 'cover_image', 'bio',
-                 'street_address', 'city', 'postal_code']
+        fields = ['type', 'phone', 'logo', 'cover_image', 'bio', 'street_address', 'city', 'postal_code']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4}),
             'type': forms.Select(attrs={'class': 'form-select'})
