@@ -125,3 +125,15 @@
 .cancel-button:hover {
     background-color: #e5e5e5;
 }
+
+.checkbox-label {
+
+    cursor: pointer;
+}
+
+input#terms_agreement {
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+    left: 2px;
+}
