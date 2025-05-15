@@ -6,13 +6,11 @@
     <h1>Profile Page</h1>
 
     <div class="profile-content">
-        <!-- Left Column - Profile Image -->
         <div class="profile-image">
             <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'accounts/images/default_profile.jpg' %}{% endif %}"
                  alt="Profile Picture">
         </div>
 
-        <!-- Right Column - Profile Info -->
         <div class="profile-info">
             <h2 class="profile-info-name"><b>Name:</b> {{ user.username }}</h2>
             {% if user.is_authenticated and user.profile.is_seller %}
@@ -23,9 +21,6 @@
                 {% if user.seller_profile.type == 'Real Estate Agency' %}
                     <h4 class="profile-info-street-address"> <b>Street Address:</b> {{ user.seller_profile.street_address }}</h4>
                 {% endif %}
-            {% else %}
-                <p><b>Complete your seller profile to list properties</b></p>
-                <!-- No URL yet for creating seller profiles -->
             {% endif %}
 
             {% else %}
@@ -36,6 +31,9 @@
                 <p class="profile-info-email"><b>Email: {{ user.email }}</b></p>
                 {% if user.profile.phone %}
                 <p class="profile-info-phone-number"><b>Phone:</b> {{ user.profile.phone }}</p>
+                {% endif %}
+                {% if user.seller_profile %}
+                <p class="profile-info-bio"><b>Bio:</b> {{ user.seller_profile.bio }}</p>
                 {% endif %}
             </div>
             <div class="profile-actions">

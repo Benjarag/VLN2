@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.http import JsonResponse
 
-from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm, SellerForm
+from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm, SellerUpdateForm
 from django.contrib import messages
 from django.contrib.auth import logout, login
 
@@ -13,7 +13,6 @@ from properties.models import Property
 from django.views.decorators.http import require_POST
 
 from sellers.models import Seller
-
 
 
 @login_required
@@ -56,64 +55,57 @@ def profile_update(request):
 
         if is_user_seller or is_still_seller:
             seller, created = Seller.objects.get_or_create(user=request.user)
-            seller_form = SellerForm(request.POST, request.FILES, instance=seller)
+            seller_form = SellerUpdateForm(request.POST, request.FILES, instance=seller)
 
             if user_form.is_valid() and profile_form.is_valid() and seller_form.is_valid():
-                user = user_form.save()
+                user = user_form.save(commit=False)
+                user_email = request.user.email
+                user.save()
 
                 new_profile = profile_form.save(commit=False)
                 new_profile.is_seller = True
                 new_profile.save()
 
-                seller.email = user.email
+                seller = seller_form.save(commit=False)
                 seller.name = user.username
+                seller.email = user.email
+                print(f"seller email is {seller.email}")
 
-                # If profile has an image, use it for seller cover image
                 if new_profile.image:
                     seller.cover_image = new_profile.image
 
-                seller_form.save()
+                seller.save()
 
                 messages.success(request, 'Your seller profile has been updated successfully!')
                 return redirect('accounts:profile')
             else:
-                # Add specific error messages for invalid forms
-                for form_name, form in [("User form", user_form),
-                                        ("Profile form", profile_form),
-                                        ("Seller form", seller_form)]:
-                    if not form.is_valid():
-                        for field, errors in form.errors.items():
-                            for error in errors:
-                                messages.error(request, f"{form_name} - {field}: {error}")
-
-                messages.error(request,
-                               'There was an error updating your profile. Please check the form and try again.')
+                print("Error in updating sellers profile")
+                messages.error(request, 'There was an error updating your profile. Please check the form and try again.')
         else:
-            # User is not a seller, just handle the user and profile forms
             if user_form.is_valid() and profile_form.is_valid():
-                user = user_form.save()
-                profile = profile_form.save()
+                user = user_form.save(commit=False)
+                user.email = request.user.email
+                print(f"user email is {user.email}")
+                user.save()
+
+                profile_form.save()
                 messages.success(request, 'Your profile has been updated successfully!')
                 return redirect('accounts:profile')
             else:
-                messages.error(request,
-                               'There was an error updating your profile. Please check the form and try again.')
+                messages.error(request, 'There was an error updating your profile. Please check the form and try again.')
     else:
-        # GET request - initialize forms
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-        # Initialize seller form if user is a seller
         if is_user_seller:
             seller, created = Seller.objects.get_or_create(user=request.user)
-            seller_form = SellerForm(instance=seller)
+            seller_form = SellerUpdateForm(instance=seller)
 
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
     }
 
-    # Add seller_form to context if it exists
     if seller_form is not None:
         context['seller_form'] = seller_form
 
@@ -137,6 +129,7 @@ def toggle_favorite(request):
     else:
         UserFavorite.objects.create(user=user, property=property_obj)
         return JsonResponse({'status': 'added'})
+
 
 @login_required
 def favorites_view(request):
@@ -173,6 +166,7 @@ def signup_view(request):
                     cover_image=None,
                     bio="",
                 )
+
             # Log the user in
             login(request, user)
             # Redirect to home page

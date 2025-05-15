@@ -50,7 +50,7 @@ def send_offer_notification_to_seller(offer):
     expiration_date = getattr(offer, 'date_expired', None)
     if not expiration_date and hasattr(offer, 'expiration_date'):
         expiration_date = offer.expiration_date
-        
+
     expiration_text = expiration_date.strftime('%d-%m-%Y') if expiration_date else "N/A"
 
     subject = f"Property update on {offer.property_name}"
@@ -71,7 +71,7 @@ def send_offer_notification_to_seller(offer):
 
     # Log the email being sent
     print(f"Attempting to send email to {seller_email} with subject: {subject}")
-    
+
     # Create email record
     try:
         email_record = Email.objects.create(
@@ -107,7 +107,10 @@ def send_offer_status_notification_to_buyer(offer):
     try:
         # Get buyer's email
         buyer_email = offer.user.email
-        print(f"Sending status update email to buyer: {buyer_email}")
+
+        if not buyer_email:
+            print("ERROR: Buyer email is empty or None")
+            return False
 
         status = offer.status
         subject = f"Your Offer for {offer.property_name} has been {status}"
