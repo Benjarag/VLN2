@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/finalize_purchase.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="finalize-container">
+    <h2>Finalize Your Purchase: Step 2 of 4</h2>
+    <h3>Payment Method</h3>
+    
+    <!-- Display form-wide errors prominently -->
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {% for error in form.non_field_errors %}
+            {{ error }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Display individual field errors at the top for visibility -->
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Please correct the following errors:</strong>
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% if field != '__all__' %}
+                    {% for error in errors %}
+                        <li>{{ field|title }}: {{ error }}</li>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <form method="post" id="payment-form">
+        {% csrf_token %}
+        
+        <div class="payment-options">
+            {{ form.payment_option }}
+            {{ form.payment_option.errors }}
+        </div>
+        
+        <!-- Credit Card Fields -->
+        <div id="credit-card-fields" class="payment-details" style="display: none;">
+            <div class="form-group">
+                {{ form.cardholder_name.label_tag }}
+                {{ form.cardholder_name }}
+                {{ form.cardholder_name.errors }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.credit_card_number.label_tag }}
+                {{ form.credit_card_number }}
+                <small class="form-text text-muted">Must be 16 digits</small>
+                {{ form.credit_card_number.errors }}
+            </div>
+            
+            <div class="card-details-row">
+                <div class="form-group">
+                    {{ form.credit_card_expiry.label_tag }}
+                    {{ form.credit_card_expiry }}
+                    <small class="form-text text-muted">MM/YY format</small>
+                    {{ form.credit_card_expiry.errors }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.credit_card_cvc.label_tag }}
+                    {{ form.credit_card_cvc }}
+                    <small class="form-text text-muted">Must be exactly 3 digits (e.g., 123)</small>
+                    {{ form.credit_card_cvc.errors }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bank Transfer Fields -->
+        <div id="bank-transfer-fields" class="payment-details" style="display: none;">
+            <div class="form-group">
+                {{ form.bank_account.label_tag }}
+                {{ form.bank_account }}
+                {{ form.bank_account.errors }}
+            </div>
+        </div>
+        
+        <!-- Mortgage Fields -->
+        <div id="mortgage-fields" class="payment-details" style="display: none;">
+            <div class="form-group">
+                {{ form.mortgage_provider.label_tag }}
+                {{ form.mortgage_provider }}
+                {{ form.mortgage_provider.errors }}
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'offers:contact_info' offer.id %}" class="back-button">Back</a>
+            <button type="submit" class="submit-button">Continue to Review</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Show relevant payment fields on page load
+    const paymentOptions = document.querySelectorAll('input[name="payment_option"]');
+    const creditCardFields = document.getElementById('credit-card-fields');
+    const bankTransferFields = document.getElementById('bank-transfer-fields');
+    const mortgageFields = document.getElementById('mortgage-fields');
+    
+    // Function to show the appropriate payment fields
+    function showPaymentFields() {
+        // Hide all payment fields first
+        creditCardFields.style.display = 'none';
+        bankTransferFields.style.display = 'none';
+        mortgageFields.style.display = 'none';
+        
+        // Show relevant fields based on selected option
+        const selectedOption = document.querySelector('input[name="payment_option"]:checked');
+        if (selectedOption) {
+            if (selectedOption.value === 'Credit Card') {
+                creditCardFields.style.display = 'block';
+            } else if (selectedOption.value === 'Bank Transfer') {
+                bankTransferFields.style.display = 'block';
+            } else if (selectedOption.value === 'Mortgage') {
+                mortgageFields.style.display = 'block';
+            }
+        }
+    }
+    
+    // Initialize on page load
+    showPaymentFields();
+    
+    // Update fields when payment option changes
+    paymentOptions.forEach(option => {
+        option.addEventListener('change', showPaymentFields);
+    });
+    
+    // Format CVC to ensure it's only 3 digits
+    const cvcInput = document.querySelector('input[name="credit_card_cvc"]');
+    if (cvcInput) {
+        cvcInput.setAttribute('maxlength', '3');
+        cvcInput.addEventListener('input', function(e) {
+            // Remove any non-digits
+            let value = e.target.value.replace(/\D/g, '');
+            // Limit to 3 digits
+            if (value.length > 3) {
+                value = value.substring(0, 3);
+            }
+            e.target.value = value;
+        });
+    }
+    
+    // Format credit card number with spaces
+    const ccNumberInput = document.querySelector('input[name="credit_card_number"]');
+    if (ccNumberInput) {
+        ccNumberInput.addEventListener('input', function(e) {
+            // Remove non-digits
+            let value = e.target.value.replace(/\D/g, '');
+            // Limit to 16 digits
+            if (value.length > 16) {
+                value = value.substring(0, 16);
+            }
+            
+            // Add spaces after every 4 digits
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' - ';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue;
+        });
+    }
+    
+    // Format expiry date
+    const expiryInput = document.querySelector('input[name="credit_card_expiry"]');
+    if (expiryInput) {
+        expiryInput.setAttribute('maxlength', '5');
+        expiryInput.addEventListener('input', function(e) {
+            // Remove non-digits
+            let value = e.target.value.replace(/\D/g, '');
+            // Limit to 4 digits
+            if (value.length > 4) {
+                value = value.substring(0, 4);
+            }
+            
+            // Add slash after first 2 digits
+            if (value.length > 2) {
+                e.target.value = value.substring(0, 2) + '/' + value.substring(2);
+            } else {
+                e.target.value = value;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -86,3 +86,12 @@
 .offers-property-price {
   font-size: 1.2em;
 }
+
+.finalize-button-wrapper {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  top: auto;
+  padding: 5px;
+}
+

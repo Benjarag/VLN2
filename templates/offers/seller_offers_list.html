@@ -44,7 +44,7 @@
                                     <td>
                                         {% if offer.status == 'Pending' %}
                                             <a href="{% url 'offers:respond_to_offer' offer.id %}" class="btn btn-sm btn-primary">Respond</a>
-                                        {% elif offer.status == 'Contingent' %}
+                                        {% elif offer.status == 'Contingent' and offer.related_property.status != 'Sold'%}
                                             <a href="{% url 'offers:respond_to_offer' offer.id %}" class="btn btn-sm btn-outline-primary">Update</a>
                                         {% else %}
                                             <button class="btn btn-sm btn-outline-secondary" disabled>Processed</button>

@@ -8,10 +8,10 @@ urlpatterns = [
     path('respond-offer/<int:offer_id>/', views.respond_to_offer, name='respond_to_offer'),
     path('', views.purchase_offers_list, name='offers'),
     path('myoffers/', views.seller_offers_list, name='myoffers'),
+    path('offers/<int:offer_id>/finalize/contact/', views.contact_info_view, name='contact_info'),
+    path('offers/<int:offer_id>/finalize/payment/', views.payment_method_view, name='payment_method'),
     path('finalization/<int:finalization_id>/review/', views.review_purchase, name='review_purchase'),
-    path('finalization/<int:finalization_id>/confirm/', views.confirm_purchase, name='confirm_purchase'),
-    path('confirmation/<int:offer_id>/', views.purchase_confirmation, name='purchase_confirmation'),
-    path('<int:offer_id>/finalize/', views.finalize_purchase, name='finalize_purchase'),
-    # path('<int:offer_id>/cancel/', views.cancel_offer, name='cancel_offer'),
-
+    path('confirmation/<int:finalization_id>/', views.purchase_confirmation, name='purchase_confirmation'),
+    # path('finalization/<int:finalization_id>/confirm/', views.confirm_purchase, name='confirm_purchase'),
+    # path('<int:offer_id>/finalize/', views.finalize_purchase, name='finalize_purchase'),
 ]

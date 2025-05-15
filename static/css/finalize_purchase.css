@@ -1,0 +1,11 @@
+.property-info-inline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.property-info-inline h5,
+.property-info-inline h6 {
+    margin: 0;
+}

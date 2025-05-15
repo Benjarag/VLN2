@@ -103,18 +103,18 @@ class PurchaseFinalization(models.Model):
     payment_option = models.CharField(max_length=50, choices=PAYMENT_OPTIONS)
 
     # Credit card fields (only used if payment_method is 'Credit Card')
-    cardholder_name = models.CharField(max_length=255, blank=True, null=True)
-    credit_card_number = models.CharField(max_length=20, blank=True, null=True)
-    credit_card_expiry = models.CharField(max_length=7, blank=True, null=True)
-    credit_card_cvc = models.CharField(max_length=4, blank=True, null=True)
+    cardholder_name = models.CharField(max_length=255, blank=True, default="")
+    credit_card_number = models.CharField(max_length=25, blank=True, default="")
+    credit_card_expiry = models.CharField(max_length=7, blank=True, default="")
+    credit_card_cvc = models.CharField(max_length=4, blank=True, default="")
 
     # Bank Transfer fields (only used if payment_method is 'Bank Transfer')
-    bank_account = models.CharField(max_length=50, blank=True, null=True,
-                                     help_text="IBAN, Swift or Icelandic format")
+    bank_account = models.CharField(max_length=50, blank=True, default="",
+                                    help_text="IBAN, Swift or Icelandic format")
 
-    # Mortage fields (only used if payment_method is 'Mortgage')
+    # Mortgage fields (only used if payment_method is 'Mortgage')
     mortgage_provider = models.CharField(max_length=100, choices=MORTAGE_PROVIDERS,
-                                        blank=True, null=True)
+                                         blank=True, default="")
 
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -134,4 +134,3 @@ class PurchaseFinalization(models.Model):
             self.purchase_offer.related_property.save()
 
         super().save(*args, **kwargs)
-

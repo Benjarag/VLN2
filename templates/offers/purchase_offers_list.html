@@ -51,9 +51,9 @@
                         </div>
                     </a>
 
-                    {% if offer.can_finalize %}
+                    {% if offer.can_finalize and not offer.related_property.status == 'Sold' %}
                     <div class="finalize-button-wrapper">
-                        <a href="{% url 'offers:finalize_purchase' offer_id=offer.id %}" class="btn btn-sm btn-success">
+                        <a href="{% url 'offers:contact_info' offer_id=offer.id %}" class="btn btn-sm btn-success">
                             Finalize Purchase
                         </a>
                     </div>
