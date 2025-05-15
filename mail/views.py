@@ -38,18 +38,30 @@ def send_offer_notification_to_seller(offer):
     buyer_name = f"{offer.user.first_name} {offer.user.last_name}" if (
                 offer.user.first_name and offer.user.last_name) else offer.user.username
 
+    # Get seller name
+    seller_name = f"{offer.seller.user.first_name} {offer.seller.user.last_name}" if (
+                offer.seller and offer.seller.user.first_name and offer.seller.user.last_name) else (
+                offer.seller.user.username if offer.seller else "Property Seller")
+
     # Get seller's email - check if seller has email, otherwise use site admin email
-    seller_email = offer.seller.email if offer.seller and offer.seller.email else settings.EMAIL_HOST_USER
+    seller_email = offer.seller.email if offer.seller and hasattr(offer.seller, 'email') else settings.EMAIL_HOST_USER
+
+    # Ensure we have an expiration date
+    expiration_date = getattr(offer, 'date_expired', None)
+    if not expiration_date and hasattr(offer, 'expiration_date'):
+        expiration_date = offer.expiration_date
+        
+    expiration_text = expiration_date.strftime('%d-%m-%Y') if expiration_date else "N/A"
 
     subject = f"Property update on {offer.property_name}"
     message = f"""
-    Hello dear {offer.seller_name},
+    Hello dear {seller_name},
 
     {buyer_name} has submitted a purchase offer for your property "{offer.property_name}".
 
     Offer Details:
     - Offer Price: {offer.get_formatted_price()}
-    - Expiration Date: {offer.date_expired.strftime('%d-%m-%Y')}
+    - Expiration Date: {expiration_text}
 
     You can review and respond to this offer by logging into your Castle Apartments account.
 
@@ -57,23 +69,35 @@ def send_offer_notification_to_seller(offer):
     Castle Apartments Team
     """
 
-    email_record = Email.objects.create(
-        buyer=offer.user.email,
-        seller=seller_email,
-        subject=subject,
-        message=message
-    )
+    # Log the email being sent
+    print(f"Attempting to send email to {seller_email} with subject: {subject}")
+    
+    # Create email record
+    try:
+        email_record = Email.objects.create(
+            buyer=offer.user.email,
+            seller=seller_email,
+            subject=subject,
+            message=message
+        )
+    except Exception as e:
+        print(f"Error creating email record: {str(e)}")
+        # Continue even if we couldn't create the email record
 
-    # Send the email
-    send_mail(
-        subject=subject,
-        message=message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[seller_email],
-        fail_silently=False,
-    )
-
-    return True
+    # Try to send the email
+    try:
+        # Send the email
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[seller_email],
+            fail_silently=False,
+        )
+        return True
+    except Exception as e:
+        print(f"Error sending email: {str(e)}")
+        raise  # Re-raise the exception to be caught by the calling code
 
 
 def send_offer_status_notification_to_buyer(offer):

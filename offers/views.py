@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django import forms  # Add this import here
+
+from mail.views import send_offer_status_notification_to_buyer, send_offer_notification_to_seller
 from .forms import PurchaseFinalizationForm, PurchaseOfferForm
 from .models import PurchaseOffer, PurchaseFinalization
 from properties.models import Property
@@ -102,6 +104,13 @@ def respond_to_offer(request, offer_id):
             # Accept this offer
             offer.status = 'Accepted'
             offer.save()
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                email_sent = True
+                messages.success(request, "Offer status updated to ACCEPTED!")
+            except Exception as e:
+                messages.error(request, f"Failed to send notification email to buyer: {str(e)}")
+                print(f"Error sending email to buyer: {str(e)}")
 
             # Reject all other pending offers for this property
             PurchaseOffer.objects.filter(
@@ -110,18 +119,30 @@ def respond_to_offer(request, offer_id):
             ).exclude(id=offer.id).update(status='Rejected')
 
             messages.success(request, "You've accepted the offer.")
+            if email_sent:
+                print("Success sending email here")
+            else:
+                print("Something is failing")
 
         elif response == 'reject':
             # Reject this offer
             offer.status = 'Rejected'
             offer.save()
-            messages.success(request, "You've rejected the offer.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to REJECTED!")
+            except Exception as e:
+                print(e)
 
         elif response == 'contingent':
             # Mark as contingent
             offer.status = 'Contingent'
             offer.save()
-            messages.success(request, "You've marked the offer as contingent.")
+            try:
+                send_offer_status_notification_to_buyer(offer)
+                messages.success(request, "Offer status updated to CONTINGENT!")
+            except Exception as e:
+                print(e)
 
         return redirect('offers:myoffers')
 
@@ -158,6 +179,20 @@ def submit_purchase_offer(request, property_id):
             offer.user = request.user
             offer.property_name = property.title
             offer.seller = property.seller
+
+            # Set the expiration date explicitly
+            offer.date_expired = form.cleaned_data['expiration_date']  # Make sure this field exists on your model
+
+            # Save the offer first so it has an ID for the notification
+            offer.save()
+
+            try:
+                send_offer_notification_to_seller(offer)
+                messages.success(request, "Buyer has been notified about your offer! Please wait for a response from them!")
+            except Exception as e:
+                messages.error(request, "An error occurred while sending the offer notification. Please try again later.")
+                print(f"Notification error: {str(e)}")
+                # The offer is still saved, just without the notification
 
             # Set seller_name directly from the seller object
             if property.seller:
