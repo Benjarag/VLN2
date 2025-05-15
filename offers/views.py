@@ -120,7 +120,7 @@ def respond_to_offer(request, offer_id):
             try:
                 send_offer_status_notification_to_buyer(offer)
                 email_sent = True
-                messages.success(request, "Offer status updated to ACCEPTED!")
+                messages.success(request, "Email has been sent to the buyer!")
             except Exception as e:
                 messages.error(request, f"Failed to send notification email to buyer: {str(e)}")
                 print(f"Error sending email to buyer: {str(e)}")

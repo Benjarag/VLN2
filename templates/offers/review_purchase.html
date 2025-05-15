@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/finalize_purchase.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container review-page">
@@ -76,3 +81,4 @@
     </form>
 </div>
 {% endblock %}
+

@@ -1,108 +1,115 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Payment Method - Finalize Purchase{% endblock %}
-
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/finalize_purchase.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="finalization-container">
-    <h1>Finalize Your Purchase: Step 2 of 4</h1>
-    <h2>Payment Method</h2>
+<div class="container review-page">
+    <h2>Finalize Your Purchase: Step 2 of 4</h2>
+    <h3>Payment Method</h3>
+    <p class="text-muted">Please select your preferred payment method.</p>
 
-    <form method="post" id="payment-form">
-        {% csrf_token %}
-        
-        <div class="payment-options">
-            <div class="form-group">
-                <label>Select Payment Method:</label>
-                <div class="radio-options">
-                    {% for value, text in form.payment_option.field.choices %}
-                    <div class="radio-option">
-                        <input type="radio" name="payment_option" id="payment_{{ value|slugify }}" 
-                               value="{{ value }}" {% if form.payment_option.value == value %}checked{% endif %} 
-                               class="payment-radio">
-                        <label for="payment_{{ value|slugify }}">{{ text }}</label>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Payment Details</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" id="payment-form">
+                {% csrf_token %}
+
+                <div class="payment-options">
+                    <div class="form-group">
+                        <label>Select Payment Method:</label>
+                        <div class="radio-options">
+                            {% for value, text in form.payment_option.field.choices %}
+                            <div class="radio-option">
+                                <input type="radio" name="payment_option" id="payment_{{ value|slugify }}"
+                                      value="{{ value }}" {% if form.payment_option.value == value %}checked{% endif %}
+                                      class="payment-radio">
+                                <label for="payment_{{ value|slugify }}">{{ text }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.payment_option.errors %}
+                        <div class="error-message">{{ form.payment_option.errors }}</div>
+                        {% endif %}
                     </div>
-                    {% endfor %}
                 </div>
-                {% if form.payment_option.errors %}
-                <div class="error-message">{{ form.payment_option.errors }}</div>
-                {% endif %}
-            </div>
-        </div>
-        
-        <!-- Credit Card Fields (initially hidden) -->
-        <div id="credit-card-fields" class="payment-fields" style="display: none;">
-            <div class="form-group">
-                <label for="{{ form.cardholder_name.id_for_label }}">Cardholder name:</label>
-                {{ form.cardholder_name }}
-                {% if form.cardholder_name.errors %}
-                <div class="error-message">{{ form.cardholder_name.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.credit_card_number.id_for_label }}">Credit card number:</label>
-                {{ form.credit_card_number }}
-                <div class="field-help">Format: XXXX-XXXX-XXXX-XXXX</div>
-                {% if form.credit_card_number.errors %}
-                <div class="error-message">{{ form.credit_card_number.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="{{ form.credit_card_expiry.id_for_label }}">Credit card expiry:</label>
-                    {{ form.credit_card_expiry }}
-                    <div class="field-help">MM/YY format</div>
-                    {% if form.credit_card_expiry.errors %}
-                    <div class="error-message">{{ form.credit_card_expiry.errors }}</div>
-                    {% endif %}
+
+                <!-- Credit Card Fields (initially hidden) -->
+                <div id="credit-card-fields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="{{ form.cardholder_name.id_for_label }}">Cardholder name:</label>
+                        {{ form.cardholder_name }}
+                        {% if form.cardholder_name.errors %}
+                        <div class="error-message">{{ form.cardholder_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.credit_card_number.id_for_label }}">Credit card number:</label>
+                        {{ form.credit_card_number }}
+                        <div class="field-help">Format: XXXX-XXXX-XXXX-XXXX</div>
+                        {% if form.credit_card_number.errors %}
+                        <div class="error-message">{{ form.credit_card_number.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.credit_card_expiry.id_for_label }}">Credit card expiry:</label>
+                            {{ form.credit_card_expiry }}
+                            <div class="field-help">MM/YY format</div>
+                            {% if form.credit_card_expiry.errors %}
+                            <div class="error-message">{{ form.credit_card_expiry.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.credit_card_cvc.id_for_label }}">Credit card CVC:</label>
+                            {{ form.credit_card_cvc }}
+                            <div class="field-help">3 digits</div>
+                            {% if form.credit_card_cvc.errors %}
+                            <div class="error-message">{{ form.credit_card_cvc.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.credit_card_cvc.id_for_label }}">Credit card CVC:</label>
-                    {{ form.credit_card_cvc }}
-                    <div class="field-help">3 digits</div>
-                    {% if form.credit_card_cvc.errors %}
-                    <div class="error-message">{{ form.credit_card_cvc.errors }}</div>
-                    {% endif %}
+
+                <!-- Bank Transfer Fields (initially hidden) -->
+                <div id="bank-transfer-fields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="{{ form.bank_account.id_for_label }}">Bank account information:</label>
+                        {{ form.bank_account }}
+                        <div class="field-help">IBAN, Swift or Icelandic format</div>
+                        {% if form.bank_account.errors %}
+                        <div class="error-message">{{ form.bank_account.errors }}</div>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+
+                <!-- Mortgage Fields (initially hidden) -->
+                <div id="mortgage-fields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="{{ form.mortgage_provider.id_for_label }}">Mortgage provider:</label>
+                        {{ form.mortgage_provider }}
+                        {% if form.mortgage_provider.errors %}
+                        <div class="error-message">{{ form.mortgage_provider.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'offers:contact_info' offer.id %}" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-primary">Continue to Review</button>
+                </div>
+            </form>
         </div>
-        
-        <!-- Bank Transfer Fields (initially hidden) -->
-        <div id="bank-transfer-fields" class="payment-fields" style="display: none;">
-            <div class="form-group">
-                <label for="{{ form.bank_account.id_for_label }}">Bank account information:</label>
-                {{ form.bank_account }}
-                <div class="field-help">IBAN, Swift or Icelandic format</div>
-                {% if form.bank_account.errors %}
-                <div class="error-message">{{ form.bank_account.errors }}</div>
-                {% endif %}
-            </div>
-        </div>
-        
-        <!-- Mortgage Fields (initially hidden) -->
-        <div id="mortgage-fields" class="payment-fields" style="display: none;">
-            <div class="form-group">
-                <label for="{{ form.mortgage_provider.id_for_label }}">Mortgage provider:</label>
-                {{ form.mortgage_provider }}
-                {% if form.mortgage_provider.errors %}
-                <div class="error-message">{{ form.mortgage_provider.errors }}</div>
-                {% endif %}
-            </div>
-        </div>
-        
-        <div class="button-container">
-            <a href="{% url 'offers:contact_info' offer.id %}" class="btn btn-secondary">Back</a>
-            <button type="submit" class="btn btn-primary">Continue to Review</button>
-        </div>
-    </form>
+    </div>
 </div>
+
 
 <script>
 // This script shows/hides payment fields based on selected payment option

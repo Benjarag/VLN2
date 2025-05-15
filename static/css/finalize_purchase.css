@@ -9,3 +9,10 @@
 .property-info-inline h6 {
     margin: 0;
 }
+
+label.form-check-label {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    left: 6px;
+}
