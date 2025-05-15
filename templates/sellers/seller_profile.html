@@ -3,72 +3,117 @@
 {% load static %}
 
 {% block content %}
-<div class="container seller-profile">
-    <div class="profile-header">
-        {% if seller.cover_image %}
-            <div class="cover-image">
-                <img src="{{ seller.cover_image.url }}" alt="{{ seller.name }} cover">
-            </div>
-        {% endif %}
+<div class="container seller-profile my-4">
+    <div class="card mb-4">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <!-- Logo/Avatar and Cover Image Side by Side -->
+                <div class="col-md-2 text-center">
+                    {% if seller.logo %}
+                        <img src="{{ seller.logo.url }}" alt="{{ seller.name }} logo" class="img-fluid rounded mb-2" style="max-height: 100px;">
+                    {% else %}
+                        <div class="seller-avatar-placeholder mb-2 mx-auto" style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            {{ seller.name|first }}
+                        </div>
+                    {% endif %}
 
-        <div class="profile-info">
-            {% if seller.logo %}
-                <div class="logo">
-                    <img src="{{ seller.logo.url }}" alt="{{ seller.name }} logo">
+                    {% if seller.cover_image %}
+                        <img src="{{ seller.cover_image.url }}" alt="{{ seller.name }} cover" class="img-fluid rounded mt-2" style="max-height: 100px;">
+                    {% endif %}
                 </div>
-            {% endif %}
 
-            <h1>{{ seller.name }}</h1>
-            <p class="seller-type">{{ seller.type }}</p>
+                <!-- Seller Information -->
+                <div class="col-md-8">
+                    <h2 class="mb-1">{{ seller.name }}</h2>
+                    <p class="text-muted mb-2">Type: {{ seller.type }}</p>
 
-            {% if seller.type == 'Real Estate Agency' and seller.street_address %}
-                <div class="address">
-                    <h3>Address:</h3>
-                    <p>{{ seller.street_address }}</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-    {% if seller.bio %}
-        <div class="bio">
-            <h3>About {{ seller.name }}</h3>
-            <p>{{ seller.bio }}</p>
-        </div>
-    {% endif %}
-
-    <div class="seller-properties">
-        <h2>Properties by {{ seller.name }}</h2>
-
-        {% if properties %}
-            <div class="property-container">
-                {% for property in properties %}
-                    <div class="property-card">
-                        <a href="{% url 'properties:property_details' property_id=property.id %}">
-                            <div class="property-image-wrapper">
-                                {% if property.images.first %}
-                                    <img src="{{ property.images.first.image.url }}" class="property-image" alt="{{ property.title }}">
-                                {% else %}
-                                    <img src="{% static 'images/placeholder.png' %}" class="property-image" alt="No image available">
-                                {% endif %}
-                                <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                                <div class="favorite-icon">&#9825;</div>
-                            </div>
-
-                            <div class="property-info">
-                                <div class="property-address">
-                                    <span class="location-icon">&#x1F4CD;</span>
-                                    {{ property.title }}
-                                    {% if property.street_address %}, {{ property.street_address }}{% endif %}
-                                </div>
-                            </div>
-                        </a>
+                    <div class="mb-2">
+                        {% if seller.email %}
+                            <p class="mb-1"><i class="fas fa-envelope mr-2"></i> {{ seller.email }}</p>
+                        {% endif %}
+                        {% if seller.phone %}
+                            <p class="mb-1"><i class="fas fa-phone mr-2"></i> {{ seller.phone }}</p>
+                        {% endif %}
                     </div>
-                {% endfor %}
+
+                    {% if seller.show_address %}
+                        <div class="mb-2">
+                            <p class="mb-1"><strong>Address:</strong> {{ seller.street_address }},
+                            {% if seller.city %}{{ seller.city }}{% endif %}
+                            {% if seller.postal_code %} {{ seller.postal_code }}{% endif %}</p>
+                        </div>
+                    {% endif %}
+
+                    {% if seller.bio %}
+                        <div class="mb-2">
+                            <p class="mb-1"><strong>Bio:</strong> {{ seller.bio }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-md-2 text-right">
+                    {% if is_owner %}
+                        <a href="{% url 'accounts:update_profile' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-edit"></i> Update Profile
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-        {% else %}
-            <p>No properties listed by this seller yet.</p>
-        {% endif %}
+        </div>
     </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h3>
+                {% if is_owner %}
+                    My Properties
+                {% else %}
+                    Properties by {{ seller.name }}
+                {% endif %}
+            </h3>
+        </div>
+    </div>
+
+    {% if properties %}
+        <div class="property-container">
+            {% for property in properties %}
+                <div class="property-card">
+                    <a href="{% url 'properties:property_details' property_id=property.id %}">
+                        <div class="property-image-wrapper">
+                            {% if property.images.first %}
+                                <img src="{{ property.images.first.image.url }}" class="property-image" alt="{{ property.title }}">
+                            {% else %}
+                                <img src="{% static 'images/placeholder.png' %}" class="property-image" alt="No image available">
+                            {% endif %}
+                            <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                            <div class="favorite-icon">&#9825;</div>
+                        </div>
+
+                        <!-- Info Section -->
+                        <div class="property-info">
+                            <div class="property-address">
+                                <span class="location-icon">&#x1F4CD;</span> {{ property.title }}, {{ property.street_address }},
+                                {% if property.city %}
+                                    {{ property.city }},
+                                {% endif %}
+                                {% if property.postal_code %}
+                                    {{ property.postal_code }}.
+                                {% endif %}
+                            </div>
+                            <div class="property-details">
+                                <span class="detail-box">🏠 {{ property.size }} sqm</span>
+                                <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+                            </div>
+
+                            <div class="property-price">{{ property.get_formatted_price }}kr.</div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>This seller doesn't have any properties listed at the moment.</p>
+    {% endif %}
 </div>
 {% endblock %}

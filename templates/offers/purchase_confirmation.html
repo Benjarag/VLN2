@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body text-center">
+            <i class="fa fa-check-circle text-success" style="font-size: 4rem;"></i>
+            <h1 class="my-4">Purchase Completed!</h1>
+            <p class="lead mb-4">Your purchase offer was successfully submitted and has been finalized.</p>
+            <p>Thank you for using our platform. The property seller will be notified about the completion of this transaction.</p>
+            
+            <div class="property-details mt-4 mb-4">
+                <h4>{{ offer.property_name }}</h4>
+                <p>Price: {{ offer.get_formatted_price }}</p>
+            </div>
+            
+            <a href="{% url 'home:homepage' %}" class="btn btn-primary btn-lg">Return to Homepage</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

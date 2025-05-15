@@ -3,17 +3,17 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section">
-    <div class="hero-background"></div>
+<section class="header-section">
+    <div class="header-background"></div>
     <div class="h-container">
         <h1>Find Your Ideal Property</h1>
         <!-- In homepage.html, replace the current search-container div -->
-<div class="search-container">
-    <form method="GET" action="{% url 'properties:property_listings' %}">
-        <input type="text" name="search" class="search-input" placeholder="Search for street name">
-        <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
-    </form>
-</div>
+        <div class="search-container">
+            <form method="GET" action="{% url 'properties:property_listings' %}">
+                <input type="text" name="search" class="search-input" placeholder="Search for street name">
+                <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
     </div>
 </section>
 

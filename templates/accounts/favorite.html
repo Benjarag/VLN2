@@ -6,20 +6,19 @@
 <div class="container mt-4">
     <h1>My Favorite Properties</h1>
     
-    {% if properties %}
+    {% if favorites %}
         <div class="property-container">
-            {% for property in properties %}
-            <div class="property-card" data-id="{{ property.id }}">
-                <a href="{% url 'properties:property_details' property_id=property.id %}">
+            {% for favorite in favorites %}
+            <div class="property-card" data-id="{{ favorite.id }}">
+                <a href="{% url 'properties:property_details' property_id=favorite.id %}">
                     <!-- Image and Status -->
                     <div class="property-image-wrapper">
-                        {% if property.property.image.first %}
-                        <!-- þetta er ekki að sækja myndina rétt!!!!!! -->
-                            <img src="{{ property.property.image.first.image.url }}" class="property-image" alt="{{ property.title }}">
+                        {% if favorite.images.first %}
+                            <img src="{{ favorite.images.first.image.url }}" class="property-image" alt="Property image">
                         {% else %}
                             <img src="/media/properties/images/ronaldo3.png" class="property-image" alt="No image available">
                         {% endif %}
-                        <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
+                        <div class="property-status {{ favorite.status|lower }}">{{ favorite.status }}</div>
                         <!-- Favorite icon - already favorite by definition -->
                         <div class="favorite-icon active">
                             <i class="fa-solid fa-heart"></i>
@@ -29,19 +28,19 @@
                     <!-- Info Section -->
                     <div class="property-info">
                         <div class="property-address">
-                            <span class="location-icon">&#x1F4CD;</span> {{ property.title }}, {{ property.street_address }},
-                            {% if property.city %}
-                                {{ property.city }},
+                            <span class="location-icon">&#x1F4CD;</span> {{ favorite.title }}, {{ favorite.street_address }},
+                            {% if favorite.city %}
+                                {{ favorite.city }},
                             {% endif %}
-                            {% if property.postal_code %}
-                                {{ property.postal_code }}.
+                            {% if favorite.postal_code %}
+                                {{ favorite.postal_code }}.
                             {% endif %}
                         </div>
                         <div class="property-details">
-                            <span class="detail-box">🏠 {{ property.size }} m²</span>
-                            <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
+                            <span class="detail-box">🏠 {{ favorite.size }} m²</span>
+                            <span class="detail-box">🛏️ {{ favorite.rooms }} rooms</span>
                         </div>
-                        <div class="property-price">{{ property.get_formatted_price }} kr.</div>
+                        <div class="property-price">{{ favorite.get_formatted_price }} kr.</div>
                     </div>
                 </a>
             </div>

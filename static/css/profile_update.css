@@ -23,23 +23,23 @@
     gap: 15px;
 }
 
-/* Individual form groups */
-.form-group {
+/* Individual form groups - scoped to profile update */
+.profile-update-container .form-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
 }
 
-/* Labels */
-.form-group label {
+/* Labels - scoped to profile update */
+.profile-update-container .form-group label {
     font-weight: 500;
     margin-bottom: 3px;
     color: #555;
     font-size: 14px;
 }
 
-/* Input fields */
-.form-group input {
+/* Input fields - scoped to profile update */
+.profile-update-container .form-group input {
     padding: 8px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -47,7 +47,7 @@
     transition: border-color 0.3s;
 }
 
-.form-group input:focus {
+.profile-update-container .form-group input:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
@@ -77,20 +77,20 @@
     background-color: #e6ae3e;
 }
 
-/* Profile link area */
-.profile-link {
+/* Profile link area - scoped to profile update */
+.profile-update-container .profile-link {
     text-align: center;
     margin-top: 15px;
     font-size: 13px;
     color: #666;
 }
 
-.profile-link a {
+.profile-update-container .profile-link a {
     color: #007bff;
     text-decoration: none;
 }
 
-.profile-link a:hover {
+.profile-update-container .profile-link a:hover {
     text-decoration: underline;
 }
 
