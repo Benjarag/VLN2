@@ -26,7 +26,6 @@ def mail_view(request):
         except Exception as e:
             return HttpResponse(f"Failed to send email: {str(e)}")
 
-    # If GET request, render an email form
     return render(request, 'mail/email_form.html')
 
 
