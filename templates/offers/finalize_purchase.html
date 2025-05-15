@@ -24,11 +24,27 @@
         
         <!-- Credit Card Fields (hidden by default) -->
         <div id="credit-card-fields" class="payment-details" style="display: none;">
-            <h4>Credit Card Details</h4>
-            {{ form.cardholder_name.label_tag }} {{ form.cardholder_name }}
-            {{ form.credit_card_number.label_tag }} {{ form.credit_card_number }}
-            {{ form.expiry_date.label_tag }} {{ form.expiry_date }}
-            {{ form.cvc.label_tag }} {{ form.cvc }}
+            
+            <div class="credit-card-form">
+                <h4>Credit Card Details</h4>
+                <div class="form-group mb-3">
+                    {{ form.cardholder_name.label_tag }}
+                    {{ form.cardholder_name }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.credit_card_number.label_tag }}
+                    {{ form.credit_card_number }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.credit_card_expiry.label_tag }}
+                    {{ form.credit_card_expiry }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.credit_card_cvc.label_tag }}
+                    {{ form.credit_card_cvc }}
+                </div>
+            </div>
+
         </div>
         
         <!-- Bank Transfer Fields (hidden by default) -->
@@ -47,3 +63,47 @@
     <button type="submit" class="btn btn-primary">Continue</button>
 </form>
 {% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Credit card number formatting
+        const ccNumberInput = document.getElementById('{{ form.credit_card_number.id_for_label }}');
+        ccNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 16) value = value.substr(0, 16); // Limit to 16 digits
+            
+            // Add dashes after every 4 digits
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' - ';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue;
+        });
+        
+        // Credit card expiry formatting
+        const ccExpiryInput = document.getElementById('{{ form.credit_card_expiry.id_for_label }}');
+        ccExpiryInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 4) value = value.substr(0, 4); // Limit to 4 digits
+            
+            // Add slash after first 2 digits
+            if (value.length > 2) {
+                e.target.value = value.substring(0, 2) + '/' + value.substring(2);
+            } else {
+                e.target.value = value;
+            }
+        });
+        
+        // CVC formatting (limit to 3-4 digits)
+        const cvcInput = document.getElementById('{{ form.credit_card_cvc.id_for_label }}');
+        cvcInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 4) value = value.substr(0, 4); // Limit to 4 digits
+            e.target.value = value;
+        });
+    });
+</script>

@@ -71,8 +71,8 @@ class Property(models.Model):
 
     @property
     def is_sold(self):
-        """Check if property is sold based on status or accepted offer"""
-        return self.status == 'Sold' or self.has_accepted_offer
+        """Check if property is sold based on status or finalized offer"""
+        return self.status == 'Sold' or self.purchase_offers.filter(status='Finalized').exists()
 
 
 class PropertyImage(models.Model):

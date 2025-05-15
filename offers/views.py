@@ -14,9 +14,19 @@ from mail.views import send_offer_status_notification_to_buyer, send_offer_notif
 def purchase_offers_list(request):
     # Get all offers from the current user
     offers = PurchaseOffer.objects.filter(user=request.user).order_by('-date_created')
+    # Get the properties for these offers
+    properties = [offer.related_property for offer in offers]
+
+    # Get favorite IDs from UserFavorite table
+    favorite_ids = []
+    if request.user.is_authenticated:
+        from accounts.models import UserFavorite
+        favorite_ids = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
 
     return render(request, 'offers/purchase_offers_list.html', {
-        'offers': offers
+        'offers': offers,
+        'properties': properties,
+        'favorite_ids': favorite_ids,
     })
 
 
@@ -80,9 +90,9 @@ def respond_to_offer(request, offer_id):
         messages.error(request, "You don't have permission to respond to this offer.")
         return redirect('offers:myoffers')
 
-    # Only allow responding to pending offers
-    if offer.status != 'Pending':
-        messages.error(request, "This offer has already been processed.")
+    # Check if the property is sold
+    if offer.related_property.status == 'Sold':
+        messages.error(request, "This property has been sold and offers can no longer be updated.")
         return redirect('offers:myoffers')
 
     if request.method == 'POST':
