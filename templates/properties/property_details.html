@@ -26,7 +26,9 @@
       </div>
     </div>
   </div>
-  <div class="favorite-icon">&#9825;</div>
+  <div class="favorite-icon {% if offer.related_property.id in favorite_ids %}active{% endif %}">
+      <i class="fa{% if offer.related_property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
+  </div>
   <button class="carousel-nav right">&gt;</button>
 </div>
 
