@@ -37,6 +37,9 @@
                 {% if user.profile.phone %}
                 <p class="profile-info-phone-number"><b>Phone:</b> {{ user.profile.phone }}</p>
                 {% endif %}
+                {% if user.profile.bio %}
+                <p class="profile-info-bio"><b>Bio:</b> {{ seller.bio }}</p>
+                {% endif %}
             </div>
             <div class="profile-actions">
                 <button onclick="window.location.href='{% url 'accounts:update_profile' %}'" class="button">Update Profile</button>

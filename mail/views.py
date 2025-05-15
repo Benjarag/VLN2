@@ -35,8 +35,7 @@ def send_offer_notification_to_seller(offer):
     Send an email notification to the property seller when a new offer is submitted
     """
     # Get buyer's name
-    buyer_name = f"{offer.user.first_name} {offer.user.last_name}" if (
-                offer.user.first_name and offer.user.last_name) else offer.user.username
+    buyer_name = f"{offer.user.username}"
 
     # Get seller's email - check if seller has email, otherwise use site admin email
     seller_email = offer.seller.email if offer.seller and offer.seller.email else settings.EMAIL_HOST_USER
@@ -81,73 +80,89 @@ def send_offer_status_notification_to_buyer(offer):
     Send an email notification to the buyer when a seller updates the status of their offer
     """
     try:
-        # Get buyer's email
+        if not offer.user:
+            print("Offer user is None - cannot send email")
+            return False
+
         buyer_email = offer.user.email
-        print(f"Sending status update email to buyer: {buyer_email}")
+
+        if not buyer_email:
+            print("ERROR: Buyer email is empty or None")
+            return False
 
         status = offer.status
         subject = f"Your Offer for {offer.property_name} has been {status}"
 
-        # Format message based on status - remove leading whitespace!
+        # Format message based on status - fixed each message to match the status
         if status == 'Accepted':
             message = f"""Dear {offer.user.first_name or offer.user.username},
 
-            Great news! Your offer of {offer.get_formatted_price()} for the property "{offer.property_name}" has been ACCEPTED.
-            
-            Next steps:
-            - Our team will contact you shortly to discuss the closing process
-            - Be prepared to complete the necessary paperwork
-            - Start planning your move!
-            
-            Thank you for choosing Castle Apartments.
-            
-            Best regards,
-            Castle Apartments Team"""
+Great news! Your offer of {offer.get_formatted_price()} for the property "{offer.property_name}" has been ACCEPTED.
+
+Next steps:
+- Our team will contact you shortly to discuss the closing process
+- Be prepared to complete the necessary paperwork
+- Start planning your move!
+
+Thank you for choosing Castle Apartments.
+
+Best regards,
+Castle Apartments Team"""
+
         elif status == 'Rejected':
             message = f"""Dear {offer.user.first_name or offer.user.username},
 
-            We're sorry to inform you that your offer of {offer.get_formatted_price()} for the property "{offer.property_name}" has been REJECTED.
-            
-            Don't be discouraged! We have many other great properties available. 
-            Keep browsing our listings to find your perfect home.
-            
-            Best regards,
-            Castle Apartments Team"""
+We're sorry to inform you that your offer of {offer.get_formatted_price()} for the property "{offer.property_name}" has been REJECTED.
+
+Don't be discouraged! We have many other great properties available. 
+Keep browsing our listings to find your perfect home.
+
+Best regards,
+Castle Apartments Team"""
+
         else:  # For other statuses like 'Contingent'
             message = f"""Dear {offer.user.first_name or offer.user.username},
 
-            The status of your offer of {offer.get_formatted_price()} for the property "{offer.property_name}" has been updated to {status}.
-            
-            Please log into your Castle Apartments account for more details.
-            
-            Best regards,
-            Castle Apartments Team"""
+The status of your offer of {offer.get_formatted_price()} for the property "{offer.property_name}" has been updated to {status}.
 
-        # Store email in database
-        email_record = Email.objects.create(
-            buyer=buyer_email,
-            seller=offer.seller.email if offer.seller and offer.seller.email else settings.EMAIL_HOST_USER,
-            subject=subject,
-            message=message
-        )
-        print(f"Email record created: ID {email_record.id}")
+Please log into your Castle Apartments account for more details.
+
+Best regards,
+Castle Apartments Team"""
+
+        try:
+            seller_email = offer.seller.email if offer.seller and offer.seller.email else settings.EMAIL_HOST_USER
+            print(f"DEBUG: Seller email: {seller_email}")
+
+            email_record = Email.objects.create(
+                buyer=buyer_email,
+                seller=seller_email,
+                subject=subject,
+                message=message
+            )
+        except Exception as db_error:
+            print(f"ERROR: Failed to create email record in database")
+            # Continue anyway - don't fail just because we couldn't log it
 
         # Check if buyer email is valid
         if not buyer_email or '@' not in buyer_email:
-            print(f"Invalid buyer email: {buyer_email}")
+            print(f"ERROR: Invalid buyer email format: '{buyer_email}'")
             return False
 
-        # Send the email
-        send_result = send_mail(
-            subject=subject,
-            message=message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[buyer_email],
-            fail_silently=False,
-        )
+        try:
+            send_result = send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[buyer_email],
+                fail_silently=False,
+            )
+            print(f"Email sent successfully")
+            return True
+        except Exception as mail_error:
+            print(f"Failed to send email via send_mail")
+            raise
 
-        print(f"Email send result: {send_result}")
-        return True
     except Exception as e:
-        print(f"Exception in send_offer_status_notification_to_buyer: {str(e)}")
-        raise  # Re-raise to let the view handle it
+        raise
+

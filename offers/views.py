@@ -64,7 +64,7 @@ def respond_to_offer(request, offer_id):
     offer = get_object_or_404(PurchaseOffer, id=offer_id)
 
     # Check if user is a seller
-    if not hasattr(request.user, 'profile') or not request.user.profile.is_seller:
+    if not request.user or not request.user.profile.is_seller:
         messages.error(request, "You don't have seller privileges.")
         return redirect('home')
 
