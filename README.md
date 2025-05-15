@@ -8,7 +8,7 @@
 - Access their listings on the 'My Listings' page which is available in the navigation bar
 - View the offers made on their listings
 - Access the offers made on their listings on the 'My Offers' page which is available in the navigation bar
-- Accept, Reject or make offers Contingent on the 'My Offers' page
+- Accept, Reject, or make offers Contingent on the 'My Offers' page
 - Either be an agency seller or an individual seller
 
 #### For each purchase offer, sellers can:
@@ -60,7 +60,7 @@
 #### The system can:
 - notify the sellers when a property of theirs has received an offer.
 - The sellers' email includes which property the offer has been made on, who made it, for what amount, and when.
-- Notify the buyers' when a seller has made an action on their offer (i.e. accepted, rejected or made it contingent)
+- Notify the buyers' when a seller has made an action on their offer (i.e. accepted, rejected, or made it contingent)
 - The buyers' email includes which property status has been updated, for what price and congratulates them.
 
 ## System restriction
