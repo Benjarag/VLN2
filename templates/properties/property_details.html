@@ -26,7 +26,11 @@
       </div>
     </div>
   </div>
-  <div class="favorite-icon">&#9825;</div>
+  <div class="property-card" data-id="{{ property.id }}">
+    <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}">
+        <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
+    </div>
+
   <button class="carousel-nav right">&gt;</button>
 </div>
 
