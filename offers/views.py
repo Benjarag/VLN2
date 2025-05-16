@@ -202,7 +202,7 @@ def submit_purchase_offer(request, property_id):
 
             try:
                 send_offer_notification_to_seller(offer)
-                messages.success(request, "Buyer has been notified about your offer! Please wait for a response from them!")
+                messages.success(request, "Seller has been notified about your offer! Please wait for a response from them!")
             except Exception as e:
                 messages.error(request, "An error occurred while sending the offer notification. Please try again later.")
                 print(f"Notification error: {str(e)}")
