@@ -21,5 +21,5 @@ document.addEventListener("DOMContentLoaded", function () {
         updateCarousel();
     });
 
-    updateCarousel(); // Initial render
+    updateCarousel();
 });

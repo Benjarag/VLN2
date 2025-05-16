@@ -15,7 +15,7 @@ class Seller(models.Model):
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField(blank=True, null=True)
 
-    # Address fields (only for agencies)
+    # Address fields only for the agencies
     street_address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     postal_code = models.CharField(max_length=10, blank=True, null=True)
@@ -36,5 +36,4 @@ class Seller(models.Model):
     @property
     def active_properties(self):
         """Return properties that are not sold"""
-        # we need this to list the properties on sale by seller when you view the seller profile
         return self.properties.exclude(status='Sold')

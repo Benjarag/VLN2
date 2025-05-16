@@ -92,5 +92,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Other event listeners...
+
 });

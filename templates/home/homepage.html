@@ -2,12 +2,10 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Section -->
 <section class="header-section">
     <div class="header-background"></div>
     <div class="h-container">
         <h1>Find Your Ideal Property</h1>
-        <!-- In homepage.html, replace the current search-container div -->
         <div class="search-container">
             <form method="GET" action="{% url 'properties:property_listings' %}">
                 <input type="text" name="search" class="search-input" placeholder="Search for street name">
@@ -17,7 +15,6 @@
     </div>
 </section>
 
-<!-- Features Section -->
 <section class="features-section">
     <div class="h-container">
         <h2>Why You Should Work With Us</h2>

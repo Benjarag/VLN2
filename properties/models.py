@@ -50,8 +50,6 @@ class Property(models.Model):
         """Return the price with kr suffix and proper formatting with dots as thousands separators"""
         # Convert price to string
         price_str = str(self.price)
-
-        # Format with dots as thousands separators (starting from right)
         formatted_price = ""
         for i, digit in enumerate(reversed(price_str)):
             if i > 0 and i % 3 == 0:

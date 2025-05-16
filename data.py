@@ -1,3 +1,4 @@
+#This is just how it looked before we setup the database
 # PROPERTIES = [
 #     {
 #         "id": 0,

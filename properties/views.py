@@ -65,7 +65,7 @@ def property_listings(request):
 def property_details(request, property_id):
     property = get_object_or_404(Property, id=property_id)
 
-    # Get the latest offer for this property from the current user (if logged in)
+    # Get the latest offer for this property from the current user only if user is logged in
     user_offer = None
     if request.user.is_authenticated:
         user_offer = PurchaseOffer.objects.filter(

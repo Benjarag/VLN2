@@ -1,4 +1,3 @@
-// Set minimum date to today for the expiration date input
 document.addEventListener('DOMContentLoaded', function() {
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');

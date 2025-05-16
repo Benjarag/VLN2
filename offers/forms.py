@@ -31,7 +31,7 @@ class PurchaseFinalizationForm(forms.ModelForm):
         # Make the payment_option field required
         self.fields['payment_option'].required = True
 
-        # Set payment fields as required=False initially (we'll validate them conditionally)
+        # Set payment fields as required=False initially
         self.fields['cardholder_name'].required = False
         self.fields['credit_card_number'].required = False
         self.fields['credit_card_expiry'].required = False
@@ -46,7 +46,7 @@ class PurchaseFinalizationForm(forms.ModelForm):
         self.fields['country'].required = False
         self.fields['national_id'].required = False
         
-        # If the form is bound and payment_option is selected, set requirements
+        # If the form is bound and payment_option is selected -> set requirements
         if self.is_bound and 'payment_option' in self.data:
             if self.data['payment_option'] == 'Credit Card':
                 self.fields['cardholder_name'].required = True

@@ -9,7 +9,6 @@
   justify-content: center;
 }
 
-/* The info inside the container adjustment*/
 .filter-form {
   width: 100%;
   max-width: 1200px;
@@ -23,7 +22,6 @@
   width: 100%;
 }
 
-/* Styling for each filter group */
 .filter-group {
   display: flex;
   flex-direction: column;
@@ -94,7 +92,6 @@
   width: 100%;
 }
 
- /*Style the select dropdowns to have the classic dropdown colour */
 .filter-group select {
   color: #6c757d;
 }
@@ -131,7 +128,6 @@
   text-align: center;
 }
 
-/* Search button styling */
 .filter-group button {
   padding: 6px 12px;
   font-size: 0.85rem;
@@ -148,7 +144,6 @@
   background-color: #e6ae3e;
 }
 
-/* Property cards styling */
 .property-card {
   position: relative;
   display: flex;
@@ -158,7 +153,6 @@
   padding: 15px;
   margin-bottom: 30px;
   overflow: visible;
-  /* Using min-height instead of fixed height for responsiveness */
   min-height: 180px;
   height: auto;
 }
@@ -170,7 +164,6 @@
   color: inherit;
 }
 
-/* Fixed size square container for image */
 .property-image-wrapper {
   position: relative;
   width: 150px;
@@ -182,7 +175,7 @@
 .property-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* This maintains aspect ratio while filling container */
+  object-fit: cover;
   border-radius: 10px;
 }
 
@@ -224,7 +217,6 @@
   transition: color 0.3s ease;
 }
 
-/* Property info section */
 .property-info {
   display: flex;
   flex-direction: column;
@@ -272,7 +264,6 @@
   transform: scale(1.1);
 }
 
-/* Container for property listings */
 .property-container {
   display: flex;
   flex-direction: column;

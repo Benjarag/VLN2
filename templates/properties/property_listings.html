@@ -59,7 +59,6 @@
     {% for property in properties %}
     <div class="property-card" data-id="{{ property.id }}">
         <a href="{% url 'properties:property_details' property_id=property.id %}">
-            <!-- Image and Status -->
             <div class="property-image-wrapper">
                 {% if property.images.first %}
                     <img src="{{ property.images.first.image.url }}" class="property-image" alt="Property image">
@@ -68,13 +67,11 @@
                 {% endif %}
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
 
-                <!-- Favorite icon block -->
                 <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}">
                     <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
                 </div>
             </div>
 
-            <!-- Info Section -->
             <div class="property-info">
                 <div class="property-address">
                     <span class="location-icon">&#x1F4CD;</span> {{ property.title }}, {{ property.street_address }},

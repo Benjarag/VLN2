@@ -1,5 +1,3 @@
-// finalize_purchase.js or payment_method.js
-
 document.addEventListener('DOMContentLoaded', function() {
     // Get all form elements
     const cardNumberInput = document.querySelector('input[name="credit_card_number"]');

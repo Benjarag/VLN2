@@ -16,13 +16,11 @@
 
 </div>
 
-<!-- Main Image with Carousel -->
-<div class="carousel-wrapper">  <!-- position: relative -->
 
-  <!-- Arrows are outside the image carousel -->
+<div class="carousel-wrapper">
   <button class="carousel-nav left">&lt;</button>
 
-  <div class="image-carousel">  <!-- this centers and sizes the images -->
+  <div class="image-carousel">
     <div class="carousel-images-wrapper">
       <div class="carousel-images">
         {% for img in property.images.all %}
@@ -31,7 +29,6 @@
       </div>
     </div>
   </div>
-    <!--  <div class="property-detail-card" data-id="{{ property.id }}">-->
     <div class="property-detail-card" data-id="{{ property.id }}">
         <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}" data-id="{{ property.id }}">
             <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
@@ -41,7 +38,6 @@
   <button class="carousel-nav right">&gt;</button>
 </div>
 
-<!-- Property Information + Purchase -->
 <div class="info-section">
     <div class="property-specs">
         <div class="spec-box">🏠 Type: {{ property.type }}</div>
@@ -50,7 +46,6 @@
         <div class="spec-box">📄 Status: {{ property.status }}</div>
     </div>
 
-    <!-- Seller Section -->
     <div class="seller-section">
         <h3>Seller Information</h3>
         {% if property.seller %}
@@ -73,7 +68,6 @@
         {% endif %}
     </div>
 
-    <!-- Submit Purchase Button -->
     {% if property.is_sold %}
         <div class="property-sold-notice">
             {% if property.status == 'Sold' %}
@@ -103,7 +97,6 @@
 
 </div>
 
-<!-- Additional Info and Description -->
 <div class="additional-section">
     <div class="additional-information">Additional Information:</div>
     <div class="additional-boxes">

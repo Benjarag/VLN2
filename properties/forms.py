@@ -50,6 +50,5 @@ class PropertyFilterForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(PropertyFilterForm, self).__init__(*args, **kwargs)
-        # You can add bootstrap classes or other attributes here
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
