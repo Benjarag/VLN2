@@ -63,7 +63,6 @@
                     <img src="{% static '../../media/properties/images/placeholder.png' %}" class="property-image" alt="No image available">
                 {% endif %}
                 <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-
                 <!-- Favorite icon block -->
                 <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}">
                     <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>

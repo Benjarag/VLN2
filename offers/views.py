@@ -10,6 +10,7 @@ from .models import PurchaseOffer, PurchaseFinalization
 from properties.models import Property
 from django.utils import timezone
 from sellers.models import Seller
+from accounts.models import UserFavorite
 
 
 @login_required
@@ -22,7 +23,6 @@ def purchase_offers_list(request):
     # Getting favorite IDs from UserFavorite table
     favorite_ids = []
     if request.user.is_authenticated:
-        from accounts.models import UserFavorite
         favorite_ids = UserFavorite.objects.filter(user=request.user).values_list('property_id', flat=True)
 
     return render(request, 'offers/purchase_offers_list.html', {
