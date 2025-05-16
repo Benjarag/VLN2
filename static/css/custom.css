@@ -14,7 +14,6 @@
 }
 
 /* NAVIGATION BAR */
-
 .nav-logo {
     height: 40px;
 }
@@ -47,7 +46,7 @@
 
 /* Profile container positioning */
 .profile-container {
-    margin-left: auto; /* Push to far right */
+    margin-left: auto;
 }
 
 /* Nav Content */
@@ -59,8 +58,6 @@
     padding: 0 20px;
 }
 
-
-/* Sticky navigation bar with scroll behavior */
 .nav-bar {
     background-color: rgba(151, 170, 190, 0.64);
     padding: 1rem 0;

@@ -31,6 +31,7 @@ class PurchaseFinalizationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PurchaseFinalizationForm, self).__init__(*args, **kwargs)
 
+        # Make the payment_option field required
         self.fields['payment_option'].required = True
 
         # Payment fields as required=False initially (we'll validate them conditionally)
@@ -248,6 +249,7 @@ class CreditCardForm(forms.Form):
                 raise forms.ValidationError("CVC is required")
             return cvc
         
+        # Remove any whitespace and non-digits
         cvc = re.sub(r'\D', '', cvc.strip())
         
         # Validate it's a 3-digit number

@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Changed from center to flex-start */
+    justify-content: flex-start;
     overflow: hidden;
     text-align: center;
 }
@@ -43,7 +43,7 @@
 }
 
 .search-input {
-    padding: 10px 50px 10px 15px; /* Extra padding on the right to make room for the button */
+    padding: 10px 50px 10px 15px;
     border-radius: 25px;
     width: 100%;
     border: 1px solid;
@@ -52,8 +52,8 @@
 
 .search-button {
     position: absolute;
-    right: 5px; /* Position from the right edge of the input */
-    top: calc(50% + 10px); /* Adjust this to align with the container - adding half of padding-top */
+    right: 5px;
+    top: calc(50% + 10px);
     transform: translateY(-50%);
     display: flex;
     align-items: center;
@@ -65,18 +65,18 @@
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    padding: 0; /* Reset all padding */
+    padding: 0;
 }
 
 .search-button:hover {
     background-color: darkgrey;
-    padding: 0; /* Reset all padding */
+    padding: 0;
 }
+
 .search-button i, .search-button svg {
     color: white;
     font-size: 16px;
 }
-
 
 /* Features Section */
 .features-section h2 {

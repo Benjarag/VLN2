@@ -25,7 +25,7 @@ def mail_view(request):
 
         if success:
             messages.success(request, "Email sent successfully!")
-            return redirect('home:homepage')  # Or wherever you want to redirect
+            return redirect('home:homepage')
         else:
             messages.error(request, "Failed to send email. Please try again later.")
 
@@ -81,7 +81,7 @@ def send_offer_status_notification_to_buyer(offer):
     status = offer.status
     subject = f"Your Offer for {offer.property_name} has been {status}"
 
-    # Message templates with consistent indentation
+   # Message Template for Accepted and Rejected Offers
     if status == 'Accepted':
         message = f"""Dear {offer.user.first_name or offer.user.username},
 

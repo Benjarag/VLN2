@@ -36,5 +36,4 @@ class Seller(models.Model):
     @property
     def active_properties(self):
         """Return properties that are not sold"""
-        # we need this to list the properties on sale by seller when you view the seller profile
         return self.properties.exclude(status='Sold')

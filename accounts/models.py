@@ -15,7 +15,7 @@ class Profile(models.Model):
         return f'{self.user.username} Profile Page'
 
 
-# And instead, create a proper relationship model:
+
 class UserFavorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_favorites')
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='favorited_by')
