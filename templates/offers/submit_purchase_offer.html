@@ -9,7 +9,6 @@
         <a href="{% url 'properties:property_details' property_id=property.id %}" class="back-button">&larr;</a>
         <h1 class="form-title">Submit Purchase Offer</h1>
     </div>
-
     <div class="property-summary">
         <div class="spo-property-info-box">
             <div class="spo-property-image">
@@ -26,39 +25,32 @@
             </div>
         </div>
     </div>
-
     <div class="offer-form">
         <h2>Your Offer Details</h2>
-        
         <form method="post" action="{% url 'offers:submit_purchase_offer' property_id=property.id %}" class="offer-form">
             {% csrf_token %}
-            
             <div class="form-group">
                 <label for="offer_price">Offer Amount (ISK)</label>
                 <input type="number" id="offer_price" name="offer_price" required min="1" 
                        placeholder="Enter your offer amount in ISK">
             </div>
-            
             <div class="form-group">
                 <label for="expiration_date">Offer Valid Until</label>
                 <input type="date" id="expiration_date" name="expiration_date" required>
                 <small class="date-hint">Your offer will remain valid until this date</small>
             </div>
-            
             <div class="form-group terms-group">
                 <label for="terms_agreement" class="checkbox-label">
                     <input type="checkbox" id="terms_agreement" name="terms_agreement" required>
                     <span>I agree that this offer is binding and I am prepared to proceed with the purchase if accepted</span>
                 </label>
             </div>
-            
             <div class="form-actions">
                 <a href="{% url 'properties:property_details' property_id=property.id %}" class="cancel-button">Cancel</a>
                 <button type="submit" class="submit-button">Submit Offer</button>
             </div>
         </form>
     </div>
-    
     <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">

@@ -10,7 +10,6 @@
     <h2>Finalize Your Purchase: Step 1 of 4</h2>
     <h3>Contact Information</h3>
     <p class="text-muted">Please provide your contact details to proceed with your purchase.</p>
-
     <div class="card mb-4">
         <div class="card-header">
             <h3>Your Details</h3>
@@ -18,37 +17,31 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-
                 <div class="form-group">
                     {{ form.street_address.label_tag }}
                     {{ form.street_address }}
                     {{ form.street_address.errors }}
                 </div>
-
                 <div class="form-group">
                     {{ form.city.label_tag }}
                     {{ form.city }}
                     {{ form.city.errors }}
                 </div>
-
                 <div class="form-group">
                     {{ form.postal_code.label_tag }}
                     {{ form.postal_code }}
                     {{ form.postal_code.errors }}
                 </div>
-
                 <div class="form-group">
                     {{ form.country.label_tag }}
                     {{ form.country }}
                     {{ form.country.errors }}
                 </div>
-
                 <div class="form-group">
                     {{ form.national_id.label_tag }}
                     {{ form.national_id }}
                     {{ form.national_id.errors }}
                 </div>
-
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{% url 'offers:offers' %}" class="btn btn-secondary">Back</a>
                     <button type="submit" class="btn btn-primary">Continue to Payment</button>

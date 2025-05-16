@@ -4,11 +4,13 @@
     margin: 2rem auto;
     border-bottom: 1px solid;
 }
+
 .profile-content {
     display: flex;
     gap: 3rem;
     align-items: flex-start;
 }
+
 .profile-image img {
     border-radius: 50%;
 }

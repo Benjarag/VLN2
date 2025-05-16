@@ -6,14 +6,11 @@
 {% endblock %}
 
 {% block content %}
-
 {% if user.profile.is_seller %}
 <div class="profile-update-container">
     <h2 class="profile-update-title">Update Your Seller Profile</h2>
-
     <form method="post" enctype="multipart/form-data" class="profile-update-form">
         {% csrf_token %}
-
         <!-- User form fields -->
         <div class="form-group">
             <label for="{{ user_form.username.id_for_label }}">Username</label>
@@ -22,7 +19,6 @@
                 <div class="error-message">{{ user_form.username.errors }}</div>
             {% endif %}
         </div>
-
         <!-- Profile form fields -->
         <div class="form-group">
             <label for="{{ profile_form.phone.id_for_label }}">Phone</label>
@@ -31,7 +27,6 @@
                 <div class="error-message">{{ profile_form.phone.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="{{ seller_form.type.id_for_label }}">Seller Type</label>
             {{ seller_form.type }}
@@ -39,7 +34,6 @@
                 <div class="error-message">{{ seller_form.type.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="{{ profile_form.image.id_for_label }}">Profile Image</label>
             {{ profile_form.image }}
@@ -47,10 +41,8 @@
                 <div class="error-message">{{ profile_form.image.errors }}</div>
             {% endif %}
         </div>
-
         <!-- Seller form fields -->
         <h3 class="section-title">Seller Information</h3>
-
         <div class="form-group">
             <label for="{{ seller_form.street_address.id_for_label }}">Street Address</label>
             {{ seller_form.street_address }}
@@ -58,7 +50,6 @@
                 <div class="error-message">{{ seller_form.street_address.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="{{ seller_form.city.id_for_label }}">City</label>
             {{ seller_form.city }}
@@ -66,7 +57,6 @@
                 <div class="error-message">{{ seller_form.city.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="{{ seller_form.postal_code.id_for_label }}">Postal Code</label>
             {{ seller_form.postal_code }}
@@ -74,7 +64,6 @@
                 <div class="error-message">{{ seller_form.postal_code.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="{{ seller_form.logo.id_for_label }}">Logo</label>
             {{ seller_form.logo }}
@@ -82,17 +71,6 @@
                 <div class="error-message">{{ seller_form.logo.errors }}</div>
             {% endif %}
         </div>
-
-        <!--
-        <div class="form-group">
-            <label for="{{ seller_form.cover_image.id_for_label }}">Cover Image</label>
-            {{ seller_form.cover_image }}
-            {% if seller_form.cover_image.errors %}
-                <div class="error-message">{{ seller_form.cover_image.errors }}</div>
-            {% endif %}
-        </div>
-        -->
-
         <div class="form-group">
             <label for="{{ seller_form.bio.id_for_label }}">Bio</label>
             {{ seller_form.bio }}
@@ -100,29 +78,22 @@
                 <div class="error-message">{{ seller_form.bio.errors }}</div>
             {% endif %}
         </div>
-
-
         {% if form.non_field_errors %}
             <div class="error-message">
                 {{ form.non_field_errors }}
             </div>
         {% endif %}
-
         <button type="submit" class="update-button">Update Profile</button>
     </form>
-
     <div class="profile-link">
         <a href="{% url 'accounts:profile' %}">Return to Profile</a>
     </div>
 </div>
-
 {% else %}
 <div class="profile-update-container">
     <h2 class="profile-update-title">Update Your Profile</h2>
-
     <form method="post" enctype="multipart/form-data" class="profile-update-form">
         {% csrf_token %}
-
         <!-- User form fields -->
         <div class="form-group">
             <label for="{{ user_form.username.id_for_label }}">Username</label>
@@ -131,7 +102,6 @@
                 <div class="error-message">{{ user_form.username.errors }}</div>
             {% endif %}
         </div>
-
         <!-- Profile form fields -->
         <div class="form-group">
             <label for="{{ profile_form.phone.id_for_label }}">Phone</label>
@@ -140,7 +110,6 @@
                 <div class="error-message">{{ profile_form.phone.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="{{ profile_form.image.id_for_label }}">Profile Image</label>
             {{ profile_form.image }}
@@ -148,16 +117,13 @@
                 <div class="error-message">{{ profile_form.image.errors }}</div>
             {% endif %}
         </div>
-
         {% if form.non_field_errors %}
             <div class="error-message">
                 {{ form.non_field_errors }}
             </div>
         {% endif %}
-
         <button type="submit" class="update-button">Update Profile</button>
     </form>
-
     <div class="profile-link">
         <a href="{% url 'accounts:profile' %}">Return to Profile</a>
     </div>

@@ -5,16 +5,13 @@
     <link rel="stylesheet" href="{% static 'css/purchase_offer_list.css' %}">
 {% endblock %}
 
-
 {% block content %}
 <div class="container">
     <h1 class="my-4">My Purchase Offers</h1>
-
     {% if offers %}
         <div class="property-container">
             {% for offer in offers %}
                 <div class="property-card offer-card {% if offer.status == 'Accepted' %}accepted{% elif offer.status == 'Rejected' %}rejected{% elif offer.status == 'Expired' %}expired{% elif offer.status == 'Contingent' %}contingent{% elif offer.status == 'Cancelled' %}cancelled{% endif %}" data-id="{{ offer.related_property.id }}">
-
                     <a href="{% url 'properties:property_details' property_id=offer.related_property.id %}">
                         <!-- Image and Status -->
                         <div class="property-image-wrapper">
@@ -29,7 +26,6 @@
                                 <i class="fa{% if offer.related_property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
                             </div>
                         </div>
-
                         <!-- Info Section -->
                         <div class="property-info">
                             <div class="property-address">
@@ -43,11 +39,9 @@
                                     <span class="offer-detail date-divider">|</span>
                                     <span class="offer-detail">Expiration date: {{ offer.date_expired|date:"j. F Y" }}</span>
                                 </div>
-
                                 <div class="offer-detail">Status of purchase offer:
                                     <span class="offer-status {{ offer.status|lower }}">{{ offer.status }}</span>
                                 </div>
-
                                 <div class="offer-detail">Seller of property: {{ offer.seller_name|default:"Unknown" }}</div>
                             </div>
                             <div class="offer-bottom-row">
@@ -55,7 +49,6 @@
                             </div>
                         </div>
                     </a>
-
                     {% if offer.can_finalize %}
                     <div class="finalize-button-wrapper">
                         <a href="{% url 'offers:contact_info' offer_id=offer.id %}" class="btn btn-sm btn-success">

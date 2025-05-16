@@ -16,17 +16,14 @@
                             {{ seller.name|first }}
                         </div>
                     {% endif %}
-
                     {% if seller.cover_image %}
                         <img src="{{ seller.cover_image.url }}" alt="{{ seller.name }} cover" class="img-fluid rounded mt-2" style="max-height: 100px;">
                     {% endif %}
                 </div>
-
                 <!-- Seller Information -->
                 <div class="col-md-8">
                     <h2 class="mb-1">{{ seller.name }}</h2>
                     <p class="text-muted mb-2">Type: {{ seller.type }}</p>
-
                     <div class="mb-2">
                         {% if seller.email %}
                             <p class="mb-1"><i class="fas fa-envelope mr-2"></i> {{ seller.email }}</p>
@@ -35,7 +32,6 @@
                             <p class="mb-1"><i class="fas fa-phone mr-2"></i> {{ seller.phone }}</p>
                         {% endif %}
                     </div>
-
                     {% if seller.show_address %}
                         <div class="mb-2">
                             <p class="mb-1"><strong>Address:</strong> {{ seller.street_address }},
@@ -43,14 +39,12 @@
                             {% if seller.postal_code %} {{ seller.postal_code }}{% endif %}</p>
                         </div>
                     {% endif %}
-
                     {% if seller.bio %}
                         <div class="mb-2">
                             <p class="mb-1"><strong>Bio:</strong> {{ seller.bio }}</p>
                         </div>
                     {% endif %}
                 </div>
-
                 <!-- Action Buttons -->
                 <div class="col-md-2 text-right">
                     {% if is_owner %}
@@ -62,7 +56,6 @@
             </div>
         </div>
     </div>
-
     <div class="row mb-4">
         <div class="col-md-8">
             <h3>
@@ -74,7 +67,6 @@
             </h3>
         </div>
     </div>
-
     {% if properties %}
         <div class="property-container">
             {% for property in properties %}
@@ -92,7 +84,6 @@
                                 <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
                             </div>
                         </div>
-
                         <!-- Info Section -->
                         <div class="property-info">
                             <div class="property-address">
@@ -108,7 +99,6 @@
                                 <span class="detail-box">🏠 {{ property.size }} sqm</span>
                                 <span class="detail-box">🛏️ {{ property.rooms }} rooms</span>
                             </div>
-
                             <div class="property-price">{{ property.get_formatted_price }}kr.</div>
                         </div>
                     </a>

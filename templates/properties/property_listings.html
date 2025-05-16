@@ -8,18 +8,15 @@
     <form method="GET" action="{% url 'properties:property_listings' %}" class="filter-form">
         {% csrf_token %}
         <div class="filter-row">
-
             <div class="filter-group group-title">
                 <div class="filter-title">Filter</div>
             </div>
-
             <div class="filter-group group-zip">
                 <label for="postal_code">Zip</label>
                 <div class="postal-code-inputs">
                     {{ filter_form.postal_code }}
                 </div>
             </div>
-
             <div class="filter-group group-price">
                 <label for="price-range">Price range</label>
                 <div class="price-inputs">
@@ -27,30 +24,24 @@
                     {{ filter_form.max_price }}
                 </div>
             </div>
-
             <div class="filter-group group-type">
                 <label for="property_type">Type</label>
                 {{ filter_form.property_type }}
             </div>
-
             <div class="filter-group group-search">
                 <label for="search">Search</label>
                 {{ filter_form.search }}
             </div>
-
             <div class="filter-group group-sort">
                 <label for="ordering">Sort</label>
                 {{ filter_form.ordering }}
             </div>
-
             <div class="filter-group group-button">
                 <button type="submit">Search</button>
             </div>
-
         </div>
     </form>
 </div>
-
 <div class="property-container">
     {% for property in properties %}
     <div class="property-card" data-id="{{ property.id }}">
@@ -68,7 +59,6 @@
                     <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
                 </div>
             </div>
-
             <!-- Info Section -->
             <div class="property-info">
                 <div class="property-address">
