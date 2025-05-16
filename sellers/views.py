@@ -1,11 +1,7 @@
-from django.shortcuts import render, redirect
-
-# sellers/views.py
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Seller
-
 
 
 def seller_profile(request, seller_id):
