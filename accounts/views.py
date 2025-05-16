@@ -1,18 +1,15 @@
-# accounts/views.py
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.http import JsonResponse
-
-from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm, SellerUpdateForm
 from django.contrib import messages
 from django.contrib.auth import logout, login
-
-from accounts.models import Profile, UserFavorite
-from properties.models import Property
 from django.views.decorators.http import require_POST
 
+from accounts.forms import UserUpdateForm, ProfileUpdateForm, CustomUserCreationForm, SellerUpdateForm
+from accounts.models import Profile, UserFavorite
+from properties.models import Property
 from sellers.models import Seller
+
 
 
 @login_required
@@ -58,9 +55,7 @@ def profile_update(request):
             seller_form = SellerUpdateForm(request.POST, request.FILES, instance=seller)
 
             if user_form.is_valid() and profile_form.is_valid() and seller_form.is_valid():
-                user = user_form.save(commit=False)
-                user_email = request.user.email
-                user.save()
+                user = user_form.save()
 
                 new_profile = profile_form.save(commit=False)
                 new_profile.is_seller = True
@@ -69,7 +64,6 @@ def profile_update(request):
                 seller = seller_form.save(commit=False)
                 seller.name = user.username
                 seller.email = user.email
-                print(f"seller email is {seller.email}")
 
                 if new_profile.image:
                     seller.cover_image = new_profile.image
@@ -79,15 +73,10 @@ def profile_update(request):
                 messages.success(request, 'Your seller profile has been updated successfully!')
                 return redirect('accounts:profile')
             else:
-                print("Error in updating sellers profile")
                 messages.error(request, 'There was an error updating your profile. Please check the form and try again.')
         else:
             if user_form.is_valid() and profile_form.is_valid():
-                user = user_form.save(commit=False)
-                user.email = request.user.email
-                print(f"user email is {user.email}")
-                user.save()
-
+                user_form.save()
                 profile_form.save()
                 messages.success(request, 'Your profile has been updated successfully!')
                 return redirect('accounts:profile')

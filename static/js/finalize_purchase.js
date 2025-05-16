@@ -1,81 +1,103 @@
-//
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Get all payment option radio buttons
-//     const paymentOptions = document.querySelectorAll('input[name="payment_option"]');
-//     const creditCardFields = document.getElementById('credit-card-fields');
-//     const bankTransferFields = document.getElementById('bank-transfer-fields');
-//     const mortgageFields = document.getElementById('mortgage-fields');
-//     const submitButton = document.querySelector('.submit-button');
-//
-//     // Function to show the relevant payment fields
-//     function showPaymentFields() {
-//         // Hide all payment fields first
-//         creditCardFields.style.display = 'none';
-//         bankTransferFields.style.display = 'none';
-//         mortgageFields.style.display = 'none';
-//
-//         // Show the relevant fields based on selected payment option
-//         const selectedOption = document.querySelector('input[name="payment_option"]:checked');
-//         if (selectedOption) {
-//             if (selectedOption.value === 'Credit Card') {
-//                 creditCardFields.style.display = 'block';
-//             } else if (selectedOption.value === 'Bank Transfer') {
-//                 bankTransferFields.style.display = 'block';
-//             } else if (selectedOption.value === 'Mortgage') {
-//                 mortgageFields.style.display = 'block';
-//             }
-//         }
-//     }
-//
-//     // Add event listeners to payment options
-//     paymentOptions.forEach(option => {
-//         option.addEventListener('change', showPaymentFields);
-//     });
-//
-//     // Initial call to set up the form correctly
-//     showPaymentFields();
-//
-//     // Form submission validation
-//     document.querySelector('form').addEventListener('submit', function(e) {
-//         const selectedOption = document.querySelector('input[name="payment_option"]:checked');
-//         let isValid = true;
-//
-//         if (selectedOption) {
-//             if (selectedOption.value === 'Credit Card') {
-//                 // Validate credit card fields
-//                 const cardholderName = document.querySelector('input[name="cardholder_name"]').value;
-//                 const cardNumber = document.querySelector('input[name="credit_card_number"]').value;
-//                 const expiry = document.querySelector('input[name="credit_card_expiry"]').value;
-//                 const cvc = document.querySelector('input[name="credit_card_cvc"]').value;
-//
-//                 if (!cardholderName || !cardNumber || !expiry || !cvc) {
-//                     alert('Please fill in all credit card information');
-//                     isValid = false;
-//                 }
-//             } else if (selectedOption.value === 'Bank Transfer') {
-//                 // Validate bank transfer fields
-//                 const bankAccount = document.querySelector('input[name="bank_account"]').value;
-//
-//                 if (!bankAccount) {
-//                     alert('Please enter your bank account information');
-//                     isValid = false;
-//                 }
-//             } else if (selectedOption.value === 'Mortgage') {
-//                 // Validate mortgage fields
-//                 const mortgageProvider = document.querySelector('select[name="mortgage_provider"]').value;
-//
-//                 if (!mortgageProvider) {
-//                     alert('Please select a mortgage provider');
-//                     isValid = false;
-//                 }
-//             }
-//         } else {
-//             alert('Please select a payment option');
-//             isValid = false;
-//         }
-//
-//         if (!isValid) {
-//             e.preventDefault(); // Prevent form submission if validation fails
-//         }
-//     });
-// });
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all radio buttons
+    const paymentRadios = document.querySelectorAll('.payment-radio');
+    
+    // Get input fields for formatting - we'll set these IDs from the template
+    const cardNumberInput = document.getElementById('card-number-input');
+    const expiryInput = document.getElementById('expiry-input');
+    const cvcInput = document.getElementById('cvc-input');
+    
+    // Function to show/hide fields based on selection
+    function togglePaymentFields() {
+        // Hide all payment fields first
+        document.querySelectorAll('.payment-fields').forEach(field => {
+            field.style.display = 'none';
+        });
+        
+        // Find the checked radio button
+        const checkedRadio = document.querySelector('input[name="payment_option"]:checked');
+        
+        if (checkedRadio) {
+            const value = checkedRadio.value;
+            
+            // Show the corresponding fields
+            if (value === 'Credit Card') {
+                document.getElementById('credit-card-fields').style.display = 'block';
+            } else if (value === 'Bank Transfer') {
+                document.getElementById('bank-transfer-fields').style.display = 'block';
+            } else if (value === 'Mortgage') {
+                document.getElementById('mortgage-fields').style.display = 'block';
+            }
+        }
+    }
+    
+    // Format credit card number with dashes after every 4 digits
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            // Get input value and remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 16 digits
+            if (value.length > 16) {
+                value = value.slice(0, 16);
+            }
+            
+            // Format with dashes after every 4 digits
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += '-';
+                }
+                formattedValue += value[i];
+            }
+            
+            // Update input value
+            this.value = formattedValue;
+        });
+    }
+    
+    // Format expiry date with slash after MM
+    if (expiryInput) {
+        expiryInput.addEventListener('input', function(e) {
+            // Get input value and remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 4 digits (MM/YY)
+            if (value.length > 4) {
+                value = value.slice(0, 4);
+            }
+            
+            // Format with slash after first 2 digits
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            
+            // Update input value
+            this.value = value;
+        });
+    }
+    
+    // Limit CVC to 3 digits
+    if (cvcInput) {
+        cvcInput.addEventListener('input', function(e) {
+            // Get input value and remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+            
+            // Limit to 3 digits
+            if (value.length > 3) {
+                value = value.slice(0, 3);
+            }
+            
+            // Update input value
+            this.value = value;
+        });
+    }
+    
+    // Add event listeners to all radio buttons
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', togglePaymentFields);
+    });
+    
+    // Initial toggle based on any pre-selected option
+    togglePaymentFields();
+});

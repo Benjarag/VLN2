@@ -11,7 +11,6 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.EmailInput(attrs={'class': 'form-control', 'id': 'signup_email', 'placeholder': 'Email'})
     )
     username = forms.CharField(
-        required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'signup_username', 'placeholder': 'Username'})
     )
 
@@ -66,7 +65,6 @@ class CustomLoginForm(AuthenticationForm):
 
 class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(help_text='')  # Empty help text
-    email = forms.EmailField(required=False)
 
     class Meta:
         model = User
@@ -78,6 +76,7 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['image', 'phone', 'is_seller']
         widgets = {
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'is_seller': forms.CheckboxInput(attrs={'class': 'form-check-input'})
         }
 
@@ -87,6 +86,11 @@ class SellerUpdateForm(forms.ModelForm):
         model = Seller
         fields = ['type', 'phone', 'logo', 'cover_image', 'bio', 'street_address', 'city', 'postal_code']
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 4}),
-            'type': forms.Select(attrs={'class': 'form-select'})
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-select'}),
+            'street_address': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control'})
         }
+

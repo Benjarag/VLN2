@@ -22,6 +22,15 @@
 - If the offer status is **Pending**, select to **Accept**, **Reject**, or mark it as **Contingent**
 - When an action is taken, the system **updates the status** of the offer accordingly
 
+### My Listings Page
+- Seller Info: Displays seller name, type, contact details, and more.
+- Property List: Shows all properties the seller has listed, each with:
+- Thumbnail and property name
+- Listing price
+- Current status (Available, Sold)
+- Number of rooms and square meters
+- Link to the Property Details page
+
 ## Favorites
 ### The user shall be able to favorite any property
 #### Users can:
@@ -47,13 +56,11 @@
 
 #### Sellers can:
 - Update their username
-- Change their seller type (i.e. whether they are a agency or individual seller)
+- Change their seller type (i.e. whether they are an agency or an individual seller)
 - Add or change their profile picture
 - Add or change their logo
 - Add or change their Street Address, city, and postal code
 - Add or change their bio
-- If they are an individual seller then only their phone-number will show up additionally on the profile page
-- If they are an agency seller then the Street Address, city, and postal code, phone number, logo and bio will be displayed on the profile page
 
 ## Mail Service
 ### The system should be able to notify the buyers' and sellers' via email
@@ -63,10 +70,18 @@
 - Notify the buyers' when a seller has made an action on their offer (i.e. accepted, rejected, or made it contingent)
 - The buyers' email includes which property status has been updated, for what price and congratulates them.
 
-## System restriction
-### If a guest attempts to perform a restricted action, the system shall redirect them to the login page and display the message: “Please log in or create an account to use this feature.”
-#### The system does this when:
-- A guest user tries to navigate to the **Favorites** page
-- A guest user tries to navigate to the **Offers** page
-- A guest user tries to 'heart' a listing
+## Guest User
+#### The system shall allow guest users to:
+- Guests shall be able to access and navigate the website without logging in. This includes pages such as Home, Property Listings, and Property Details.
+- Guests shall be able to view a list of available properties, including basic details like address, price, number of rooms, and a thumbnail image.
+- Guests shall be able to apply filters (e.g., location, price range, property type) to narrow down the list of visible properties.
+- Guests shall be able to view the full details of a property, including description, price, address, images, and seller information.
+- Guests shall be able to view seller profiles (individuals or agencies) when clicking on a seller’s name or thumbnail on a property listing.
+- Guests shall not be able to: Submit purchase offers, favorite or bookmark properties, view or update a user profile, view their purchase offers, or finalize offers.
+- If a guest attempts to perform a restricted action, the system shall redirect them to the login page and display the message: “Please log in or create an account to use this feature.”
+
+
+
+
+
 
