@@ -37,8 +37,6 @@ class Property(models.Model):
     # Foreign key to Seller instead of embedded data
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='properties', null=True, blank=True)
 
-
-
     def __str__(self):
         return self.title
 
@@ -83,4 +81,3 @@ class PropertyImage(models.Model):
 
     class Meta:
         ordering = ['order']  # This will order images based on their "order" field.
-

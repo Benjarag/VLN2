@@ -11,9 +11,6 @@ class PurchaseOffer(models.Model):
         ('Accepted', 'Accepted'),
         ('Rejected', 'Rejected'),
         ('Contingent', 'Contingent'),
-        # ('Expired', 'Expired'),
-        # ('Finalized', 'Finalized'),
-        # ('Cancelled', 'Cancelled'),
     ]
 
     # Add this field

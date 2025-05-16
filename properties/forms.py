@@ -1,15 +1,13 @@
-# properties/forms.py
 from django import forms
 from .models import Property
 
 class PropertyFilterForm(forms.Form):
-    # For the search field, similarly add style
     search = forms.CharField(
         required=False, 
         label='Search by street address',
         widget=forms.TextInput(attrs={
             'placeholder': 'Search by street address...',
-            'style': 'font-size: 0.60rem;'  # Adjust size as needed
+            'style': 'font-size: 0.60rem;' # Adding style for smaller font
         })
     )
     
@@ -22,7 +20,6 @@ class PropertyFilterForm(forms.Form):
     max_price = forms.IntegerField(required=False, label='Max Price',
                                   widget=forms.NumberInput(attrs={'placeholder': 'Max'}))
     
-    # For the property_type field, add a style attribute to make the font smaller
     property_type = forms.ChoiceField(
         choices=[('', '-- Select Property Type --')] + list(Property.PROPERTY_TYPES),
         required=False,

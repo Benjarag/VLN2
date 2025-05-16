@@ -74,7 +74,7 @@
     {% if properties %}
         <div class="property-container">
             {% for property in properties %}
-                <div class="property-card">
+                <div class="property-card" data-id="{{ property.id }}">
                     <a href="{% url 'properties:property_details' property_id=property.id %}">
                         <div class="property-image-wrapper">
                             {% if property.images.first %}
@@ -83,7 +83,10 @@
                                 <img src="{% static 'images/placeholder.png' %}" class="property-image" alt="No image available">
                             {% endif %}
                             <div class="property-status {{ property.status|lower }}">{{ property.status }}</div>
-                            <div class="favorite-icon">&#9825;</div>
+                            <!-- Favorite icon block -->
+                            <div class="favorite-icon {% if property.id in favorite_ids %}active{% endif %}" data-id="{{ property.id }}">
+                                <i class="fa{% if property.id in favorite_ids %}-solid{% else %}-regular{% endif %} fa-heart"></i>
+                            </div>
                         </div>
 
                         <div class="property-info">
