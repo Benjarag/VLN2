@@ -15,14 +15,14 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/property_details.css' %}">
-    <link rel="stylesheet" href="{% static 'css/properties.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'css/submit_purchase_offer.css' %}">
     <link rel="stylesheet" href="{% static 'css/popup.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile_update.css' %}">
     <link rel="stylesheet" href="{% static 'css/purchase_offer_list.css' %}">
+
+    {% block extra_css %}{% endblock %}
 
     <!-- JavaScript -->
     <script src="{% static 'js/property_details.js' %}"></script>

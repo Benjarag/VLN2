@@ -3,6 +3,10 @@
 
 {% block title %}Property Listings{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/properties.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="filter-container">
     <form method="GET" action="{% url 'properties:property_listings' %}" class="filter-form">
