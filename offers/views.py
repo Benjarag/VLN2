@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django import forms  # Add this import here
+from django import forms
 
 from mail.views import send_offer_status_notification_to_buyer, send_offer_notification_to_seller
 from .forms import PurchaseFinalizationForm, PurchaseOfferForm
@@ -14,12 +14,12 @@ from sellers.models import Seller
 
 @login_required
 def purchase_offers_list(request):
-    # Get all offers from the current user
+    # Getting all offers from the current user
     offers = PurchaseOffer.objects.filter(user=request.user).order_by('-date_created')
-    # Get the properties for these offers
+    # Getting the properties for these offers
     properties = [offer.related_property for offer in offers]
 
-    # Get favorite IDs from UserFavorite table
+    # Getting favorite IDs from UserFavorite table
     favorite_ids = []
     if request.user.is_authenticated:
         from accounts.models import UserFavorite
@@ -34,7 +34,7 @@ def purchase_offers_list(request):
 
 @login_required
 def seller_offers_list(request):
-    # Check if user is a seller
+    # Checking if user is a seller
     if not hasattr(request.user, 'profile') or not request.user.profile.is_seller:
         messages.error(request, "You don't have seller privileges.")
         return redirect('home')
@@ -42,7 +42,7 @@ def seller_offers_list(request):
     try:
         seller = Seller.objects.get(user=request.user)
     except Seller.DoesNotExist:
-        # This is a critical issue - the user is marked as a seller but doesn't have a Seller record
+        # This is an issue - the user is marked as a seller but doesn't have a Seller record
         # Let's create one with basic details to avoid breaking the flow
         seller = Seller.objects.create(
             user=request.user,
@@ -51,10 +51,10 @@ def seller_offers_list(request):
         )
         messages.warning(request, "Your seller profile has been automatically created.")
 
-    # Get all properties for this seller
+    # Getting all properties for this seller
     seller_properties = Property.objects.filter(seller=seller)
 
-    # Get offers for these properties
+    # Getting offers for these properties
     properties_with_offers = {}
 
     for prop in seller_properties:
@@ -72,17 +72,15 @@ def seller_offers_list(request):
 
 @login_required
 def respond_to_offer(request, offer_id):
-    # Get the offer
+    # Getting the offer
     offer = get_object_or_404(PurchaseOffer, id=offer_id)
     
-    # Check if property already has an accepted offer
+    # Checking if property already has an accepted offer
     if offer.related_property.has_accepted_offer and offer.status != 'Accepted':
         messages.error(request, "This property already has an accepted offer and cannot receive further responses.")
         return redirect('offers:myoffers')
-        
-    # Rest of your view code...
 
-    # Check if user is a seller
+    # Checking if user is a seller
     if not request.user or not request.user.profile.is_seller:
         messages.error(request, "You don't have seller privileges.")
         return redirect('home')
@@ -94,12 +92,12 @@ def respond_to_offer(request, offer_id):
         messages.error(request, "Your seller profile is not properly set up.")
         return redirect('home')
 
-    # Check if this seller owns the property
+    # Checking if this seller owns the property
     if offer.seller != seller:
         messages.error(request, "You don't have permission to respond to this offer.")
         return redirect('offers:myoffers')
 
-    # Check if the property is sold
+    # Checking if the property is sold
     if offer.related_property.status == 'Sold':
         messages.error(request, "This property has been sold and offers can no longer be updated.")
         return redirect('offers:myoffers')
@@ -112,7 +110,7 @@ def respond_to_offer(request, offer_id):
             offer.status = 'Accepted'
             offer.save()
 
-            # Mark the property as sold
+            # Mark property as sold
             property = offer.related_property
             property.status = 'Sold'
             property.save()
@@ -166,16 +164,14 @@ def respond_to_offer(request, offer_id):
 def submit_purchase_offer(request, property_id):
     property = get_object_or_404(Property, id=property_id)
 
-    # Check if property is sold or has an accepted offer
+    # Checking if property is sold or has an accepted offer
     if property.is_sold:
         messages.error(request, "Cannot submit offer for a property that is sold or has an accepted offer")
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'message': 'This property is not accepting offers'})
         return redirect('properties:property_details', property_id=property.id)
-    
-    # Rest of the view code remains the same
+
     if request.method == 'POST':
-        # Process form submission
         form = PurchaseOfferForm(request.POST)
         if form.is_valid():
             # Check if date is valid (not in the past)
@@ -243,7 +239,6 @@ def submit_purchase_offer(request, property_id):
 def contact_info_view(request, offer_id):
     """First step of the finalization process - collecting contact information"""
     offer = get_object_or_404(PurchaseOffer, id=offer_id, user=request.user)
-    # Use related_property instead of property
     property = offer.related_property
 
     # Check if offer can be finalized
@@ -378,7 +373,7 @@ def payment_method_view(request, offer_id):
         form = PurchaseFinalizationForm(form_data, instance=finalization)
 
         if form.is_valid():
-            # Save payment info to finalization object
+            # Save payment info
             finalization = form.save()
 
             # Redirect to review page
@@ -420,7 +415,7 @@ def review_purchase(request, finalization_id):
 
     return render(request, 'offers/review_purchase.html', {
         'finalization': finalization,
-        'offer': offer  # Add the offer to the context
+        'offer': offer
     })
 
 

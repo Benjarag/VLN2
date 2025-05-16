@@ -12,7 +12,5 @@ urlpatterns = [
     path('offers/<int:offer_id>/finalize/payment/', views.payment_method_view, name='payment_method'),
     path('finalization/<int:finalization_id>/review/', views.review_purchase, name='review_purchase'),
     path('confirmation/<int:finalization_id>/', views.purchase_confirmation, name='purchase_confirmation'),
-    # path('finalization/<int:finalization_id>/confirm/', views.confirm_purchase, name='confirm_purchase'),
-    # path('<int:offer_id>/finalize/', views.finalize_purchase, name='finalize_purchase'),
     path('update/<int:offer_id>/', views.respond_to_offer, name='update_offer_status')
 ]
