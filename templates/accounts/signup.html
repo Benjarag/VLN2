@@ -8,10 +8,8 @@
 {% block content %}
 <div class="signup-container">
     <h2 class="signup-title">Create an Account</h2>
-
     <form method="post" class="signup-form">
         {% csrf_token %}
-
         <div class="form-group">
             <label for="signup_username">Username</label>
             {{ form.username }}
@@ -19,7 +17,6 @@
                 <div class="error-message">{{ form.username.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="signup_email">Email</label>
             {{ form.email }}
@@ -27,7 +24,6 @@
                 <div class="error-message">{{ form.email.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="signup_password1">Password</label>
             {{ form.password1 }}
@@ -35,8 +31,6 @@
                 <div class="error-message">{{ form.password1.errors }}</div>
             {% endif %}
         </div>
-
-
         <div class="form-group">
             <label for="signup_password2">Confirm Password</label>
             {{ form.password2 }}
@@ -44,8 +38,6 @@
                 <div class="error-message">{{ form.password2.errors }}</div>
             {% endif %}
         </div>
-
-
         <div class="form-group form-check">
             {{ form.usertype }}
             <label class="form-check-label" for="id_usertype">{{ form.usertype.label }}</label>
@@ -56,11 +48,8 @@
                 <div class="error-message">{{ form.usertype.errors }}</div>
             {% endif %}
         </div>
-
-
         <button type="submit" class="signup-button">Sign Up</button>
     </form>
-
     <div class="login-link">
         Already have an account? <a href="{% url 'accounts:login' %}">Log In</a>
     </div>

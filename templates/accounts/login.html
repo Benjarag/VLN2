@@ -8,10 +8,8 @@
 {% block content %}
 <div class="login-container">
     <h2 class="login-title">Log in to Castle Apartments</h2>
-
     <form method="post" class="login-form">
         {% csrf_token %}
-
         <div class="form-group">
             <label for="login_username">Username</label>
             {{ form.username }}
@@ -19,7 +17,6 @@
                 <div class="error-message">{{ form.username.errors }}</div>
             {% endif %}
         </div>
-
         <div class="form-group">
             <label for="login_password">Password</label>
             {{ form.password }}
@@ -27,19 +24,15 @@
                 <div class="error-message">{{ form.password.errors }}</div>
             {% endif %}
         </div>
-
         {% if form.non_field_errors %}
             <div class="error-message">
                 {{ form.non_field_errors }}
             </div>
         {% endif %}
-
         <button type="submit" class="login-button">Log in</button>
-
         <!-- If you have a next parameter in the URL -->
         <input type="hidden" name="next" value="{{ next }}">
     </form>
-
     <div class="signup-link">
         Don't have an account? <a href="{% url 'accounts:signup' %}">Sign up</a>
     </div>
