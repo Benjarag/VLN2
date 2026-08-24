@@ -89,12 +89,10 @@ WSGI_APPLICATION = 'VLN2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'verklegt_namskeid_db',
-        'USER': 'verklegt_db_user',
-        'PASSWORD': 'PcNkIf0Ku9al0jD0ubK7Bz6V',
-        'HOST': 'db-verklegt-namskeid-ii-eu-bmpg13.postgres.database.azure.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        # Keep the legacy SQLite file intact. Its schema predates the current
+        # models, so local development uses a clean database instead.
+        'NAME': BASE_DIR / 'db_screenshots_v2.sqlite3',
     }
 }
 #
